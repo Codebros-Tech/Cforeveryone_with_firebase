@@ -3,7 +3,6 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, NavLink, Navigate, Outlet, useNavigate } from 'react-router-dom'
 import Toast from '../../components/Toast'
-import axiosClient from '../../axios'
 import { StateContext } from '../../contexts/ContextProvider'
 import Modal from "../../components/Modal.jsx"
 
@@ -32,11 +31,7 @@ export default function DefaultLayout() {
 
 
     useEffect(() => {
-        axiosClient.post('/me')
-            .then(({data}) => {
-                setCurrentUser(data.data);
-            });
-
+        setCurrentUser(null);
     }, []);
 
 
@@ -46,32 +41,14 @@ export default function DefaultLayout() {
     }
 
     const deleteFun = () => {
-        axiosClient.delete('/user')
-        .then((response) => {
-            console.log(response);
-            setCurrentUser(null);
-            setUserToken(null);
-            showToast("Account Deleted Successfully");
-        })
-        .catch((error) => {
-            console.error("Error occurs during deleting the user", error);
-            showToast("Couldn't delete the account");
-            setModalState(false);
-        });
+        setCurrentUser(null);
+        showToast("Account Deleted Successfully")
+        console.error("Error occurs during deleting the user");
+        showToast("Couldn't delete the account");
     }
 
     const logout = (ev) => {
         ev.preventDefault();
-        axiosClient.post('/logout')
-            .then(() => {
-                setCurrentUser({});
-                setUserToken(null);
-                navigate('/');
-            }).catch((error) => {
-                console.log(error);
-                localStorage.clear();
-                showToast('Logout successful')
-            })
     }
 
     if (!userToken) {

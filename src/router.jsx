@@ -1,4 +1,5 @@
 import {Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom"
+import {lazy} from'react'
 import Dashboard from "./views/Users/Dashboard"
 import Login from './views/Guest/Login'
 import GuestLayout from "./views/Layouts/GuestLayout"
@@ -16,13 +17,12 @@ import Features from "./views/Guest/Features"
 import AdminLogin from "./views/Guest/AdminLogin"
 import Main from './views/Layouts/Main'
 import AdminLayout from "./views/Layouts/AdminLayout"
-import ForgotPassword from "./views/Guest/ForgotPassword"
 import CodeCreate from "./views/Code/CodeCreate"
 import CodeShow from "./views/Code/CodeShow"
 import CodeIndex from "./views/Code/CodeIndex"
 import MyCodes from "./views/Code/MyCodes"
-import CodeView from './views/Code/CodeView.jsx'
-import Contact from "./views/Pages/Contact"
+const CodeView = lazy(()  => import('./views/Code/CodeView.jsx'));
+const Contact = lazy(() => import("./views/Pages/Contact"));
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -67,7 +67,6 @@ const router = createBrowserRouter(
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
             </Route>
         </Route>
     )

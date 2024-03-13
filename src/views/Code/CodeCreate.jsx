@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import PageComponent from '../../components/PageComponent.jsx'
 import {  TrashIcon } from '@heroicons/react/24/outline';
-import axiosClient from '../../axios.js';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import TButton from '../../components/TButton.jsx';
@@ -23,36 +22,27 @@ export default function CodeCreate() {
     });
 
 
-    const onSubmit = (e) => {
-        e.preventDefault()
+    // const onSubmit = (e) => {
+    //     e.preventDefault()
+    //
+    //     const payload = { ...code }
 
-        const payload = { ...code }
-
-        let res = null
-        // the way to transfer the data if it was a normal code creation.
-        if (id) {
-            res = axiosClient.put(`/codes/${id}`, payload)
-
-        } else {
-            res = axiosClient.post('/codes', payload)
-        }
-
-        res
-        .then((response) => {
-            console.log(response);
-            navigate('/codes');
-            if (id) {
-                showToast("Code updated successfully");
-            } else {
-                showToast("Code created successfully");
-            }
-        }).catch((error) => {
-            if (error && error.response) {
-                setError(error.response.data.message);
-                console.log(error);
-            }
-        });
-    }
+    //     res
+    //     .then((response) => {
+    //         console.log(response);
+    //         navigate('/codes');
+    //         if (id) {
+    //             showToast("Code updated successfully");
+    //         } else {
+    //             showToast("Code created successfully");
+    //         }
+    //     }).catch((error) => {
+    //         if (error && error.response) {
+    //             setError(error.response.data.message);
+    //             console.log(error);
+    //         }
+    //     });
+    // }
 
     const onImageChoose = (ev) => {
         const file = ev.target.files[0];

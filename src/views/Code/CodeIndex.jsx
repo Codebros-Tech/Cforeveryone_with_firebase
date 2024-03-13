@@ -2,23 +2,29 @@ import Code from "./Code";
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
-import axiosClient from "../../axios";
 import { StateContext } from "../../contexts/ContextProvider";
-import echo from '../../echo.js'
+import {fetchAllCodes, getAllCodes} from '../../firebase/code.js';
 
 export default function CodeIndex() {
     const [loading, setLoading ] = useState(false);
 
     const { allCodes, setAllCodes } = useContext(StateContext);
 
+    const getCodes = async ()   => {
+        const allCodes = await getAllCodes();
+        setLoading(allCodes);
+    }
+
     useEffect(() => {
         setLoading(true);
-        axiosClient.get('/codes')
-            .then(({data}) => {
-                setAllCodes(data.codes);
-                setLoading(false);
-            })
+        getCodes().then(r => {
+            console.log(r);
+        }).catch((error) => {
+            console.error('error occred when fetching the codes' , error);
+        });
+        setLoading(false);
     }, []);
+
 
     return (
         <PageComponent title="All Codes" buttons={(

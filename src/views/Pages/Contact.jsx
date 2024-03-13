@@ -1,5 +1,4 @@
 import { useContext, useRef } from "react";
-import axiosClient from "../../axios";
 import { StateContext } from "../../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
 

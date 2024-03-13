@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { StateContext } from '../../contexts/ContextProvider';
-import axiosClient from '../../axios';
 import Modal from '../../components/Modal';
 import { useNavigate } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
+import {addLike} from "../../firebase/code.js";
 
 export default function Code({thecode, commentHide = false}) {
 
@@ -22,27 +22,13 @@ export default function Code({thecode, commentHide = false}) {
 
     const { deleteCodeId } = useContext(StateContext);
 
-    const likeComment = (id) => {
-        axiosClient.post(`/codes/${id}/like`)
-            .then(() => {
-            setCode({...code, 'userLikeStatus': {...code.userLikeStatus, 'state': !code.userLikeStatus.state}});
-            }).catch((error) => {
-                console.error("Error occured liking code ", error);
-            })
+    const addLike = async (code_id) => {
+        const like = await addLike(code_id, user_id);
     }
 
-    const deleteCode = (id) => {
-        axiosClient.delete(`/codes/${id}`)
-            .then(() => {
-                deleteCodeId(id);
-                showToast('Code deleted successfully');
-                navigate(`/codes/`);
-            })
-            .catch((error) => {
-                console.error(error);
-                console.log("error occured during code deletion");
-                navigate(`/codes/`);
-            })
+    const deleteCode = async (code_id) => {
+        const deleteCode = await deleteCodeId(code_id);
+        console.log('delete code response', deleteCode);
     }
 
 

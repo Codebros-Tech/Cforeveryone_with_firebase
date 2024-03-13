@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
-import axiosClient from "../../axios"
 import PageComponent from "../../components/PageComponent"
 import User from "./User"
-import echo from '../../echo.js'
 
 export default function People() {
     const [users , setUsers] = useState([]);

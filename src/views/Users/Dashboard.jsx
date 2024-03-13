@@ -1,10 +1,8 @@
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
-import axiosClient from '../../axios';
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
-import echo from '../../echo.js';
 
 export default function Dashboard() {
 

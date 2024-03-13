@@ -1,13 +1,12 @@
 import PageComponent from "../../components/PageComponent.jsx";
 import TButton from "../../components/TButton.jsx";
 import {useEffect, useRef, useState} from "react";
-import axiosClient from "../../axios.js";
 import { useParams } from "react-router-dom";
 import Code from './Code.jsx'
 import Comment from './Comment.jsx'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
-import echo from "../../echo.js";
+import {addComment, getUserCodes} from "../../firebase/code.js";
 
 export default function CodeView() {
     const { id } = useParams();
@@ -18,16 +17,13 @@ export default function CodeView() {
     const commentRef = useRef(null);
     const navigate = useNavigate();
 
+    const getCodeComments = async (id)  =>  {
+        const comments = await getUserCodes();
+        // suppose to fetch the comment and the code.
+    }
+
     useEffect(() => {
         setLoading(true);
-        axiosClient.get(`/codes/${id}/comments`)
-            .then(({data}) => {
-                setComments(data.comments);
-                setCode(data.code);
-                setLoading(false);
-            }).catch(() => {
-                navigate('/codes');
-            });
 
         const initialTime = performance.now();
         setStartTime(initialTime);
@@ -49,22 +45,11 @@ export default function CodeView() {
             console.error(error);
         });
     }
-
-    const commentChannel = echo.channel('public.code.'+id+'.comment');
-    commentChannel.listen('.comment', (event) => {
-        setComments([...comments, event.comment]);
-    });
-
     const submitComment = (ev) => {
         ev.preventDefault();
         const comment = commentRef.current.value;
         commentRef.current.value = "";
-        axiosClient.post(`/codes/${id}/comments`, {
-            code_id: code.id,
-            comment: comment,
-        }).catch((error) => {
-            console.error(error);
-        })
+        // addComment()
     }
 
     return (

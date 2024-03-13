@@ -2,9 +2,7 @@ import Code from "./Code";
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
-import axiosClient from "../../axios";
 import { StateContext } from "../../contexts/ContextProvider";
-import echo from "../../echo.js";
 
 export default function MyCodes() {
     const [loading, setLoading] = useState(false);
@@ -12,33 +10,9 @@ export default function MyCodes() {
 
     useEffect(() => {
         setLoading(true);
-        axiosClient.get('/codes/mine')
-            .then(({data}) => {
-                setMyCodes(data.codes);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error(error);
-                setLoading(false);
-            })
+
+        // fetching all of the codes that where posted by this user
     }, []);
-
-
-    echo.channel('private.codes').listen('.codes', (event) => {
-        if (event.id) {
-            myCodes.filter(code => code.id === event.id);
-            setMyCodes(myCodes);
-        } else if (event.code) {
-            myCodes.map((code) => {
-                if (code.id === event.code.id) {
-                    return event.code;
-                }
-                return code;
-            })
-            setMyCodes([...myCodes, event.code]);
-        }
-    });
-
 
     return (
         <PageComponent title="My Codes" buttons={(
