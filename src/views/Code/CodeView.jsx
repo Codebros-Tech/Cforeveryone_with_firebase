@@ -6,7 +6,7 @@ import Code from './Code.jsx'
 import Comment from './Comment.jsx'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
-import {addComment, getUserCodes} from "../../firebase/code.js";
+import {addComment, getCodeById, getUserCodes} from "../../firebase/code.js";
 
 export default function CodeView() {
     const { id } = useParams();
@@ -22,8 +22,14 @@ export default function CodeView() {
         // suppose to fetch the comment and the code.
     }
 
+    const getCodeAsync = async () =>  {
+        const codeInstance = await getCodeById(id);
+        setCode(codeInstance);
+    }
+
     useEffect(() => {
         setLoading(true);
+        getCodeAsync();
 
         const initialTime = performance.now();
         setStartTime(initialTime);

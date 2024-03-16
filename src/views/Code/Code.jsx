@@ -22,9 +22,9 @@ export default function Code({thecode, commentHide = false}) {
 
     const { deleteCodeId } = useContext(StateContext);
 
-    const addLike = async (code_id) => {
-        const like = await addLike(code_id, user_id);
-    }
+    // const addLike = async (code_id) => {
+    //     const like = await addLike(code_id, user_id);
+    // }
 
     const deleteCode = async (code_id) => {
         const deleteCode = await deleteCodeId(code_id);
@@ -39,24 +39,24 @@ export default function Code({thecode, commentHide = false}) {
     return (
         <div className="flex rounded w-full mt-3">
             {
-                code && code.user &&
+                code  &&
                 <div className={"px-2 bg-black text-gray-500 w-full md:w-11/12"}>
                     <div>
-                        <div className={"flex justify-between"}>
-                            <span>{code.user.name}</span>
-                            <span
-                                className={"font-thin text-[14px] hover:text-[17px] delay-500"}>{code.createdAt}</span>
-                            {
-                                code.user.profile !== 'http://localhost:8000' &&
-                                <img className="h-[30px] w-auto rounded-full" src={code.user.profile} alt=""/>
-                            }
-                        </div>
+                        {/*<div className={"flex justify-between"}>*/}
+                        {/*    <span>{code.user.name}</span>*/}
+                        {/*    <span*/}
+                        {/*        className={"font-thin text-[14px] hover:text-[17px] delay-500"}>{code.createdAt}</span>*/}
+                        {/*    {*/}
+                        {/*        code.user.profile !== 'http://localhost:8000' &&*/}
+                        {/*        <img className="h-[30px] w-auto rounded-full" src={code.user.profile} alt=""/>*/}
+                        {/*    }*/}
+                        {/*</div>*/}
                         <div className='flex flex-col justify-between'>
                             <h3 className="font-semibold sm:text-lg">{code.title}</h3>
                             <p>{code.description}</p>
                             <div className='ms-auto'>
                                 {
-                                    code.user.email === currentUser.email &&
+                                    // code.user.email === currentUser.email &&
                                     <div className='flex gap-x-4'>
                                         <button title={"Click to toggle between the code and the output"} onClick={() => setLogState((prev) => !prev)}>
                                             {!logState ? "Output" : "Code"}
@@ -89,19 +89,19 @@ export default function Code({thecode, commentHide = false}) {
                             <motion.img initial={{ scale: 0}} animate={{scale: 1}} transition={{ duration: 1}} className='w-80' alt={"The code error image."} src={code.errorImage}/>
                         }
                     </motion.div>
-                    {!commentHide &&
-                        <div className={"flex pt-2 font-thin gap-x-2 text-gray-100 "}>
-                            <button className={" px-4 bg-gray-800"} onClick={() => likeComment(code.id)}>
-                                 Like <span className={"text-[14px] "}>{code.likes} </span>
-                            </button>
-                            <a href={`/codes/${code.id}/comments`} className='flex'>
-                                Comment
-                            </a>
-                            <a href='/codes/id/suggestion'>
-                                Suggest
-                            </a>
-                        </div>
-                    }
+                    {/*{!commentHide &&*/}
+                    {/*    <div className={"flex pt-2 font-thin gap-x-2 text-gray-100 "}>*/}
+                    {/*        <button className={" px-4 bg-gray-800"} onClick={() => likeComment(code.id)}>*/}
+                    {/*             Like <span className={"text-[14px] "}>{code.likes} </span>*/}
+                    {/*        </button>*/}
+                    {/*        <a href={`/codes/${code.id}/comments`} className='flex'>*/}
+                    {/*            Comment*/}
+                    {/*        </a>*/}
+                    {/*        <a href='/codes/id/suggestion'>*/}
+                    {/*            Suggest*/}
+                    {/*        </a>*/}
+                    {/*    </div>*/}
+                    {/*}*/}
                 </div>
             }
         </div>

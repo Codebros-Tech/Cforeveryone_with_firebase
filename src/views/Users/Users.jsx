@@ -9,15 +9,8 @@ export default function People() {
 
     useEffect(() => {
         setLoading(true);
-        axiosClient.get('/users')
-        .then(({data}) => {
-            setUsers(data.users);
-            setLoading(false);
-        })
-        .catch((error) => {
-            console.error("Error fetching the users ", error);
-        });
-
+        // fetch all of the users of this application
+        setLoading(false);
     }, [])
 
     return (

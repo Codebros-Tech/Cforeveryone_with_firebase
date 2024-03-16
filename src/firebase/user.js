@@ -104,3 +104,7 @@ async function updateUserProfile(updatedFields) {
         console.error('Error updating profile:', error);
     }
 }
+
+async function getDashboardInformation() {
+    // this is going to return the dashboard information to the user.
+}

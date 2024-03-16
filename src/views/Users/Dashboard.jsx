@@ -43,14 +43,6 @@ export default function Dashboard() {
 
     useEffect(() => {
         setLoading(true);
-        axiosClient.get('/dashboard')
-            .then(({data}) => {
-                setDashboardInfo(data)
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error(error);
-            })
     }, []);
 
     return (
@@ -83,22 +75,22 @@ export default function Dashboard() {
 
                         <div className="shadow-sm">
                             <h3>Total Likes</h3>
-                            <h1 className="text-[40px]">{dashboardInfo.totalLikes}</h1>
+                            <h1 className="text-[40px]">0</h1>
                         </div>
 
                         <div className="shadow-sm">
                             <h3>Total Points</h3>
-                            <h1 className="text-[40px]">{dashboardInfo.totalComments}</h1>
+                            <h1 className="text-[40px]">0</h1>
                         </div>
 
                         <div className="shadow-sm">
                             <h3>Quizes Taken</h3>
-                            <h1 className="text-[40px]">{dashboardInfo.quizesTaken}</h1>
+                            <h1 className="text-[40px]"></h1>
                         </div>
 
                         <div className="shadow-sm">
                             <h3>Suggestions Made</h3>
-                            <h1 className="text-[40px]">{dashboardInfo.quizesTaken}</h1>
+                            <h1 className="text-[40px]"></h1>
                         </div>
                     </div>
 

@@ -13,7 +13,7 @@ export default function User({ user }) {
                 <div>
                     <h5 className='font-semibold uppercase'>{user.name}</h5>
                     <h5 className='italic'>{user.email}</h5>
-                    <h5>{user.matricule}</h5>
+                    <h5>{user && user.matricule}</h5>
                     <div className='flex items-center mt-2 justify-between'>
                         <TButton color='green' to="/codes/create">
                             {/* <LinkIcon className='h-4 w-4 mr-2' />   */}

@@ -1,11 +1,11 @@
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../config/firebase.js'; // Replace with your Firebase config import
-import { collection, getDocs, query, doc, where, deleteDoc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, query, doc, where, deleteDoc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase.js'; // Replace with your Firebase config import
 
 export async function getAllCodes() {
-    const codeRef = collection(db, 'codeSnippets');
-    const q = query(codeRef); // Optional: Add filtering or ordering based on needs
+    const codeRef = collection(db, 'codes');
+    const q = query(codeRef);
     const querySnapshot = await getDocs(q);
     const snippets = [];
     querySnapshot.forEach((doc) => {
@@ -15,10 +15,10 @@ export async function getAllCodes() {
 }
 
 
-export async function postCodeSnippet(code, title, description) {
-    const codeRef = collection(db, 'code');
+export async function postCode(code, title, description) {
+    const codeRef = collection(db, 'codes');
     const data = {
-        code: code,
+        text: code,
         title: title,
         description: description,
         author: auth.currentUser.uid, // Get currently logged in user ID
@@ -27,13 +27,14 @@ export async function postCodeSnippet(code, title, description) {
     try {
         const docRef = await addDoc(codeRef, data);
         console.log('Document written with ID:', docRef.id);
+        return docRef;
     } catch (error) {
         console.error('Error adding document:', error);
     }
 }
 
-export async function getCodeSnippetById(snippetId) {
-    const docRef = doc(db, 'codeSnippets', snippetId);
+export async function getCodeById(codeId) {
+    const docRef = doc(db, 'codes', codeId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists) {
         return docSnap.data();
@@ -44,8 +45,18 @@ export async function getCodeSnippetById(snippetId) {
     }
 }
 
-export async function addComment(snippetId, commentText) {
-    const commentRef = collection(db, 'codeSnippets', snippetId, 'comments');
+export async function deleteCode(codeId) {
+    const docRef = doc(db, 'codes', codeId);
+    try {
+        await deleteDoc(docRef);
+    } catch (error) {
+        console.error('Error deleting document:', error);
+    }
+}
+
+
+export async function addComment(codeId, commentText) {
+    const commentRef = collection(db, 'codes', codeId, 'comments');
     const data = {
         text: commentText,
         author: auth.currentUser.uid,
@@ -95,14 +106,6 @@ export async function addLike(snippetId, userId) {
     }
 }
 
-export async function deleteCodeSnippet(snippetId) {
-    const docRef = doc(db, 'codeSnippets', snippetId);
-    try {
-        await deleteDoc(docRef);
-    } catch (error) {
-        console.error('Error deleting document:', error);
-    }
-}
 
 export async function addSuggestion(snippetId, suggestionText) {
     const suggestionsRef = collection(db, 'codeSnippets', snippetId, 'suggestions');

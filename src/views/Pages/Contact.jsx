@@ -16,17 +16,7 @@ export default function Contact() {
         ev.preventDefault();
         console.log('form has been submitted');
 
-        axiosClient.post('/contact', {
-            name: nameRef.current.value,
-            description: descriptionRef.current.value,
-        }).then((response) => {
-            console.log(response);
-            showToast("Thanks for you feedback");
-            navigate('/');
-        }).catch((error) => {
-            console.error(error);
-            showToast("Error: " + error.message);
-        });
+        // send contact information with name and description
     }
 
     return (

@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import PageComponent from '../../components/PageComponent.jsx'
 import {  TrashIcon } from '@heroicons/react/24/outline';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import TButton from '../../components/TButton.jsx';
 import { StateContext } from '../../contexts/ContextProvider.jsx';
+import {postCode} from "../../firebase/code.js";
 
 export default function CodeCreate() {
     const navigate = useNavigate()
@@ -22,27 +23,12 @@ export default function CodeCreate() {
     });
 
 
-    // const onSubmit = (e) => {
-    //     e.preventDefault()
-    //
-    //     const payload = { ...code }
-
-    //     res
-    //     .then((response) => {
-    //         console.log(response);
-    //         navigate('/codes');
-    //         if (id) {
-    //             showToast("Code updated successfully");
-    //         } else {
-    //             showToast("Code created successfully");
-    //         }
-    //     }).catch((error) => {
-    //         if (error && error.response) {
-    //             setError(error.response.data.message);
-    //             console.log(error);
-    //         }
-    //     });
-    // }
+    const onSubmit = async (e) => {
+        e.preventDefault()
+        const postedCode = await postCode(code.text, code.title, code.description);
+        showToast("Code has been created");
+        navigate('/');
+    }
 
     const onImageChoose = (ev) => {
         const file = ev.target.files[0];
@@ -58,26 +44,9 @@ export default function CodeCreate() {
         reader.readAsDataURL(file);
     }
 
-    useEffect(() => {
-        // some code that will run if we are under a particular code
-        if (id) {
-            setLoading(true);
-            axiosClient.get(`/codes/${id}`)
-                .then(({data}) => {
-                    setLoading(false);
-                    setCode(data.code);
-                })
-        }
-    }, []);
 
     const deletecode = (code) => {
-        axiosClient.delete(`/codes/${code}`)
-            .then(({data}) => {
-                console.log(data);
-                showToast('code deleted successfully');
-            }).catch((error) => {
-                showToast(error.message);
-            })
+
     }
 
     return (

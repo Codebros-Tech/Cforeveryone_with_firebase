@@ -3,16 +3,16 @@ import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
 import { StateContext } from "../../contexts/ContextProvider";
-import {fetchAllCodes, getAllCodes} from '../../firebase/code.js';
+import { getAllCodes} from '../../firebase/code.js';
 
 export default function CodeIndex() {
     const [loading, setLoading ] = useState(false);
 
     const { allCodes, setAllCodes } = useContext(StateContext);
-
     const getCodes = async ()   => {
         const allCodes = await getAllCodes();
-        setLoading(allCodes);
+        setAllCodes(allCodes);
+        console.log(allCodes);
     }
 
     useEffect(() => {
@@ -52,6 +52,7 @@ export default function CodeIndex() {
                             No  Codes have been posted
                         </div>
                 }
+
             </div>
             }
             {
