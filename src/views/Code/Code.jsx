@@ -5,7 +5,6 @@ import Modal from '../../components/Modal';
 import { useNavigate } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
-import {addLike} from "../../firebase/code.js";
 
 export default function Code({thecode, commentHide = false}) {
 
@@ -26,8 +25,8 @@ export default function Code({thecode, commentHide = false}) {
     //     const like = await addLike(code_id, user_id);
     // }
 
-    const deleteCode = async (code_id) => {
-        const deleteCode = await deleteCodeId(code_id);
+    const deleteCode = (code_id) => {
+        const deleteCode = deleteCodeId(code_id);
         console.log('delete code response', deleteCode);
     }
 

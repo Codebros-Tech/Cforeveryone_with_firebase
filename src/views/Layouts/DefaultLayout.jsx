@@ -5,6 +5,7 @@ import { Link, NavLink, Navigate, Outlet, useNavigate } from 'react-router-dom'
 import Toast from '../../components/Toast'
 import { StateContext } from '../../contexts/ContextProvider'
 import Modal from "../../components/Modal.jsx"
+import {auth} from "../../config/firebase.js";
 
 const navigation = [
   { name: 'Dashboard', to: '/dashboard'},
@@ -20,20 +21,12 @@ function classNames(...classes) {
 
 export default function DefaultLayout() {
 
-    const navigate = useNavigate();
-
     const modalTitle  = "Deactivate account";
     const modalText = "Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone."
 
     const [ modalState, setModalState] = useState(false);
 
-    const { currentUser, setCurrentUser, userToken, setUserToken, showToast } = useContext(StateContext);
-
-
-    useEffect(() => {
-        setCurrentUser(null);
-    }, []);
-
+    const { showToast } = useContext(StateContext);
 
     const deleteAccount =  (ev) => {
         ev.preventDefault();
@@ -41,17 +34,15 @@ export default function DefaultLayout() {
     }
 
     const deleteFun = () => {
-        setCurrentUser(null);
-        showToast("Account Deleted Successfully")
-        console.error("Error occurs during deleting the user");
-        showToast("Couldn't delete the account");
+        // delete the current user
     }
 
     const logout = (ev) => {
         ev.preventDefault();
     }
 
-    if (!userToken) {
+
+    if (!auth.currentUser) {
         return <Navigate to='/login' />
     }
 

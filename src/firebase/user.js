@@ -1,22 +1,46 @@
-import { signInWithPopup, GoogleAuthProvider, signOut  } from 'firebase/auth';
-import { auth } from '../config/firebase.js'; // Replace with your Firebase config import
-import { deleteUser, doc, getDocs, collection, deleteDoc, query, where, updateDoc  } from 'firebase/firestore';
+import {
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signOut
+} from 'firebase/auth';
+import {auth, db} from '../config/firebase.js'; // Replace with your Firebase config import
+import {addDoc, collection, doc, getDocs, query, updateDoc, where} from 'firebase/firestore';
+import {deleteCode} from "./code.js";
 
 
-async function handleLogin() {
+export async function handleLoginWithGoogle() {
     const provider = new GoogleAuthProvider();
     try {
         const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        console.log('Logged in user:', user);
+        return result.user;
         // Store user data in your application state or local storage (optional)
     } catch (error) {
         console.error('Login error:', error);
     }
 }
 
+export async function handleLoginWithEmailAndPassword(email, password) {
+    try {
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        return result.user;
+    } catch (error) {
+        return error.code;
+    }
+}
 
-async function deleteUserAccount(userId) {
+export async function handleSignupWithEmailAndPassword(email, password) {
+    try {
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        return result.user;
+    } catch(error) {
+        return error.code;
+    }
+}
+
+
+export async function deleteUserAccount(userId) {
     // Check if the user is trying to delete themselves (avoid accidental deletion)
     if (userId === auth.currentUser.uid) {
         console.error('User cannot delete themselves. Implement confirmation step.');
@@ -27,13 +51,13 @@ async function deleteUserAccount(userId) {
     const codeRef = collection(db, 'codeSnippets');
     const q = query(codeRef, where('author', '==', userId));
     const querySnapshot = await getDocs(q);
-    const snippetsToDelete = [];
+    const codeToDelete = [];
     querySnapshot.forEach((doc) => {
-        snippetsToDelete.push(doc.id);
+        codeToDelete.push(doc.id);
     });
 
-    for (const snippetId of snippetsToDelete) {
-        await deleteCodeSnippet(snippetId); // Reuse the existing deleteCodeSnippet function
+    for (const codeId of codeToDelete) {
+        await deleteCode(codeId); // Reuse the existing deleteCodeSnippet function
     }
 
     // 2. Delete user document (optional, depending on your data structure)
@@ -47,7 +71,7 @@ async function deleteUserAccount(userId) {
 }
 
 
-async function getAllLikes(snippetId) {
+export async function getAllLikes(snippetId) {
     const likesRef = collection(db, 'codeSnippets', snippetId, 'likes');
     const q = query(likesRef);
     const querySnapshot = await getDocs(q);
@@ -59,7 +83,7 @@ async function getAllLikes(snippetId) {
 }
 
 
-async function fetchAllUsers() {
+export  async function fetchAllUsers() {
     const usersRef = collection(db, 'users'); // Replace with your user collection name
     const querySnapshot = await getDocs(usersRef);
     const users = [];
@@ -70,7 +94,7 @@ async function fetchAllUsers() {
     return users;
 }
 
-async function logoutUser() {
+export async function logoutUser() {
     try {
         await signOut(auth);
         console.log('User logged out successfully.');
@@ -79,7 +103,7 @@ async function logoutUser() {
     }
 }
 
-async function addFeedback(feedbackText) {
+export  async function addFeedback(feedbackText) {
     const feedbackRef = collection(db, 'feedback'); // Replace with your feedback collection name
     const data = {
         text: feedbackText,
@@ -95,7 +119,7 @@ async function addFeedback(feedbackText) {
 }
 
 
-async function updateUserProfile(updatedFields) {
+export async function updateUserProfile(updatedFields) {
     const userRef = doc(db, 'users', auth.currentUser.uid); // Replace with your user collection name
     try {
         await updateDoc(userRef, updatedFields);

@@ -2,44 +2,36 @@ import { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom"
 import { StateContext } from "../../contexts/ContextProvider";
 import { PhotoIcon } from '@heroicons/react/24/outline';
+import {handleSignupWithEmailAndPassword} from "../../firebase/user.js";
 
 export default function Signup() {
-
-    const { setCurrentUser, setUserToken } = useContext(StateContext);
-
     const nameRef = useRef(null);
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
     const passwordConfirmationRef = useRef(null);
-    const [imageData, setImageData] = useState(null)
-
-    const [errors, setErrors] = useState({__html: ''});
+    const [imageData, setImageData] = useState(null);
+    const [error, setError] = useState({
+        label: null,
+    });
 
     const submitForm = (ev) => {
         ev.preventDefault();
 
-        setErrors({ __html: ''});
+        if (passwordRef.current.value !== passwordConfirmationRef.current.value) {
+            passwordConfirmationRef.current.focus = true;
+            setError({
+                label: "Passwords do not match",
+            });
 
-        axiosClient.post('/signup', {
-            image: imageData,
-            name: nameRef.current.value,
-            email: emailRef.current.value,
-            password: passwordRef.current.value,
-            password_confirmation: passwordConfirmationRef.current.value,
+            return;
+        }
+
+        handleSignupWithEmailAndPassword(
+            emailRef.current.value,
+            passwordRef.current.value,
+        ).then(r => {
+
         })
-        .then(({data}) => {
-            setCurrentUser(data.user);
-            setUserToken(data.token);
-        })
-        // destructure the error to get the response.
-        .catch((error) => {
-            if (error.response && error.response.data) {
-                const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], []);
-                // <br /> will be added at the end of each string to move us to the next line.
-                setErrors({__html: finalErrors.join("<br>")})
-            }
-            console.log(error);
-        });
     }
 
     const onImageChoose = (ev) => {
@@ -66,7 +58,9 @@ export default function Signup() {
             </h2>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 {
-                    errors.__html && <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={errors}>
+                    error.label &&
+                    <div className="bg-red-500 rounded py-2 px-3 text-white">
+                        {error.label}
                     </div>
                 }
 
