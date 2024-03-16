@@ -1,6 +1,5 @@
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom"
-import { StateContext } from "../../contexts/ContextProvider";
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import {handleSignupWithEmailAndPassword} from "../../firebase/user.js";
 
@@ -11,7 +10,7 @@ export default function Signup() {
     const passwordConfirmationRef = useRef(null);
     const [imageData, setImageData] = useState(null);
     const [error, setError] = useState({
-        label: null,
+        message: null,
     });
 
     const submitForm = (ev) => {
@@ -20,7 +19,7 @@ export default function Signup() {
         if (passwordRef.current.value !== passwordConfirmationRef.current.value) {
             passwordConfirmationRef.current.focus = true;
             setError({
-                label: "Passwords do not match",
+                message: "Passwords do not match",
             });
 
             return;
@@ -29,8 +28,15 @@ export default function Signup() {
         handleSignupWithEmailAndPassword(
             emailRef.current.value,
             passwordRef.current.value,
-        ).then(r => {
-
+        ).then(response => {
+            // edit the name of the user
+            if (response === 'account-exists-with-different-credential') {
+                // the account exist with a different credential
+                console.log('Wrong Credentials');
+                setError({
+                    message: "wrong Credentials ",
+                })
+            }
         })
     }
 
@@ -60,7 +66,7 @@ export default function Signup() {
                 {
                     error.label &&
                     <div className="bg-red-500 rounded py-2 px-3 text-white">
-                        {error.label}
+                        {error.message}
                     </div>
                 }
 
@@ -138,7 +144,7 @@ export default function Signup() {
                                 id="password"
                                 ref={passwordRef}
                                 type="password"
-                                autoComplete="current-password"
+                                autoComplete="new-password"
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
@@ -147,16 +153,16 @@ export default function Signup() {
 
                     <div>
                         <div className="flex items-center justify-between">
-                            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="#password_confirmation" className="block text-sm font-medium leading-6 text-gray-900">
                                 Password Confirmation
                             </label>
                         </div>
                         <div className="mt-2">
                             <input
                                 id="password_confirmation"
-                                name="password_confirmation"
                                 type="password"
                                 ref={passwordConfirmationRef}
+                                autoComplete={"password"}
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />

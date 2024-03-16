@@ -19,15 +19,16 @@ export default function CodeCreate() {
         title: "",
         text: "",
         description: "",
-        errorImage: null,
+        // errorImage: null,
     });
 
 
     const onSubmit = async (e) => {
         e.preventDefault()
+        setLoading(true);
         const postedCode = await postCode(code.text, code.title, code.description);
         showToast("Code has been created");
-        navigate('/');
+        setLoading(false);
     }
 
     const onImageChoose = (ev) => {
@@ -47,8 +48,8 @@ export default function CodeCreate() {
 
     const deletecode = (code) => {
 
-    }
 
+    }
     return (
         <PageComponent
             title={!id ?  "Post Your Code" : "Update The Code"}

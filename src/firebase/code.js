@@ -1,28 +1,31 @@
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../config/firebase.js'; // Replace with your Firebase config import
+import { auth } from '../config/firebase.js';
 import { collection, getDocs, addDoc, query, doc, where, deleteDoc, getDoc } from 'firebase/firestore';
-import { db } from '../config/firebase.js'; // Replace with your Firebase config import
+import { db } from '../config/firebase.js';
 
 export async function getAllCodes() {
-    const codeRef = collection(db, 'codes');
-    const q = query(codeRef);
-    const querySnapshot = await getDocs(q);
-    const snippets = [];
-    querySnapshot.forEach((doc) => {
-        snippets.push({ ...doc.data(), id: doc.id });
-    });
-    return snippets;
+    try {
+        const codeRef = collection(db, 'codes');
+        const q = query(codeRef);
+        const querySnapshot = await getDocs(q);
+        const snippets = [];
+        querySnapshot.forEach((doc) => {
+            snippets.push({ ...doc.data(), id: doc.id });
+        });
+        return snippets;
+    } catch (error) {
+        console.error('Error occurred when fetching all of the codes');
+    }
 }
 
-
-export async function postCode(code, title, description) {
+export async function postCode(code, title, description, language = 'C') {
     const codeRef = collection(db, 'codes');
     const data = {
         text: code,
         title: title,
         description: description,
-        author: auth.currentUser.uid, // Get currently logged in user ID
-        createdAt: new Date(),
+        language: language,
+        user_id: auth.currentUser.uid,
+        created_at: new Date(),
     };
     try {
         const docRef = await addDoc(codeRef, data);
@@ -54,13 +57,12 @@ export async function deleteCode(codeId) {
     }
 }
 
-
-export async function addComment(codeId, commentText) {
+export async function addCodeComment(codeId, commentText) {
     const commentRef = collection(db, 'codes', codeId, 'comments');
     const data = {
         text: commentText,
-        author: auth.currentUser.uid,
-        createdAt: new Date(),
+        user_id: auth.currentUser.uid,
+        created_at: new Date(),
     };
     try {
         await addDoc(commentRef, data);
@@ -70,19 +72,22 @@ export async function addComment(codeId, commentText) {
 }
 
 export async function getCodeComments(codeId) {
-    const comments = collection(db, 'comment');
-    const q = query(codeRef, where('code_id', '==', codeId));
-    const querySnapshot = await getDocs(q);
-    const snippets = [];
-    querySnapshot.forEach((doc) => {
-        snippets.push({ ...doc.data(), id: doc.id });
-    });
-    return snippets;
+   try {
+       const comments = collection(db, 'codes', codeId, 'comments');
+       const q = query(comments);
+       const querySnapshot = await getDocs(q);
+       const snippets = [];
+       querySnapshot.forEach((doc) => {
+           snippets.push({ ...doc.data(), id: doc.id });
+       });
+       return snippets;
+   } catch (error ) {
+       console.error("Error occurred when fetching the code comments");
+   }
 }
 
-
-
-export async function getUserCodes(userId) {
+export async function getUserCodes() {
+    const userId = auth.currentUser.uid;
     const codeRef = collection(db, 'codes');
     const q = query(codeRef, where('user_id', '==', userId));
     const querySnapshot = await getDocs(q);
@@ -93,11 +98,20 @@ export async function getUserCodes(userId) {
     return snippets;
 }
 
-export async function addLike(snippetId, userId) {
-    const likesRef = collection(db, 'codeSnippets', snippetId, 'likes');
+export async function addCodeLike(codeId, userId) {
+    const likesRef = collection(db, 'codes', codeId, 'likes');
+    const likeQuery = query(
+        likesRef,
+        where('user_id', '==', userId),
+        where('code_id', '==', codeId),
+    );
+    const likeQuerySnapshot = await getDoc(likeQuery);
+
+
+
     const data = {
-        userId: userId,
-        likedAt: new Date(),
+        user_id: userId,
+        liked_at: new Date(),
     };
     try {
         await addDoc(likesRef, data);
@@ -105,7 +119,6 @@ export async function addLike(snippetId, userId) {
         console.error('Error adding like:', error);
     }
 }
-
 
 export async function addSuggestion(snippetId, suggestionText) {
     const suggestionsRef = collection(db, 'codeSnippets', snippetId, 'suggestions');
@@ -121,30 +134,27 @@ export async function addSuggestion(snippetId, suggestionText) {
     }
 }
 
-
-export async function getAllLikes(snippetId) {
-    const likesRef = collection(db, 'codeSnippets', snippetId, 'likes');
+export async function getAllCodeLikesCount(codeId) {
+    const likesRef = collection(db, 'codes', codeId, 'likes');
     const q = query(likesRef);
     const querySnapshot = await getDocs(q);
     const likes = [];
     querySnapshot.forEach((doc) => {
         likes.push(doc.data());
     });
-    return likes;
+    return likes.length;
 }
 
-
-export async function addUserToViewed(snippetId, userId) {
+export async function addUserToCodeViewers(codeId, userId) {
     // Check if the user has already viewed the code snippet
-    const viewedRef = collection(db, 'codeSnippets', snippetId, 'viewedUsers');
+    const viewedRef = collection(db, 'codes', codeId, 'views');
     const q = query(viewedRef, where('userId', '==', userId));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-        // User hasn't viewed it yet, add them to the list
         const data = {
-            userId: userId,
-            viewedAt: new Date(),
+            user_id: userId,
+            viewed_at: new Date(),
         };
         try {
             await addDoc(viewedRef, data);
@@ -156,9 +166,8 @@ export async function addUserToViewed(snippetId, userId) {
     }
 }
 
-
 export async function filterCodesByLanguage(language) {
-    const codeRef = collection(db, 'codeSnippets');
+    const codeRef = collection(db, 'codes');
     const q = query(codeRef, where('language', '==', language));
     const querySnapshot = await getDocs(q);
     const snippets = [];

@@ -4,9 +4,15 @@ import {useEffect, useRef, useState} from "react";
 import { useParams } from "react-router-dom";
 import Code from './Code.jsx'
 import Comment from './Comment.jsx'
-import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
-import { useNavigate } from 'react-router-dom'
-import {addComment, getCodeById, getUserCodes} from "../../firebase/code.js";
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
+
+import {
+    addCodeComment,
+    addUserToCodeViewers,
+    getCodeById,
+    getCodeComments,
+} from "../../firebase/code.js";
+import {auth} from "../../config/firebase.js";
 
 export default function CodeView() {
     const { id } = useParams();
@@ -15,21 +21,24 @@ export default function CodeView() {
     const [code, setCode] = useState({});
     const [startTime, setStartTime ] = useState(0.0);
     const commentRef = useRef(null);
-    const navigate = useNavigate();
 
-    const getCodeComments = async (id)  =>  {
-        const comments = await getUserCodes();
-        // suppose to fetch the comment and the code.
+    const getComments = async () => {
+        const fetchedComments = await getCodeComments(id);
+        setComments(fetchedComments);
     }
 
-    const getCodeAsync = async () =>  {
+    useEffect(() => {
+        getComments();
+    }, []);
+
+    const getCodeInstance = async () =>  {
         const codeInstance = await getCodeById(id);
         setCode(codeInstance);
     }
 
     useEffect(() => {
         setLoading(true);
-        getCodeAsync();
+        getCodeInstance();
 
         const initialTime = performance.now();
         setStartTime(initialTime);
@@ -43,19 +52,14 @@ export default function CodeView() {
         const endTime = performance.now();
         const durationFloat = (endTime - startTime) / 1000;
         const duration =  durationFloat.toFixed(0);
-        axiosClient.post(`/codes/${id}/viewed`, {
-            duration: duration,
-        }).then(({data}) => {
-            console.log(data);
-        }).catch((error) => {
-            console.error(error);
-        });
+
+        addUserToCodeViewers(id, auth.currentUser.uid, duration).then(r => console.log("user has been added to viewed users ", r));
     }
     const submitComment = (ev) => {
         ev.preventDefault();
         const comment = commentRef.current.value;
         commentRef.current.value = "";
-        // addComment()
+        addCodeComment(id, comment).then(r => console.log("Comment added to the code."));
     }
 
     return (

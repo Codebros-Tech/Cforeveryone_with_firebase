@@ -18,7 +18,6 @@ import AdminLogin from "./views/Guest/AdminLogin"
 import Main from './views/Layouts/Main'
 import AdminLayout from "./views/Layouts/AdminLayout"
 import CodeCreate from "./views/Code/CodeCreate"
-import CodeShow from "./views/Code/CodeShow"
 import CodeIndex from "./views/Code/CodeIndex"
 import MyCodes from "./views/Code/MyCodes"
 const CodeView = lazy(()  => import('./views/Code/CodeView.jsx'));
@@ -27,7 +26,6 @@ const Contact = lazy(() => import("./views/Pages/Contact"));
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
-
             <Route element={<Main />}>
                 <Route path="/" element={<Hero />} />
 
@@ -46,9 +44,7 @@ const router = createBrowserRouter(
                 <Route path="/codes/mine" element={<MyCodes />} />
                 <Route path="/codes/create" element={<CodeCreate />} />
                 <Route path="/codes/:id/edit" element={<CodeCreate />} />
-                <Route path="/codes/:id" element={<CodeShow />} />
-
-                <Route path="/codes/:id/comments" element={<CodeView />} />
+                <Route path="/codes/:id" element={<CodeView />} />
 
                 <Route path="/users" element={<Users />} />
                 <Route path="/users/:username" element={<AccountInfo />} />

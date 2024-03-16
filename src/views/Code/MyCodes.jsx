@@ -3,15 +3,21 @@ import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
 import { StateContext } from "../../contexts/ContextProvider";
+import {getUserCodes} from "../../firebase/code.js";
 
 export default function MyCodes() {
     const [loading, setLoading] = useState(false);
     const { myCodes, setMyCodes } = useContext(StateContext);
 
+    const getUserCodeInstance = async () => {
+        const userCodes = await getUserCodes();
+        setMyCodes(userCodes);
+    }
+
     useEffect(() => {
         setLoading(true);
-
-        // fetching all of the codes that where posted by this user
+        getUserCodeInstance().then(r => console.log('get the user code instance', r));
+        setLoading(false);
     }, []);
 
     return (

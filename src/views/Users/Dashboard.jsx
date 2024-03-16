@@ -3,6 +3,7 @@ import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
+import {getDashboardInformation} from "../../firebase/user.js";
 
 export default function Dashboard() {
 
@@ -41,8 +42,15 @@ export default function Dashboard() {
         setLoadingCode(false);
     }
 
+    const getDashboardInfo = async () => {
+        const data  = await getDashboardInformation();
+        setDashboardInfo(data);
+    }
+
     useEffect(() => {
         setLoading(true);
+        getDashboardInfo().then(r => console.log("information fetched"));
+        setLoading(false)
     }, []);
 
     return (
@@ -65,7 +73,7 @@ export default function Dashboard() {
                     <div className="max-w-6xl grid grid-cols-2 gap-y-5 gap-x-3 sm:grid-cols-3 text-center font-bold">
                         <div className="shadow-sm">
                             <h3>Codes Posted</h3>
-                            <h1 className="text-[40px]">{dashboardInfo.codesNum}</h1>
+                            <h1 className="text-[40px]">{dashboardInfo.codes}</h1>
                         </div>
 
                         <div className="shadow-sm">

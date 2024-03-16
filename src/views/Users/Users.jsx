@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react"
 import PageComponent from "../../components/PageComponent"
 import User from "./User"
+import {getAllUsers} from "../../firebase/user.js";
 
 export default function People() {
     const [users , setUsers] = useState([]);
     const [loading , setLoading] = useState(false);
 
+    const getAllUserInstance = async () => {
+        try {
+            const users = await getAllUsers();
+            setUsers(users);
+        } catch (error) {
+            console.error('error fetching all the users', error);
+        }
+    }
 
     useEffect(() => {
         setLoading(true);
-        // fetch all of the users of this application
+        getAllUserInstance().then(() => console.log('done fetching the users'));
         setLoading(false);
     }, [])
 

@@ -6,7 +6,7 @@ import {
     signOut
 } from 'firebase/auth';
 import {auth, db} from '../config/firebase.js'; // Replace with your Firebase config import
-import {addDoc, collection, doc, getDocs, query, updateDoc, where} from 'firebase/firestore';
+import {addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where} from 'firebase/firestore';
 import {deleteCode} from "./code.js";
 
 
@@ -30,9 +30,13 @@ export async function handleLoginWithEmailAndPassword(email, password) {
     }
 }
 
-export async function handleSignupWithEmailAndPassword(email, password) {
+export async function handleSignupWithEmailAndPassword(name ,email, password) {
     try {
         const result = await createUserWithEmailAndPassword(auth, email, password);
+        // set the name of this user
+        await updateUserProfile({
+            displayName: name,
+        })
         return result.user;
     } catch(error) {
         return error.code;
@@ -41,49 +45,27 @@ export async function handleSignupWithEmailAndPassword(email, password) {
 
 
 export async function deleteUserAccount(userId) {
-    // Check if the user is trying to delete themselves (avoid accidental deletion)
     if (userId === auth.currentUser.uid) {
-        console.error('User cannot delete themselves. Implement confirmation step.');
-        return;
+        const codeRef = collection(db, 'codes');
+        const q = query(codeRef, where('user_id', '==', userId));
+        const querySnapshot = await getDocs(q);
+        const codeToDelete = [];
+        querySnapshot.forEach((doc) => {
+            codeToDelete.push(doc.id);
+        });
+
+        for (const codeId of codeToDelete) {
+            await deleteCode(codeId); // Reuse the existing deleteCodeSnippet function
+        }
+
+        const userRef = collection(db, 'users', userId);
+        await deleteDoc(userRef);
+        console.log('User deleted successfully.');
     }
-
-    // 1. Delete all code snippets posted by the user
-    const codeRef = collection(db, 'codeSnippets');
-    const q = query(codeRef, where('author', '==', userId));
-    const querySnapshot = await getDocs(q);
-    const codeToDelete = [];
-    querySnapshot.forEach((doc) => {
-        codeToDelete.push(doc.id);
-    });
-
-    for (const codeId of codeToDelete) {
-        await deleteCode(codeId); // Reuse the existing deleteCodeSnippet function
-    }
-
-    // 2. Delete user document (optional, depending on your data structure)
-    // You might have a separate users collection to store user data.
-    // const userDocRef = doc(db, 'users', userId);
-    // await deleteDoc(userDocRef);
-
-    // 3. Delete user from authentication (important)
-    await deleteUser(auth.currentUser); // Replace with actual user deletion logic
-    console.log('User deleted successfully.');
 }
 
 
-export async function getAllLikes(snippetId) {
-    const likesRef = collection(db, 'codeSnippets', snippetId, 'likes');
-    const q = query(likesRef);
-    const querySnapshot = await getDocs(q);
-    const likes = [];
-    querySnapshot.forEach((doc) => {
-        likes.push(doc.data());
-    });
-    return likes;
-}
-
-
-export  async function fetchAllUsers() {
+export  async function getAllUsers() {
     const usersRef = collection(db, 'users'); // Replace with your user collection name
     const querySnapshot = await getDocs(usersRef);
     const users = [];
@@ -107,8 +89,9 @@ export  async function addFeedback(feedbackText) {
     const feedbackRef = collection(db, 'feedback'); // Replace with your feedback collection name
     const data = {
         text: feedbackText,
-        userId: auth.currentUser.uid, // Get currently logged in user ID
-        createdAt: new Date(),
+        user_id: auth.currentUser.uid,
+        name: auth.currentUser.displayName,
+        created_at: new Date(),
     };
     try {
         await addDoc(feedbackRef, data);
@@ -129,6 +112,22 @@ export async function updateUserProfile(updatedFields) {
     }
 }
 
-async function getDashboardInformation() {
-    // this is going to return the dashboard information to the user.
+export async function getDashboardInformation() {
+    // get the total codes
+    const codeRef = collection(db, 'codes');
+    const userCodesQuery = query(
+        codeRef,
+        where('user_id', '==', auth.currentUser.uid),
+    );
+    const querySnapshot = await getDocs(userCodesQuery);
+    const codes = [];
+    querySnapshot.forEach((doc) => {
+        // Consider filtering out sensitive user data before returning the user object
+        codes.push({ ...doc.data(), id: doc.id });
+    });
+    // return codes.length;
+
+    return {
+        codes: codes.length,
+    }
 }

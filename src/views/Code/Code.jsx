@@ -2,31 +2,28 @@ import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
 import { StateContext } from '../../contexts/ContextProvider';
 import Modal from '../../components/Modal';
-import { useNavigate } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
+import {addCodeLike, getAllCodeLikesCount} from "../../firebase/code.js";
+import {auth} from "../../config/firebase.js";
 
 export default function Code({thecode, commentHide = false}) {
 
-    const {currentUser , showToast} = useContext(StateContext);
+    const {showToast} = useContext(StateContext);
     const [logState, setLogState ] = useState(false);
-    const [code, setCode] = useState(thecode);
+    const [code] = useState(thecode);
 
     const [ modalState, setModalState] = useState(false);
-
-    const navigate = useNavigate();
 
     const modalTitle  = "Delete The Code";
     const modalText = "Are you sure you want to delete this Code? All of the comments related to this code will be deleted."
 
-    const { deleteCodeId } = useContext(StateContext);
-
-    // const addLike = async (code_id) => {
-    //     const like = await addLike(code_id, user_id);
-    // }
+    const addLike = (code_id) => {
+        addCodeLike(code_id, auth.currentUser.uid).then(r => console.log("Code has been liked"));
+    }
 
     const deleteCode = (code_id) => {
-        const deleteCode = deleteCodeId(code_id);
+        const deleteCode = deleteCode(code_id);
         console.log('delete code response', deleteCode);
     }
 
@@ -34,6 +31,8 @@ export default function Code({thecode, commentHide = false}) {
     if (modalState) {
         return <Modal yesFunction={() => deleteCode(code.id)} text={modalText} title={modalTitle} />
     }
+
+    const codeLikesCount = getAllCodeLikesCount(code.id);
 
     return (
         <div className="flex rounded w-full mt-3">
@@ -72,7 +71,7 @@ export default function Code({thecode, commentHide = false}) {
                     <CopyToClipboard text={code.text} onCopy={() => {
                         showToast("Code has been copied to clipboard");
                     }}>
-                        <button className="text-[13px] bg-gray-800 text-white" title='Copy code to clipboard text-center   '>
+                        <button className="text-[13px] bg-gray-800 text-white" title='Copy code to clipboard text-center '>
                             Copy
                         </button>
                     </CopyToClipboard>
@@ -88,19 +87,19 @@ export default function Code({thecode, commentHide = false}) {
                             <motion.img initial={{ scale: 0}} animate={{scale: 1}} transition={{ duration: 1}} className='w-80' alt={"The code error image."} src={code.errorImage}/>
                         }
                     </motion.div>
-                    {/*{!commentHide &&*/}
-                    {/*    <div className={"flex pt-2 font-thin gap-x-2 text-gray-100 "}>*/}
-                    {/*        <button className={" px-4 bg-gray-800"} onClick={() => likeComment(code.id)}>*/}
-                    {/*             Like <span className={"text-[14px] "}>{code.likes} </span>*/}
-                    {/*        </button>*/}
-                    {/*        <a href={`/codes/${code.id}/comments`} className='flex'>*/}
-                    {/*            Comment*/}
-                    {/*        </a>*/}
-                    {/*        <a href='/codes/id/suggestion'>*/}
-                    {/*            Suggest*/}
-                    {/*        </a>*/}
-                    {/*    </div>*/}
-                    {/*}*/}
+                    {!commentHide &&
+                        <div className={"flex pt-2 font-thin gap-x-2 text-gray-100 "}>
+                            <button onClick={() => addLike(code.id)} className={" px-4 bg-gray-800"}>
+                                 Like <span className={"text-[14px] "}>{codeLikesCount}</span>
+                            </button>
+                            <a href={`/codes/${code.id}`} className='flex'>
+                                Comment
+                            </a>
+                            <a href='/codes/id/suggestion'>
+                                Suggest
+                            </a>
+                        </div>
+                    }
                 </div>
             }
         </div>

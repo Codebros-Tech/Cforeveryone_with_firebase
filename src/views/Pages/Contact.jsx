@@ -1,22 +1,19 @@
-import { useContext, useRef } from "react";
-import { StateContext } from "../../contexts/ContextProvider";
-import { useNavigate } from "react-router-dom";
+import {useRef} from "react";
+import {addFeedback} from "../../firebase/user.js";
 
 export default function Contact() {
 
     const nameRef = useRef(null);
     const descriptionRef = useRef(null);
 
-    const { showToast } = useContext(StateContext);
-
-    const navigate = useNavigate();
-
-
-    const submitForm = (ev) => {
+    const submitForm = async (ev) => {
         ev.preventDefault();
-        console.log('form has been submitted');
 
-        // send contact information with name and description
+        try {
+            await addFeedback(descriptionRef.current.value);
+        } catch (error) {
+            console.error("Error sending the feedback");
+        }
     }
 
     return (

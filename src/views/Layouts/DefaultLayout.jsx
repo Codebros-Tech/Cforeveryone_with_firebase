@@ -6,6 +6,7 @@ import Toast from '../../components/Toast'
 import { StateContext } from '../../contexts/ContextProvider'
 import Modal from "../../components/Modal.jsx"
 import {auth} from "../../config/firebase.js";
+import {deleteUserAccount, logoutUser} from "../../firebase/user.js";
 
 const navigation = [
   { name: 'Dashboard', to: '/dashboard'},
@@ -26,7 +27,6 @@ export default function DefaultLayout() {
 
     const [ modalState, setModalState] = useState(false);
 
-    const { showToast } = useContext(StateContext);
 
     const deleteAccount =  (ev) => {
         ev.preventDefault();
@@ -34,11 +34,15 @@ export default function DefaultLayout() {
     }
 
     const deleteFun = () => {
-        // delete the current user
+        deleteUserAccount(auth.currentUser.uid).then(r => console.log('account deleted'));
     }
 
-    const logout = (ev) => {
-        ev.preventDefault();
+    const logout = async (ev) => {
+        try {
+            await logoutUser();
+        } catch (error) {
+            console.error('error occurred when trying to log out the user');
+        }
     }
 
 

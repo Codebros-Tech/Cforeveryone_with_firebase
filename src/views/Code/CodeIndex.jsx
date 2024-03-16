@@ -3,7 +3,7 @@ import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
 import { StateContext } from "../../contexts/ContextProvider";
-import { getAllCodes} from '../../firebase/code.js';
+import {filterCodesByLanguage, getAllCodes} from '../../firebase/code.js';
 
 export default function CodeIndex() {
     const [loading, setLoading ] = useState(false);
@@ -13,6 +13,11 @@ export default function CodeIndex() {
         const allCodes = await getAllCodes();
         setAllCodes(allCodes);
         console.log(allCodes);
+    }
+
+    const codesByLanguage = async (langauge) => {
+        const codes = await filterCodesByLanguage(langauge);
+        setAllCodes(codes);
     }
 
     useEffect(() => {
@@ -37,6 +42,7 @@ export default function CodeIndex() {
                 </TButton>
             </div>
         )}>
+            {/*Add filter section to filter the codes by the language*/}
             {
                 !loading  &&
                 <div className={"flex flex-col items-center sm:block"}>
