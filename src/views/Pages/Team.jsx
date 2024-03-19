@@ -1,4 +1,4 @@
-import {people} from "../../constant.js";
+import {people} from "../../utils/constant.js";
 
 export default function Team() {
     return (

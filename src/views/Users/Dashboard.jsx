@@ -1,9 +1,9 @@
-import PageComponent from "../../components/PageComponent";
-import TButton from "../../components/TButton";
-import { useContext, useEffect, useState } from "react";
+import {lazy, useContext, useEffect, useState} from "react";
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
 import {getDashboardInformation} from "../../firebase/user.js";
+const PageComponent = lazy(() => import("../../components/PageComponent"));
+const TButton = lazy(() => import("../../components/TButton"));
 
 export default function Dashboard() {
 

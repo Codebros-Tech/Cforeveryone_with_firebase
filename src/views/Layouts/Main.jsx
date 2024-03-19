@@ -1,7 +1,7 @@
-import {useContext, useEffect} from 'react'
+import {lazy, useContext, useEffect} from 'react'
 import { useNavigate, Outlet} from 'react-router-dom'
 import { StateContext} from "../../contexts/ContextProvider.jsx";
-import MainHeader from "../../components/MainHeader.jsx";
+const MainHeader = lazy(() => import("../../components/MainHeader.jsx"));
 
 export default function Hero() {
 

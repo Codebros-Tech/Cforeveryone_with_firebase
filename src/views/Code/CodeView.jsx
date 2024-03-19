@@ -1,10 +1,13 @@
-import PageComponent from "../../components/PageComponent.jsx";
-import TButton from "../../components/TButton.jsx";
+import { lazy } from 'react';
 import {useEffect, useRef, useState} from "react";
 import { useParams } from "react-router-dom";
-import Code from './Code.jsx'
-import Comment from './Comment.jsx'
+
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
+
+const PageComponent = lazy(() => import( "../../components/PageComponent.jsx"));
+const TButton = lazy(() => import( "../../components/TButton.jsx"));
+const Code = lazy(() => import( './Code.jsx'));
+const Comment = lazy(() => import('./Comment.jsx'));
 
 import {
     addCodeComment,

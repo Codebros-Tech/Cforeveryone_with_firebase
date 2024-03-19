@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
-import TButton from '../../components/TButton'
-// import { LinkIcon } from '@heroicons/react/24/outline'
+import {lazy} from "react";
+const TButton = lazy(() => import('../../components/TButton'));
 
 export default function User({ user }) {
     return (

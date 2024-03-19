@@ -1,4 +1,6 @@
-import PageComponent from "../../components/PageComponent";
+import {lazy} from "react";
+
+const PageComponent = lazy(() => import("../../components/PageComponent"));
 
 export default function Problems() {
     return (

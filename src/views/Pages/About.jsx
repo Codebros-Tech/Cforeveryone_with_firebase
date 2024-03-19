@@ -1,4 +1,4 @@
-import {links, stats} from "../../constant.js";
+import {links, stats} from "../../utils/constant.js";
 
 export default function About() {
     return (

@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
+import {lazy, useContext, useState} from 'react';
 import { StateContext } from '../../contexts/ContextProvider';
-import Modal from '../../components/Modal';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
 import {addCodeLike, getAllCodeLikesCount} from "../../firebase/code.js";
 import {auth} from "../../config/firebase.js";
+
+const Modal = lazy(() => import('../../components/Modal'));
 
 export default function Code({thecode, commentHide = false}) {
 

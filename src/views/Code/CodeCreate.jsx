@@ -1,15 +1,13 @@
-import { useContext, useState } from 'react'
-import PageComponent from '../../components/PageComponent.jsx'
+import {lazy, useContext, useState} from 'react'
 import {  TrashIcon } from '@heroicons/react/24/outline';
-import { useNavigate, useParams } from 'react-router-dom';
-
-import TButton from '../../components/TButton.jsx';
+import { useParams } from 'react-router-dom';
 import { StateContext } from '../../contexts/ContextProvider.jsx';
 import {postCode} from "../../firebase/code.js";
 
-export default function CodeCreate() {
-    const navigate = useNavigate()
+const TButton = lazy(() => import('../../components/TButton.jsx'));
+const PageComponent =  lazy(() => import('../../components/PageComponent.jsx'));
 
+export default function CodeCreate() {
     const { id } = useParams()
     const [error, setError] = useState()
     const [loading, setLoading] = useState(false);
@@ -44,7 +42,6 @@ export default function CodeCreate() {
 
         reader.readAsDataURL(file);
     }
-
 
     const deletecode = (code) => {
 

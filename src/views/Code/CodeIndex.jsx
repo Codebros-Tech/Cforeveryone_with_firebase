@@ -1,8 +1,10 @@
-import Code from "./Code";
-import PageComponent from "../../components/PageComponent";
-import TButton from "../../components/TButton";
+import { lazy } from 'react';
 import {useEffect, useState} from "react";
 import {getAllCodes} from "../../firebase/code.js";
+
+const Code = lazy(() => import("./Code"));
+const PageComponent = lazy(() => import("../../components/PageComponent"));
+const TButton = lazy(() => import("../../components/TButton"));
 
 export default function CodeIndex() {
     const [loading, setLoading ] = useState(false);
@@ -11,7 +13,6 @@ export default function CodeIndex() {
     useEffect(() => {
         getAllCodes().then((codes) => {
             console.log(codes);
-            // setAllCodes(codes);
         })
     }, []);
 

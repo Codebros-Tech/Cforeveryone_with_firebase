@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react'
+import {useContext} from 'react'
 import { StateContext } from '../../contexts/ContextProvider';
 
 export default function UserInfo() {

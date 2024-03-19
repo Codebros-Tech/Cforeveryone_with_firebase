@@ -1,19 +1,14 @@
-import {Fragment, useContext, useEffect, useState} from 'react'
+import {Fragment, lazy, useContext, useEffect, useState} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link, NavLink, Outlet, useNavigate} from 'react-router-dom'
-import Toast from '../../components/Toast'
-import Modal from "../../components/Modal.jsx"
 import { StateContext} from "../../contexts/ContextProvider.jsx";
 import {deleteUserAccount, logoutUser} from "../../firebase/user.js";
+import {navigation} from "../../utils/utils.js";
 
-const navigation = [
-  { name: 'Dashboard', to: '/dashboard'},
-  { name: "Codes and Issues", to: '/codes'},
-  { name: "Users", to: '/users'},
-  { name: "Contact Us", to: '/contact'},
-  { name: "Notifications", to: '/notifications'},
-]
+const Toast = lazy(() => import('../../components/Toast'));
+const Modal = lazy(() => import("../../components/Modal.jsx"));
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
