@@ -1,7 +1,7 @@
-import {Navigate, Outlet, useNavigate} from "react-router-dom"
+import {Outlet, useNavigate} from "react-router-dom"
 import {checkLoginStatus} from "../../firebase/user.js";
 import {useEffect} from "react";
-import {isLogicalOrOperator} from "eslint-plugin-react-refresh";
+
 
 export default function GuestLayout() {
     const navigate = useNavigate();
