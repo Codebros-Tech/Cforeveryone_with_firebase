@@ -1,25 +1,40 @@
-import {
-    createUserWithEmailAndPassword,
-    GoogleAuthProvider,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    signOut
-} from 'firebase/auth';
+import {createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from 'firebase/auth';
 import {auth, db} from '../config/firebase.js'; // Replace with your Firebase config import
-import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc,
-    getDocs,
-    query,
-    serverTimestamp,
-    setDoc,
-    where
-} from 'firebase/firestore';
+import {addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where} from 'firebase/firestore';
 import { updateProfile} from 'firebase/auth';
 import {deleteCode} from "./code.js";
+import {useNavigate} from "react-router-dom";
 
+export const checkLoginStatus = () => {
+    const token = localStorage.getItem('firebaseAuthToken');
+    console.log("Token exist and is ", !!token);
+    return !!token;
+}
+
+
+export async function getDashboardInformation() {
+    try {
+
+        const codeRef = collection(db, 'codes');
+        const userCodesQuery = query(codeRef, where('user_id', '==', userId));
+        const querySnapshot = await getDocs(userCodesQuery);
+        if (querySnapshot.empty) {
+            console.log("no codes with that userId");
+        }
+        const codes = [];
+        querySnapshot.forEach((doc) => {
+            codes.push({ ...doc.data(), id: doc.id });
+        });
+
+        return {
+            codes: codes.length,
+        };
+
+    } catch (error) {
+        console.log('error ', error, ' occurred');
+        return [];
+    }
+}
 
 export async function handleLoginWithGoogle() {
     const provider = new GoogleAuthProvider();
@@ -35,7 +50,11 @@ export async function handleLoginWithGoogle() {
 export async function handleLoginWithEmailAndPassword(email, password) {
     try {
         const result = await signInWithEmailAndPassword(auth, email, password);
-        return result.user;
+        const user = result.user;
+        const token = user.getIdToken(true);
+        localStorage.setItem('firebaseAuthToken', await token);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        return user;
     } catch (error) {
         return error.code;
     }
@@ -98,6 +117,8 @@ export  async function getAllUsers() {
 export async function logoutUser() {
     try {
         await signOut(auth);
+        localStorage.removeItem('firebaseAuthToken');
+
         console.log('User logged out successfully.');
     } catch (error) {
         console.error('Error logging out:', error);
@@ -118,24 +139,4 @@ export  async function addFeedback(feedbackText) {
     } catch (error) {
         console.error('Error adding feedback:', error);
     }
-}
-
-
-
-export async function getDashboardInformation(userId) {
-    // get the total codes
-    const codeRef = collection(db, 'codes');
-    const userCodesQuery = query(codeRef, where('user_id', '==', userId));
-    const querySnapshot = await getDocs(userCodesQuery);
-    if (querySnapshot.empty) {
-        console.log("no codes with that userId");
-    }
-    const codes = [];
-    querySnapshot.forEach((doc) => {
-        codes.push({ ...doc.data(), id: doc.id });
-    });
-
-    return {
-        codes: codes.length,
-    };
 }

@@ -1,11 +1,14 @@
-import {useRef, useState} from "react";
-import {Link} from "react-router-dom";
+import {useContext, useRef, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import {handleLoginWithEmailAndPassword, handleLoginWithGoogle} from '../../firebase/user.js';
+import {StateContext} from "../../contexts/ContextProvider.jsx";
 
 export default function Login() {
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
     const [error, setError] = useState({message: null, linkLabel: null, link: null});
+    const { showToast } = useContext(StateContext);
+    const navigate = useNavigate();
 
     const submitForm = (event) => {
         event.preventDefault();
@@ -14,22 +17,9 @@ export default function Login() {
             emailRef.current.value,
             passwordRef.current.value
         ).then((response) => {
-            if (response === 'account-exists-with-different-credential') {
-                // the account exist with a different credential
-                console.log('Wrong Credentials');
-                setError({
-                    message: "wrong Credentials ",
-                    link: null,
-                    linkLabel: null,
-                });
-            } else if (response === 'auth/invalid-credential') {
-                console.log('Account does not exist');
-                setError({
-                    message: "Account does not exist",
-                    link: '/signup',
-                    linkLabel: "Create Account",
-                })
-            }
+            showToast("Login Successfully");
+            console.log(response);
+            navigate('/dashboard');
         })
     }
 
@@ -84,10 +74,9 @@ export default function Login() {
                         <div className="mt-2">
                             <input
                                 id="password"
-                                name="password"
                                 type="password"
                                 ref={passwordRef}
-                                autoComplete="current-password"
+                                autoComplete={'current-password'}
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />

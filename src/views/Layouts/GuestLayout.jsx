@@ -1,16 +1,17 @@
-import { Outlet, useNavigate} from "react-router-dom"
-import {StateContext} from "../../contexts/ContextProvider.jsx";
-import {useContext, useEffect} from "react";
+import {Navigate, Outlet, useNavigate} from "react-router-dom"
+import {checkLoginStatus} from "../../firebase/user.js";
+import {useEffect} from "react";
+import {isLogicalOrOperator} from "eslint-plugin-react-refresh";
 
 export default function GuestLayout() {
-    const { currentUser } = useContext(StateContext);
     const navigate = useNavigate();
-
     useEffect(() => {
-        if (currentUser) {
+        const isLoggedIn = checkLoginStatus();
+        if (isLoggedIn) {
             navigate('/dashboard');
         }
-    }, [currentUser]);
+    }, []);
+
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

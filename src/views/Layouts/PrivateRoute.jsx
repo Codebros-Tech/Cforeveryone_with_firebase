@@ -1,10 +1,10 @@
 import {Fragment, lazy, useContext, useEffect, useState} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import {Link, NavLink, Outlet, useNavigate} from 'react-router-dom'
+import {Link, Navigate, NavLink, Outlet, useNavigate} from 'react-router-dom'
 import { StateContext} from "../../contexts/ContextProvider.jsx";
-import {deleteUserAccount, logoutUser} from "../../firebase/user.js";
-import {navigation} from "../../utils/utils.js";
+import {checkLoginStatus, deleteUserAccount, logoutUser} from "../../firebase/user.js";
+import {getAuth} from "firebase/auth";
 
 const Toast = lazy(() => import('../../components/Toast'));
 const Modal = lazy(() => import("../../components/Modal.jsx"));
@@ -14,15 +14,27 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+const navigation = [
+    { name: 'Dashboard', to: '/dashboard'},
+    { name: "Codes and Issues", to: '/codes'},
+    { name: "Users", to: '/users'},
+    { name: "Contact Us", to: '/contact'},
+    { name: "Notifications", to: '/notifications'},
+]
+
 export default function PrivateRoute() {
     const navigate = useNavigate();
-    const { currentUser  } = useContext(StateContext);
-
     useEffect(() => {
-        if (!currentUser) {
+        const isLoggedIn = checkLoginStatus();
+        if (isLoggedIn) {
+            navigate('/dashboard');
+        } else {
             navigate('/login');
         }
     }, []);
+
+    const { currentUser , setCurrentUser } = useContext(StateContext);
+
 
     const modalTitle  = "Deactivate accounts";
     const modalText = "Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone."

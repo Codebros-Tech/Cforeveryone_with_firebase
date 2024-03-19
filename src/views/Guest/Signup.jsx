@@ -1,9 +1,13 @@
-import { useRef, useState} from "react";
-import { Link } from "react-router-dom"
+import {useContext, useRef, useState} from "react";
+import {Link, useNavigate} from "react-router-dom"
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import {handleSignupWithEmailAndPassword} from "../../firebase/user.js";
+import {StateContext} from "../../contexts/ContextProvider.jsx";
 
 export default function Signup() {
+    const { showToast } = useContext(StateContext);
+    const navigate = useNavigate();
+
     const nameRef = useRef(null);
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
@@ -30,7 +34,9 @@ export default function Signup() {
             emailRef.current.value,
             passwordRef.current.value,
         ).then(response => {
+            showToast("Account Created Successfully");
             console.log(response);
+            navigate('/dashboard');
         })
     }
 

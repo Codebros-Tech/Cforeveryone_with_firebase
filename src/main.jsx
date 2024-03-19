@@ -1,11 +1,10 @@
-import React, {Suspense} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { RouterProvider } from 'react-router-dom'
 import { ContextProvider } from './contexts/ContextProvider.jsx'
 
 import {Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom"
-import {lazy} from'react'
 import Dashboard from "./views/Users/Dashboard"
 import Login from './views/Guest/Login'
 import GuestLayout from "./views/Layouts/GuestLayout"
@@ -60,9 +59,7 @@ const router = createBrowserRouter(
                 <Route path="/myinfo" element={<UserInfo />} />
                 <Route path="/myinfo/edit" element={<InfoUpdate />} />
 
-                { /* This means that you can only contact us if you are a user of our platform.  */}
                 <Route path="/contact" element={<Contact />} />
-
 
                 <Route path="/*" element={<NotFound />} />
             </Route>
@@ -80,11 +77,7 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <ContextProvider>
-            <RouterProvider router={router} fallbackElement={<div>Loading the component</div>}>
-                <Suspense fallback={<div> Suspense Loading UI </div>}>
-
-                </Suspense>
-            </RouterProvider>
+            <RouterProvider router={router} fallbackElement={<div>Loading the component</div>} />
         </ContextProvider>
     </React.StrictMode>
 )
