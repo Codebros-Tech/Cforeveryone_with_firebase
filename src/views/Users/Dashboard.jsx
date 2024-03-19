@@ -11,16 +11,23 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(false);
     const [choice, setChoice] = useState({});
     const [question, setQuestion] = useState("");
-
     const OPENAI_API_KEY = import.meta.env.VITE_API_OPENAI_KEY;
     const [loadingCode, setLoadingCode] = useState(false);
-
-    const {showToast} = useContext(StateContext);
-
+    const {currentUser ,showToast} = useContext(StateContext);
     const openai = new OpenAI({
         apiKey: OPENAI_API_KEY,
         dangerouslyAllowBrowser: true,
     });
+
+
+    useEffect(() => {
+        setLoading(true);
+        if (currentUser) {
+            const data = getDashboardInformation(currentUser.uid);
+            setDashboardInfo(data);
+            setLoading(false)
+        }
+    }, [currentUser]);
 
     async function main(text) {
         setLoadingCode(true);
@@ -41,17 +48,6 @@ export default function Dashboard() {
         setChoice(completion.choices[0])
         setLoadingCode(false);
     }
-
-    const getDashboardInfo = async () => {
-        const data  = await getDashboardInformation();
-        setDashboardInfo(data);
-    }
-
-    useEffect(() => {
-        setLoading(true);
-        getDashboardInfo().then(r => console.log("information fetched"));
-        setLoading(false)
-    }, []);
 
     return (
         <PageComponent title="Dashboard"  buttons={(

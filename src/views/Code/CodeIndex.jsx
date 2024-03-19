@@ -1,33 +1,18 @@
 import Code from "./Code";
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
-import { useContext, useEffect, useState } from "react";
-import { StateContext } from "../../contexts/ContextProvider";
-import {filterCodesByLanguage, getAllCodes} from '../../firebase/code.js';
+import {useEffect, useState} from "react";
+import {getAllCodes} from "../../firebase/code.js";
 
 export default function CodeIndex() {
     const [loading, setLoading ] = useState(false);
-
-    const { allCodes, setAllCodes } = useContext(StateContext);
-    const getCodes = async ()   => {
-        const allCodes = await getAllCodes();
-        setAllCodes(allCodes);
-        console.log(allCodes);
-    }
-
-    const codesByLanguage = async (langauge) => {
-        const codes = await filterCodesByLanguage(langauge);
-        setAllCodes(codes);
-    }
+    const [allCodes, setAllCodes] = useState([]);
 
     useEffect(() => {
-        setLoading(true);
-        getCodes().then(r => {
-            console.log(r);
-        }).catch((error) => {
-            console.error('error occred when fetching the codes' , error);
-        });
-        setLoading(false);
+        getAllCodes().then((codes) => {
+            console.log(codes);
+            // setAllCodes(codes);
+        })
     }, []);
 
 

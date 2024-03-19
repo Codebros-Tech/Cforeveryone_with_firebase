@@ -11,7 +11,7 @@ export default function Code({thecode, commentHide = false}) {
 
     const {showToast} = useContext(StateContext);
     const [logState, setLogState ] = useState(false);
-    const [code] = useState(thecode);
+    const [code, setCode] = useState(thecode);
 
     const [ modalState, setModalState] = useState(false);
 

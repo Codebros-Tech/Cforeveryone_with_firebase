@@ -1,7 +1,8 @@
-import {  useState } from 'react'
+import {useContext, useEffect, useState} from 'react'
 import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Link, Outlet } from 'react-router-dom'
+import {Link, useNavigate, Outlet} from 'react-router-dom'
+import { StateContext} from "../../contexts/ContextProvider.jsx";
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
@@ -12,7 +13,16 @@ const navigation = [
 
 export default function Hero() {
 
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const navigate = useNavigate();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { currentUser, setCurrentUser} = useContext(StateContext);
+
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/dashboard');
+        }
+    }, []);
+    
 
     return (
         <div className="bg-white">

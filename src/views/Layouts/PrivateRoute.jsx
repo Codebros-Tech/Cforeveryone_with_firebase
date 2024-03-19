@@ -1,11 +1,10 @@
-import { Fragment, useContext, useEffect, useState } from 'react'
+import {Fragment, useContext, useEffect, useState} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Link, NavLink, Navigate, Outlet, useNavigate } from 'react-router-dom'
+import {Link, NavLink, Outlet, useNavigate} from 'react-router-dom'
 import Toast from '../../components/Toast'
-import { StateContext } from '../../contexts/ContextProvider'
 import Modal from "../../components/Modal.jsx"
-import {auth} from "../../config/firebase.js";
+import { StateContext} from "../../contexts/ContextProvider.jsx";
 import {deleteUserAccount, logoutUser} from "../../firebase/user.js";
 
 const navigation = [
@@ -20,13 +19,20 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function DefaultLayout() {
+export default function PrivateRoute() {
+    const navigate = useNavigate();
+    const { currentUser  } = useContext(StateContext);
 
-    const modalTitle  = "Deactivate account";
+    useEffect(() => {
+        if (!currentUser) {
+            navigate('/login');
+        }
+    }, []);
+
+    const modalTitle  = "Deactivate accounts";
     const modalText = "Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone."
 
     const [ modalState, setModalState] = useState(false);
-
 
     const deleteAccount =  (ev) => {
         ev.preventDefault();
@@ -34,7 +40,7 @@ export default function DefaultLayout() {
     }
 
     const deleteFun = () => {
-        deleteUserAccount(auth.currentUser.uid).then(r => console.log('account deleted'));
+        deleteUserAccount(currentUser.uid).then(r => console.log('account deleted', r));
     }
 
     const logout = async (ev) => {
@@ -45,16 +51,10 @@ export default function DefaultLayout() {
         }
     }
 
-
-    if (!auth.currentUser) {
-        return <Navigate to='/login' />
-    }
-
     if (modalState) {
         return <Modal yesFunction={deleteFun} text={modalText} title={modalTitle} setModalState={setModalState} />
     }
 
-    // default layout should have a function that will count the number of issues posted
 
     return (
         <>
@@ -66,11 +66,11 @@ export default function DefaultLayout() {
                         <div className="flex h-16 items-center justify-between">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                            <img
-                                className="h-8 w-8"
-                                src="logo.svg"
-                                alt="Cforeveryone"
-                            />
+                            {/*<img*/}
+                            {/*    className="h-8 w-8"*/}
+                            {/*    src="logo.svg"*/}
+                            {/*    alt="Cforeveryone"*/}
+                            {/*/>*/}
                             </div>
                             <div className="hidden md:block">
                             <div className="ml-10 flex items-baseline space-x-4">
@@ -206,6 +206,7 @@ export default function DefaultLayout() {
                     </>
                 )}
                 </Disclosure>
+
                 <Outlet />
 
                 <Toast />

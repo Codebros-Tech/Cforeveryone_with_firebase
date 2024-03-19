@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState} from "react";
 import { Link } from "react-router-dom"
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import {handleSignupWithEmailAndPassword} from "../../firebase/user.js";
@@ -26,17 +26,11 @@ export default function Signup() {
         }
 
         handleSignupWithEmailAndPassword(
+            nameRef.current.value,
             emailRef.current.value,
             passwordRef.current.value,
         ).then(response => {
-            // edit the name of the user
-            if (response === 'account-exists-with-different-credential') {
-                // the account exist with a different credential
-                console.log('Wrong Credentials');
-                setError({
-                    message: "wrong Credentials ",
-                })
-            }
+            console.log(response);
         })
     }
 

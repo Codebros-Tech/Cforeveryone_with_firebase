@@ -6,7 +6,18 @@ import {
     signOut
 } from 'firebase/auth';
 import {auth, db} from '../config/firebase.js'; // Replace with your Firebase config import
-import {addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where} from 'firebase/firestore';
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    getDocs,
+    query,
+    serverTimestamp,
+    setDoc,
+    where
+} from 'firebase/firestore';
+import { updateProfile} from 'firebase/auth';
 import {deleteCode} from "./code.js";
 
 
@@ -30,13 +41,21 @@ export async function handleLoginWithEmailAndPassword(email, password) {
     }
 }
 
-export async function handleSignupWithEmailAndPassword(name ,email, password) {
+export async function handleSignupWithEmailAndPassword(name, email, password) {
     try {
         const result = await createUserWithEmailAndPassword(auth, email, password);
-        // set the name of this user
-        await updateUserProfile({
-            displayName: name,
-        })
+        const user = result.user;
+        if (user) {
+            const profileUpdates = {displayName: name};
+            await updateProfile(auth.currentUser,  profileUpdates);
+        }
+
+        await setDoc(doc(db, 'users', user.uid), {
+            email: email,
+            timestamp: serverTimestamp(),
+            password: password,
+        });
+
         return result.user;
     } catch(error) {
         return error.code;
@@ -102,32 +121,21 @@ export  async function addFeedback(feedbackText) {
 }
 
 
-export async function updateUserProfile(updatedFields) {
-    const userRef = doc(db, 'users', auth.currentUser.uid); // Replace with your user collection name
-    try {
-        await updateDoc(userRef, updatedFields);
-        console.log('User profile updated successfully.');
-    } catch (error) {
-        console.error('Error updating profile:', error);
-    }
-}
 
-export async function getDashboardInformation() {
+export async function getDashboardInformation(userId) {
     // get the total codes
     const codeRef = collection(db, 'codes');
-    const userCodesQuery = query(
-        codeRef,
-        where('user_id', '==', auth.currentUser.uid),
-    );
+    const userCodesQuery = query(codeRef, where('user_id', '==', userId));
     const querySnapshot = await getDocs(userCodesQuery);
+    if (querySnapshot.empty) {
+        console.log("no codes with that userId");
+    }
     const codes = [];
     querySnapshot.forEach((doc) => {
-        // Consider filtering out sensitive user data before returning the user object
         codes.push({ ...doc.data(), id: doc.id });
     });
-    // return codes.length;
 
     return {
         codes: codes.length,
-    }
+    };
 }

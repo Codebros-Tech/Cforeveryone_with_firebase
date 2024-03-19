@@ -1,4 +1,4 @@
-import { useRef, useState} from "react";
+import {useRef, useState} from "react";
 import {Link} from "react-router-dom";
 import {handleLoginWithEmailAndPassword, handleLoginWithGoogle} from '../../firebase/user.js';
 
@@ -21,9 +21,8 @@ export default function Login() {
                     message: "wrong Credentials ",
                     link: null,
                     linkLabel: null,
-                })
-            }
-            if (response === 'auth/invalid-credential') {
+                });
+            } else if (response === 'auth/invalid-credential') {
                 console.log('Account does not exist');
                 setError({
                     message: "Account does not exist",

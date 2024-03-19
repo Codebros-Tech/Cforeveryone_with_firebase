@@ -1,10 +1,16 @@
-import {  Navigate, Outlet } from "react-router-dom"
-import {auth} from "../../config/firebase.js";
+import { Outlet, useNavigate} from "react-router-dom"
+import {StateContext} from "../../contexts/ContextProvider.jsx";
+import {useContext, useEffect} from "react";
 
 export default function GuestLayout() {
-    if (auth.currentUser) {
-        return <Navigate to='/' />
-    }
+    const { currentUser } = useContext(StateContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (currentUser) {
+            navigate('/dashboard');
+        }
+    }, [currentUser]);
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

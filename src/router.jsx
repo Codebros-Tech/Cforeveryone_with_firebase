@@ -3,7 +3,7 @@ import {lazy} from'react'
 import Dashboard from "./views/Users/Dashboard"
 import Login from './views/Guest/Login'
 import GuestLayout from "./views/Layouts/GuestLayout"
-import DefaultLayout from "./views/Layouts/DefaultLayout"
+import PrivateRoute from "./views/Layouts/PrivateRoute.jsx"
 import Signup from "./views/Guest/Signup"
 import Users from "./views/Users/Users"
 import Team from "./views/Pages/Team"
@@ -37,7 +37,7 @@ const router = createBrowserRouter(
                 <Route path="login" element={<AdminLogin />} />
             </Route>
 
-            <Route path="/" element={<DefaultLayout />}>
+            <Route path="/" element={<PrivateRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
 
                 <Route path="/codes" element={<CodeIndex />} />
