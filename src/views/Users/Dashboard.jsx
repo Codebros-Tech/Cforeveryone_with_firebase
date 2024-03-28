@@ -1,11 +1,10 @@
 import {lazy, useContext, useEffect, useState} from "react";
-import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
+const DashboardAI = lazy(() => import("@/src/components/DashboardAI.jsx"));
 
-const PageComponent = lazy(
-    () => import("../../components/PageComponent"));
+const PageComponent = lazy(() => import("../../components/PageComponent"));
 const TButton = lazy(() => import("../../components/TButton"));
 
 export default function Dashboard() {
@@ -13,41 +12,11 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(true);
     const {currentUser} = useContext(StateContext);
 
-    const {showToast} = useContext(StateContext);
-
     useEffect(() => {
         setLoading(true);
         getDashboardInformation(currentUser.uid);
         setLoading(false);
     }, [currentUser.uid]);
-
-
-    const [choice, setChoice] = useState({});
-    const [question, setQuestion] = useState("");
-    const OPENAI_API_KEY = import.meta.env.VITE_API_OPENAI_KEY;
-    const [loadingCode, setLoadingCode] = useState(false);
-    const openai = new OpenAI({
-        apiKey: OPENAI_API_KEY,
-        dangerouslyAllowBrowser: true,
-    });
-
-    async function main(text) {
-        setLoadingCode(true);
-        const completion = await openai.chat.completions.create({
-            messages: [{"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": text},
-                {"role": "user", "content": "Generate the C codes only without explanations"}],
-            model: "gpt-3.5-turbo",
-        }).catch((error) => {
-            setLoadingCode(false);
-            console.log(error);
-            showToast((JSON.stringify(error)));
-        });
-
-        console.log(completion.choices[0]);
-        setChoice(completion.choices[0])
-        setLoadingCode(false);
-    }
 
 
     const getDashboardInformation = async (id) => {
@@ -115,31 +84,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="px-4">
-                        <h1>My AI helper</h1>
-                        <p>Can be used to generate your code or ask any questions or worries oyou have on any
-                            subjets.</p>
-                        <div>
-                        <textarea className="w-full" value={question}
-                                    onChange={(ev) => setQuestion(ev.target.value)}/>
-                            <button onClick={() => main(question)} className="p-3 bg-blue-500 text-white"
-                                    disabled={loadingCode && true}>Send requests
-                            </button>
-                        </div>
-                        {
-                            !loadingCode &&
-                            <div>
-                            <textarea className="border-0 w-full mt-5 min-h-[500px]"
-                                        value={choice.message && choice.message.content} disabled></textarea>
-                            </div>
-                        }
-                        {
-                            loadingCode &&
-                            <div className="flex items-center justify-center">
-                                Your Request is being generated
-                            </div>
-                        }
-                    </div>
+                    <DashboardAI />
                 </div>
             }
             {
