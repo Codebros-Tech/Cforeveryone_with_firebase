@@ -1,4 +1,4 @@
-import {Fragment, lazy, useContext} from 'react'
+import {Fragment, Suspense, lazy, useContext} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link, Navigate, NavLink, Outlet} from 'react-router-dom'
@@ -152,7 +152,9 @@ export default function PrivateRoute() {
                 )}
                 </Disclosure>
 
-                <Outlet />
+                <Suspense fallback={<div>Loading ....</div>}>
+                    <Outlet />
+                </Suspense>
 
                 <Toast />
             </div>
