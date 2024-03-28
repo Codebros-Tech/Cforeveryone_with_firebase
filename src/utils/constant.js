@@ -39,3 +39,16 @@ export const stats = [
     { name: 'Hours per week', value: '40' },
     { name: 'Paid time off', value: 'Unlimited' },
 ]
+
+export const navigation = [
+    { name: 'Dashboard', to: '/dashboard'},
+    { name: "Codes and Issues", to: '/codes'},
+    { name: "Users", to: '/users'},
+    { name: "Chats", to: '/chats'},
+    { name: "Contact Us", to: '/contact'},
+    { name: "Notifications", to: '/notifications'},
+]
+
+export function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
