@@ -1,6 +1,6 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
+import './App.css'
 import { RouterProvider } from 'react-router-dom'
 import { ContextProvider } from './contexts/ContextProvider.jsx'
 
@@ -27,6 +27,7 @@ import CodeIndex from "./views/Code/CodeIndex"
 import MyCodes from "./views/Code/MyCodes"
 import CodeView from './views/Code/CodeView.jsx';
 import Contact from "./views/Pages/Contact"
+import Chats from "@/src/views/Pages/Chats.jsx";
 // const CodeView = lazy(()  => import('./views/Code/CodeView.jsx'));
 // const Contact = lazy(() => import("./views/Pages/Contact"));
 
@@ -60,6 +61,8 @@ const router = createBrowserRouter(
                 <Route path="/myinfo/edit" element={<InfoUpdate />} />
 
                 <Route path="/contact" element={<Contact />} />
+
+                <Route path="/chats" element={<Chats />} />
 
                 <Route path="/*" element={<NotFound />} />
             </Route>

@@ -1,5 +1,4 @@
 import {lazy, useContext, useState} from 'react'
-import {  TrashIcon } from '@heroicons/react/24/outline';
 import { useParams } from 'react-router-dom';
 import { StateContext } from '../../contexts/ContextProvider.jsx';
 import {postCode} from "../../firebase/code.js";
@@ -9,7 +8,7 @@ const PageComponent =  lazy(() => import('../../components/PageComponent.jsx'));
 
 export default function CodeCreate() {
     const { id } = useParams()
-    const [error, setError] = useState()
+    const [error] = useState();
     const [loading, setLoading] = useState(false);
     const { showToast } = useContext(StateContext);
 
@@ -17,14 +16,13 @@ export default function CodeCreate() {
         title: "",
         text: "",
         description: "",
-        // errorImage: null,
     });
 
 
     const onSubmit = async (e) => {
         e.preventDefault()
         setLoading(true);
-        const postedCode = await postCode(code.text, code.title, code.description);
+        await postCode(code.text, code.title, code.description);
         showToast("Code has been created");
         setLoading(false);
     }
@@ -43,20 +41,14 @@ export default function CodeCreate() {
         reader.readAsDataURL(file);
     }
 
-    const deletecode = (code) => {
 
-
-    }
     return (
         <PageComponent
             title={!id ?  "Post Your Code" : "Update The Code"}
             buttons={
                 (   id &&
                     <div className='md:flex gap-2'>
-                        <TButton onClick={() => deletecode(code)} color='red' to='/codes/create'>
-                            <TrashIcon className='h-4 w-4 mr-2' />
-                            Delete
-                        </TButton>
+                        
                     </div>
                 )
             }
@@ -69,7 +61,7 @@ export default function CodeCreate() {
                 }
                 {
                     !loading &&
-                    <div className='shadow sm:overflow-hidden sm:rounded-md'>
+                    <div className='shadow-md sm:overflow-hidden sm:rounded-md'>
 
                         <div className='space-y-6 bg-white px-4 py-5 sm:p-6'>
                             {
@@ -90,8 +82,7 @@ export default function CodeCreate() {
                                     id='title'
                                     value={code.title}
                                     placeholder='Code Title'
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-50
-                                    focus:ring-indigo-500 sm:text-sm"
+                                    className="mt-1 block w-full rounded-md py-2.5 px-2  sm:text-sm"
                                     onChange={(e) => setCode({...code, title: e.target.value})}
                                     required
                                 />
@@ -111,7 +102,7 @@ export default function CodeCreate() {
                                     id="description"
                                     value={code.description}
                                     placeholder="Describe Your Code"
-                                    className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-50 focus:ring-indigo-500 sm:text-sm'
+                                    className='mt-1 block w-full px-2.5 py-2.5 rounded-md sm:text-sm'
                                     onChange={(ev) => setCode({...code, description: ev.target.value})}
                                     required
                                 >
@@ -126,7 +117,7 @@ export default function CodeCreate() {
                                 >
                                     Code Text
                                 </label>
-                                <textarea value={code.text} className="w-full mt-1 rounded-sm overflow-y-auto overflow-x-auto"
+                                <textarea value={code.text} className="w-full mt-1 px-2 rounded-sm overflow-y-auto overflow-x-auto"
                                      onChange={(ev) => setCode({...code, text: ev.target.value})} id="text" cols="30" rows="15">
                                 </textarea>
                             </div>
@@ -139,7 +130,7 @@ export default function CodeCreate() {
                                     <button
                                             type="button"
                                             className="relative ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4
-                                            text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:indigo-500 focus:ring-offset-2 mb-3"
+                                            text-gray-700 shadow-sm hover:bg-gray-50 mb-3"
                                         >
                                             <input
                                                 type="file"

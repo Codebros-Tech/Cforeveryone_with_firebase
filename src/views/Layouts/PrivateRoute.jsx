@@ -15,6 +15,7 @@ const navigation = [
     { name: 'Dashboard', to: '/dashboard'},
     { name: "Codes and Issues", to: '/codes'},
     { name: "Users", to: '/users'},
+    { name: "Chats", to: '/chats'},
     { name: "Contact Us", to: '/contact'},
     { name: "Notifications", to: '/notifications'},
 ]
@@ -32,7 +33,8 @@ export default function PrivateRoute() {
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-16 items-center justify-between">
                         <div className="flex items-center">
-                            <div className="flex-shrink-0">
+                            <div className="flex-shrink-0 text-white font-bold text-2xl lg:text-3xl">
+                                Cforeveryone
                             </div>
                             <div className="hidden md:block">
                             <div className="ml-10 flex items-baseline space-x-4">
@@ -43,7 +45,7 @@ export default function PrivateRoute() {
                                     className={({isActive}) => classNames(
                                     isActive
                                         ? 'bg-gray-900 text-white'
-                                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                        : 'text-gray-300 whitespace-nowrap hover:bg-gray-700 hover:text-white',
                                     'rounded-md px-3 py-2 text-sm font-medium'
                                     )}
                                 >

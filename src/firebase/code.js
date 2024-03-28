@@ -16,7 +16,6 @@ export async function postCode(code, title, description, language = 'C') {
     try {
         const docRef = await addDoc(codeRef, data);
         console.log('Document written with ID:', docRef.id);
-        return docRef;
     } catch (error) {
         console.error('Error adding document:', error);
     }

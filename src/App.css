@@ -1,0 +1,8 @@
+input:focus-visible, textarea {
+    outline: none !important;
+}
+
+input, textarea {
+    border: 1px solid #c0c0c0 !important;
+    outline: none;
+}
