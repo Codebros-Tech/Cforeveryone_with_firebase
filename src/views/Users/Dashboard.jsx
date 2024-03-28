@@ -93,31 +93,6 @@ export default function Dashboard() {
                             <h3>Codes Posted</h3>
                             <h1 className="text-[40px]">{dashboardInfo.codes}</h1>
                         </div>
-
-                        {/* <div className="shadow-sm">
-                            <h3>People you helped</h3>
-                            <h1 className="text-[40px]">5</h1>
-                        </div>
-
-                        <div className="shadow-sm">
-                            <h3>Total Likes</h3>
-                            <h1 className="text-[40px]">0</h1>
-                        </div>
-
-                        <div className="shadow-sm">
-                            <h3>Total Points</h3>
-                            <h1 className="text-[40px]">0</h1>
-                        </div>
-
-                        <div className="shadow-sm">
-                            <h3>Quizes Taken</h3>
-                            <h1 className="text-[40px]"></h1>
-                        </div>
-
-                        <div className="shadow-sm">
-                            <h3>Suggestions Made</h3>
-                            <h1 className="text-[40px]"></h1>
-                        </div> */}
                     </div>
 
                     <div className="w-full mt-5 flex items-center justify-center">

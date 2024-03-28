@@ -11,7 +11,6 @@ export default function CodeIndex() {
     const [loading, setLoading ] = useState(true);
     const [allCodes, setAllCodes] = useState([]);
 
-
     useEffect(() => {
         const getAllCodes = async () => {
             try {
@@ -54,7 +53,7 @@ export default function CodeIndex() {
                 <div className={"flex flex-col items-center sm:block"}>
                     {
                         allCodes.map((code, index) => (
-                            <Code key={index} thecode={code} />
+                            <Code key={index} code={code} />
                         ))
                     }
                 </div>

@@ -1,5 +1,6 @@
 import {lazy, useEffect, useState} from "react"
 import {getAllUsers} from "../../firebase/user.js";
+
 const PageComponent = lazy(() => import("../../components/PageComponent"));
 const User = lazy(() => import("./User"))
 
