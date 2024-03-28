@@ -2,8 +2,6 @@ import {lazy, Suspense, useContext, useEffect, useState} from "react";
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
 import {getDashboardInformation} from "../../firebase/user.js";
-import {getAuth} from "firebase/auth";
-import {Button} from "../../../@/components/ui/button.jsx";
 const PageComponent = lazy(() => import("../../components/PageComponent"));
 const TButton = lazy(() => import("../../components/TButton"));
 

@@ -4,7 +4,6 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link, Navigate, NavLink, Outlet, useNavigate} from 'react-router-dom'
 import { StateContext} from "../../contexts/ContextProvider.jsx";
 import {checkLoginStatus, deleteUserAccount, logoutUser} from "../../firebase/user.js";
-import {getAuth} from "firebase/auth";
 
 const Toast = lazy(() => import('../../components/Toast'));
 const Modal = lazy(() => import("../../components/Modal.jsx"));
@@ -23,47 +22,12 @@ const navigation = [
 ]
 
 export default function PrivateRoute() {
-    const navigate = useNavigate();
-    useEffect(() => {
-        const isLoggedIn = checkLoginStatus();
-        if (isLoggedIn) {
-            navigate('/dashboard');
-        } else {
-            navigate('/login');
-        }
-    }, []);
+    const isLoggedIn = checkLoginStatus();
 
-    const { currentUser , setCurrentUser } = useContext(StateContext);
+    const { currentUser } = useContext(StateContext);
 
-
-    const modalTitle  = "Deactivate accounts";
-    const modalText = "Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone."
-
-    const [ modalState, setModalState] = useState(false);
-
-    const deleteAccount =  (ev) => {
-        ev.preventDefault();
-        setModalState(true);
-    }
-
-    const deleteFun = () => {
-        deleteUserAccount(currentUser.uid).then(r => console.log('account deleted', r));
-    }
-
-    const logout = async (ev) => {
-        try {
-            await logoutUser();
-        } catch (error) {
-            console.error('error occurred when trying to log out the user');
-        }
-    }
-
-    if (modalState) {
-        return <Modal yesFunction={deleteFun} text={modalText} title={modalTitle} setModalState={setModalState} />
-    }
-
-
-    return (
+    return !isLoggedIn
+    ?  <Navigate to={'/login'} /> : (
         <>
             <div className='relative'>
                 <Disclosure as="nav" className="bg-gray-800">
@@ -73,11 +37,6 @@ export default function PrivateRoute() {
                         <div className="flex h-16 items-center justify-between">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
-                            {/*<img*/}
-                            {/*    className="h-8 w-8"*/}
-                            {/*    src="logo.svg"*/}
-                            {/*    alt="Cforeveryone"*/}
-                            {/*/>*/}
                             </div>
                             <div className="hidden md:block">
                             <div className="ml-10 flex items-baseline space-x-4">
@@ -140,15 +99,6 @@ export default function PrivateRoute() {
                                             Sign Out
                                         </Link>
                                     </Menu.Item>
-                                    <Menu.Item>
-                                        <Link
-                                            onClick={(ev) => deleteAccount(ev)}
-                                            to="#"
-                                            className='block px-4 py-2 text-sm text-red-700'
-                                        >
-                                            Delete Account
-                                        </Link>
-                                    </Menu.Item>
                                 </Menu.Items>
                                 </Transition>
                             </Menu>
@@ -200,9 +150,8 @@ export default function PrivateRoute() {
                         </div>
                         <div className="mt-3 space-y-1 px-2">
                             <Disclosure.Button
-                                onClick={(ev) => logout(ev)}
-                                as="a"
-                                href="#"
+                                onClick={() => logoutUser()}
+                                as="button"
                                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                             >
                                 Sign Out

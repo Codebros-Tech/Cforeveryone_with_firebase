@@ -7,7 +7,7 @@ export default function Login() {
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
     const [error, setError] = useState({message: null, linkLabel: null, link: null});
-    const { showToast } = useContext(StateContext);
+    const { showToast, currentUser, setCurrentUser } = useContext(StateContext);
     const navigate = useNavigate();
 
     const submitForm = (event) => {
@@ -20,7 +20,13 @@ export default function Login() {
             showToast("Login Successfully");
             console.log(response);
             navigate('/dashboard');
-        })
+        });
+    }
+
+    const loginWithGoogle = () => {
+        handleLoginWithGoogle().then(r => {
+            console.log("user 28 ", r);
+        });
     }
 
     return (
@@ -91,22 +97,22 @@ export default function Login() {
                             Sign in
                         </button>
                     </div>
-
-                    <div className={"mx-auto"}>
-                        <button onClick={handleLoginWithGoogle}
-                                className={"py-2 my-4 bg-blue-500 text-white px-2"}>Login with
-                            Google
-                        </button>
-                    </div>
                 </form>
+
+                <div className={"mx-auto"}>
+                    <button onClick={() => loginWithGoogle() }
+                            className={"py-2 my-4 bg-blue-500 text-white px-2"}>Login with
+                        Google
+                    </button>
+                </div>
 
                 <p className="mt-10 text-center text-sm text-gray-500">
                     Don&rsquo;t have an Account?{' '}
                     <Link to="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                    Click here to create one.
-                </Link>
+                        Click here to create one.
+                    </Link>
                 </p>
             </div>
         </>
     )
-  }
+}

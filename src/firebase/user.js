@@ -1,6 +1,5 @@
 import {
     createUserWithEmailAndPassword,
-    getAuth,
     GoogleAuthProvider,
     signInWithEmailAndPassword,
     signInWithPopup,
@@ -10,11 +9,9 @@ import {auth, db} from '../config/firebase.js'; // Replace with your Firebase co
 import {addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where} from 'firebase/firestore';
 import { updateProfile} from 'firebase/auth';
 import {deleteCode} from "./code.js";
-import {useNavigate} from "react-router-dom";
 
 export const checkLoginStatus = () => {
     const token = localStorage.getItem('firebaseAuthToken');
-    console.log("Token exist and is ", !!token);
     return !!token;
 }
 
@@ -43,11 +40,19 @@ export async function getDashboardInformation(userId) {
 }
 
 export async function handleLoginWithGoogle() {
-    const provider = new GoogleAuthProvider();
     try {
-        const result = await signInWithPopup(auth, provider);
-        return result.user;
-        // Store user data in your application state or local storage (optional)
+        const provider = new GoogleAuthProvider();
+        const result =  await signInWithPopup(auth, provider);
+        const user = result.user;
+        if (user) {
+            const token = await user.getIdToken(true);
+            localStorage.setItem('firebaseAuthToken',  token);
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            return user;
+        } else {
+            console.log("no User");
+            return null;
+        }
     } catch (error) {
         console.error('Login error:', error);
     }
@@ -57,8 +62,8 @@ export async function handleLoginWithEmailAndPassword(email, password) {
     try {
         const result = await signInWithEmailAndPassword(auth, email, password);
         const user = result.user;
-        const token = user.getIdToken(true);
-        localStorage.setItem('firebaseAuthToken', await token);
+        const token = await user.getIdToken(true);
+        localStorage.setItem('firebaseAuthToken',  token);
         localStorage.setItem('currentUser', JSON.stringify(user));
         return user;
     } catch (error) {
@@ -104,7 +109,6 @@ export async function deleteUserAccount(userId) {
 
         const userRef = collection(db, 'users', userId);
         await deleteDoc(userRef);
-        console.log('User deleted successfully.');
     }
 }
 
@@ -124,8 +128,7 @@ export async function logoutUser() {
     try {
         await signOut(auth);
         localStorage.removeItem('firebaseAuthToken');
-
-        console.log('User logged out successfully.');
+        window.location.reload();
     } catch (error) {
         console.error('Error logging out:', error);
     }
@@ -141,7 +144,6 @@ export  async function addFeedback(feedbackText) {
     };
     try {
         await addDoc(feedbackRef, data);
-        console.log('Feedback submitted successfully.');
     } catch (error) {
         console.error('Error adding feedback:', error);
     }
