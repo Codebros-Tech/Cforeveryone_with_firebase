@@ -4,17 +4,11 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut
-} from 'firebase/auth';m '../config/firebase.js';
+} from 'firebase/auth';
+import {auth, db} from '../config/firebase.js';
 import {addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where} from 'firebase/firestore';
 import { updateProfile} from 'firebase/auth';
 import {deleteCode} from "./code.js";
-import {auth, db} fro
-
-export const checkLoginStatus = () => {
-    const token = localStorage.getItem('firebaseAuthToken');
-    return !!token;
-}
-
 
 export async function getDashboardInformation(userId) {
     try {
@@ -41,15 +35,9 @@ export async function getDashboardInformation(userId) {
 
 export async function handleLoginWithGoogle() {
     try {
-        let user;
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider).then((result) => {
-            user = result.user;
-            const token = user.getIdToken(true);
-            localStorage.setItem('firebaseAuthToken',  token);
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            return user;
-        });
+        const { user } = await signInWithPopup(auth, provider);
+        return user;
     } catch (error) {
         console.error('Login error:', error);
     }
@@ -61,23 +49,20 @@ export function handleLoginWithEmailAndPassword(email, password) {
         signInWithEmailAndPassword(auth, email, password).then((result) => {
             user = result.user;
         });
-        const token =  user.getIdToken(true);
-        localStorage.setItem('firebaseAuthToken',  token);
-        localStorage.setItem('currentUser', JSON.stringify(user));
         return user;
     } catch (error) {
         console.error(error);
     }
 }
 
-export function handleSignupWithEmailAndPassword(name, email, password) {
+export async function handleSignupWithEmailAndPassword(name, email, password) {
     try {
         let user;
-        createUserWithEmailAndPassword(auth, email, password).then((result) => {
+        createUserWithEmailAndPassword(auth, email, password).then(async (result) => {
             user = result.user;
             const profileUpdates = {displayName: name};
-            updateProfile(auth.currentUser, profileUpdates);
-            setDoc(doc(db, 'users', user.uid), {
+            await updateProfile(auth.currentUser, profileUpdates);
+            await setDoc(doc(db, 'users', user.uid), {
                 email: email,
                 timestamp: serverTimestamp(),
                 password: password,
@@ -121,12 +106,9 @@ export  async function getAllUsers() {
     return users;
 }
 
-export function logoutUser() {
+export async function logoutUser() {
     try {
-        signOut(auth).then(() => {
-            localStorage.removeItem('firebaseAuthToken');
-            localStorage.removeItem('currentUser');
-        });
+        await signOut(auth);
     } catch (error) {
         console.error(error);
     }

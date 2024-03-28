@@ -1,8 +1,7 @@
 import {lazy, Suspense, useContext, useEffect, useState} from "react";
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
-import {getDashboardInformation} from "../../firebase/user.js";
-import {getAuth} from "firebase/auth";
+
 const PageComponent = lazy(() => import("../../components/PageComponent"));
 const TButton = lazy(() => import("../../components/TButton"));
 
@@ -23,8 +22,6 @@ export default function Dashboard() {
 
     useEffect(() => {
         setLoading(true);
-
-        console.log(currentUser);
 
         // getDashboardInformation(currentUser.uid).then(response => {
         //     setDashboardInfo(response);

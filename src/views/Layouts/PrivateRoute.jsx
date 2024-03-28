@@ -1,9 +1,9 @@
-import {Fragment, lazy, useContext} from 'react'
+import {Fragment, lazy, useContext, useEffect, useRef} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link, Navigate, NavLink, Outlet} from 'react-router-dom'
 import { StateContext} from "../../contexts/ContextProvider.jsx";
-import {checkLoginStatus, logoutUser} from "../../firebase/user.js";
+import {logoutUser} from "../../firebase/user.js";
 
 const Toast = lazy(() => import('../../components/Toast'));
 
@@ -20,11 +20,9 @@ const navigation = [
 ]
 
 export default function PrivateRoute() {
-    const isLoggedIn = checkLoginStatus();
-
     const { currentUser } = useContext(StateContext);
 
-    return !isLoggedIn
+    return !currentUser
     ?  <Navigate to={'/login'} /> : (
         <>
             <div className='relative'>
@@ -58,7 +56,6 @@ export default function PrivateRoute() {
                         <div className="hidden md:block">
                             <div className="ml-4 flex items-center md:ml-6">
 
-                            {/* Profile dropdown */}
                             <Menu as="div" className="relative ml-3">
                                 <div>
                                 <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
