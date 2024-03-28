@@ -1,6 +1,6 @@
-import { collection, getDocs, query } from 'firebase/firestore';
 import { lazy } from 'react';
 import {useEffect, useState} from "react";
+import { collection, getDocs, query  } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
 const Code = lazy(() => import("./Code"));
@@ -8,30 +8,32 @@ const PageComponent = lazy(() => import("../../components/PageComponent"));
 const TButton = lazy(() => import("../../components/TButton"));
 
 export default function CodeIndex() {
-    const [loading, setLoading ] = useState(false);
+    const [loading, setLoading ] = useState(true);
     const [allCodes, setAllCodes] = useState([]);
 
-    const getAllCodes = async () => {
-        try {
-            const codeRef = collection(db, 'codes');
-            const q = query(codeRef);
-            const querySnapshot = await getDocs(q);
-            const snippets = [];
-            querySnapshot.forEach((doc) => {
-                snippets.push({ ...doc.data(), id: doc.id });
-            });
-            console.log(snippets);
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     useEffect(() => {
-        setLoading(true);
-        getAllCodes().then(() => {
-            console.log("done");
-        });
-        setLoading(false);
+        const getAllCodes = async () => {
+            try {
+                setLoading(true);
+                const codeCollection = collection(db, 'codes');
+                const q = query(codeCollection);
+                const querySnapshot = await getDocs(q);
+                const fetchedCodes = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(), 
+                  }));
+            
+                setAllCodes(fetchedCodes);
+            
+            } catch (error) {
+                console.error(error);
+            } finally{
+                setLoading(false);
+            }
+        }
+
+        getAllCodes();
     }, []);
 
 
@@ -46,24 +48,16 @@ export default function CodeIndex() {
                 </TButton>
             </div>
         )}>
-            {/*Add filter section to filter the codes by the language*/}
+
             {
                 !loading  &&
                 <div className={"flex flex-col items-center sm:block"}>
-                {
-                    allCodes &&
+                    {
                         allCodes.map((code, index) => (
                             <Code key={index} thecode={code} />
                         ))
-                }
-                {
-                    allCodes.length === 0 &&
-                        <div className="flex justify-center items-center">
-                            No  Codes have been posted
-                        </div>
-                }
-
-            </div>
+                    }
+                </div>
             }
             {
                 loading &&

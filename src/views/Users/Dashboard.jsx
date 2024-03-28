@@ -4,7 +4,8 @@ import { StateContext } from "../../contexts/ContextProvider";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
 
-const PageComponent = lazy(() => import("../../components/PageComponent"));
+const PageComponent = lazy(
+    () => import("../../components/PageComponent"));
 const TButton = lazy(() => import("../../components/TButton"));
 
 export default function Dashboard() {
