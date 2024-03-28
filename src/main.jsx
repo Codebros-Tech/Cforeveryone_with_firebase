@@ -19,9 +19,7 @@ import UserInfo from "./views/Users/UserInfo"
 import InfoUpdate from "./views/Users/InfoUpdate"
 import AccountInfo from "./views/Users/AccountInfo"
 import Features from "./views/Guest/Features"
-import AdminLogin from "./views/Guest/AdminLogin"
 import Main from './views/Layouts/Main'
-import AdminLayout from "./views/Layouts/AdminLayout"
 import CodeCreate from "./views/Code/CodeCreate"
 import CodeIndex from "./views/Code/CodeIndex"
 import MyCodes from "./views/Code/MyCodes"
@@ -37,10 +35,6 @@ const router = createBrowserRouter(
 
                 <Route path="/team" element={<Team />} />
                 <Route path="/features" element={<Features />} />
-            </Route>
-
-            <Route path="/admin" element={<AdminLayout />}>
-                <Route path="login" element={<AdminLogin />} />
             </Route>
 
             <Route path="/" element={<PrivateRoute />}>
