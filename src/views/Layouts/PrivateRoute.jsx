@@ -1,13 +1,11 @@
-import {Fragment, lazy, useContext, useEffect, useState} from 'react'
+import {Fragment, lazy, useContext} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import {Link, Navigate, NavLink, Outlet, useNavigate} from 'react-router-dom'
+import {Link, Navigate, NavLink, Outlet} from 'react-router-dom'
 import { StateContext} from "../../contexts/ContextProvider.jsx";
-import {checkLoginStatus, deleteUserAccount, logoutUser} from "../../firebase/user.js";
+import {checkLoginStatus, logoutUser} from "../../firebase/user.js";
 
 const Toast = lazy(() => import('../../components/Toast'));
-const Modal = lazy(() => import("../../components/Modal.jsx"));
-
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

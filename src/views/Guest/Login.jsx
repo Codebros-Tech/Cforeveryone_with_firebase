@@ -7,7 +7,7 @@ export default function Login() {
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
     const [error, setError] = useState({message: null, linkLabel: null, link: null});
-    const { showToast, currentUser, setCurrentUser } = useContext(StateContext);
+    const { setCurrentUser } = useContext(StateContext);
     const navigate = useNavigate();
 
     const submitForm = (event) => {
@@ -17,16 +17,16 @@ export default function Login() {
             emailRef.current.value,
             passwordRef.current.value
         ).then((response) => {
-            showToast("Login Successfully");
-            console.log(response);
+            setCurrentUser(response);
             navigate('/dashboard');
         });
     }
 
     const loginWithGoogle = () => {
-        handleLoginWithGoogle().then(r => {
-            console.log("user 28 ", r);
-        });
+        handleLoginWithGoogle().then(response => {
+            setCurrentUser(response);
+            navigate('/dashboard');
+        })
     }
 
     return (

@@ -4,11 +4,11 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut
-} from 'firebase/auth';
-import {auth, db} from '../config/firebase.js'; // Replace with your Firebase config import
+} from 'firebase/auth';m '../config/firebase.js';
 import {addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where} from 'firebase/firestore';
 import { updateProfile} from 'firebase/auth';
 import {deleteCode} from "./code.js";
+import {auth, db} fro
 
 export const checkLoginStatus = () => {
     const token = localStorage.getItem('firebaseAuthToken');
@@ -41,52 +41,50 @@ export async function getDashboardInformation(userId) {
 
 export async function handleLoginWithGoogle() {
     try {
+        let user;
         const provider = new GoogleAuthProvider();
-        const result =  await signInWithPopup(auth, provider);
-        const user = result.user;
-        if (user) {
-            const token = await user.getIdToken(true);
+        signInWithPopup(auth, provider).then((result) => {
+            user = result.user;
+            const token = user.getIdToken(true);
             localStorage.setItem('firebaseAuthToken',  token);
             localStorage.setItem('currentUser', JSON.stringify(user));
             return user;
-        } else {
-            console.log("no User");
-            return null;
-        }
+        });
     } catch (error) {
         console.error('Login error:', error);
     }
 }
 
-export async function handleLoginWithEmailAndPassword(email, password) {
+export function handleLoginWithEmailAndPassword(email, password) {
     try {
-        const result = await signInWithEmailAndPassword(auth, email, password);
-        const user = result.user;
-        const token = await user.getIdToken(true);
+        let user;
+        signInWithEmailAndPassword(auth, email, password).then((result) => {
+            user = result.user;
+        });
+        const token =  user.getIdToken(true);
         localStorage.setItem('firebaseAuthToken',  token);
         localStorage.setItem('currentUser', JSON.stringify(user));
         return user;
     } catch (error) {
-        return error.code;
+        console.error(error);
     }
 }
 
-export async function handleSignupWithEmailAndPassword(name, email, password) {
+export function handleSignupWithEmailAndPassword(name, email, password) {
     try {
-        const result = await createUserWithEmailAndPassword(auth, email, password);
-        const user = result.user;
-        if (user) {
+        let user;
+        createUserWithEmailAndPassword(auth, email, password).then((result) => {
+            user = result.user;
             const profileUpdates = {displayName: name};
-            await updateProfile(auth.currentUser,  profileUpdates);
-        }
-
-        await setDoc(doc(db, 'users', user.uid), {
-            email: email,
-            timestamp: serverTimestamp(),
-            password: password,
+            updateProfile(auth.currentUser, profileUpdates);
+            setDoc(doc(db, 'users', user.uid), {
+                email: email,
+                timestamp: serverTimestamp(),
+                password: password,
+            });
         });
 
-        return result.user;
+        return user;
     } catch(error) {
         return error.code;
     }
@@ -114,23 +112,23 @@ export async function deleteUserAccount(userId) {
 
 
 export  async function getAllUsers() {
-    const usersRef = collection(db, 'users'); // Replace with your user collection name
+    const usersRef = collection(db, 'users');
     const querySnapshot = await getDocs(usersRef);
     const users = [];
     querySnapshot.forEach((doc) => {
-        // Consider filtering out sensitive user data before returning the user object
         users.push({ ...doc.data(), id: doc.id });
     });
     return users;
 }
 
-export async function logoutUser() {
+export function logoutUser() {
     try {
-        await signOut(auth);
-        localStorage.removeItem('firebaseAuthToken');
-        window.location.reload();
+        signOut(auth).then(() => {
+            localStorage.removeItem('firebaseAuthToken');
+            localStorage.removeItem('currentUser');
+        });
     } catch (error) {
-        console.error('Error logging out:', error);
+        console.error(error);
     }
 }
 

@@ -2,6 +2,7 @@ import {lazy, Suspense, useContext, useEffect, useState} from "react";
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
 import {getDashboardInformation} from "../../firebase/user.js";
+import {getAuth} from "firebase/auth";
 const PageComponent = lazy(() => import("../../components/PageComponent"));
 const TButton = lazy(() => import("../../components/TButton"));
 
@@ -23,21 +24,16 @@ export default function Dashboard() {
     useEffect(() => {
         setLoading(true);
 
-        if (currentUser) {
-            console.log(currentUser);
+        console.log(currentUser);
 
-            getDashboardInformation(currentUser.uid).then(r => {
-                console.log(r);
-            });
-        }
+        // getDashboardInformation(currentUser.uid).then(response => {
+        //     setDashboardInfo(response);
+        // });
 
-        setLoading(false)
     }, []);
 
     async function main(text) {
         setLoadingCode(true);
-        // messages object is going to take in an array of objects which will contain
-        // role which can either be 'assistant', 'user', 'assistant'
         const completion = await openai.chat.completions.create({
         messages: [{"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": text},
@@ -54,7 +50,7 @@ export default function Dashboard() {
         setLoadingCode(false);
     }
 
-    return (
+    return !currentUser ? <div>Empty</div> :  (
         <PageComponent title="Dashboard"  buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/mine">
