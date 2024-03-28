@@ -27,9 +27,7 @@ import CodeIndex from "./views/Code/CodeIndex"
 import MyCodes from "./views/Code/MyCodes"
 import CodeView from './views/Code/CodeView.jsx';
 import Contact from "./views/Pages/Contact"
-import Chats from "@/src/views/Pages/Chats.jsx";
-// const CodeView = lazy(()  => import('./views/Code/CodeView.jsx'));
-// const Contact = lazy(() => import("./views/Pages/Contact"));
+import ChatPage from "@/src/views/Pages/ChatPage.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -62,7 +60,7 @@ const router = createBrowserRouter(
 
                 <Route path="/contact" element={<Contact />} />
 
-                <Route path="/chats" element={<Chats />} />
+                <Route path="/chats" element={<ChatPage />} />
 
                 <Route path="/*" element={<NotFound />} />
             </Route>
