@@ -2,20 +2,6 @@ import { auth } from '../config/firebase.js';
 import { collection, getDocs, addDoc, query, doc, where, deleteDoc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase.js';
 
-export async function getAllCodes() {
-    try {
-        const codeRef = collection(db, 'codes');
-        const q = query(codeRef);
-        const querySnapshot = await getDocs(q);
-        const snippets = [];
-        querySnapshot.forEach((doc) => {
-            snippets.push({ ...doc.data(), id: doc.id });
-        });
-        return snippets;
-    } catch (error) {
-        console.error('Error occurred when fetching all of the codes');
-    }
-}
 
 export async function postCode(code, title, description, language = 'C') {
     const codeRef = collection(db, 'codes');

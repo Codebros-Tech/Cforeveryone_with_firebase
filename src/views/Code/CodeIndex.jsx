@@ -1,6 +1,7 @@
+import { collection, getDocs, query } from 'firebase/firestore';
 import { lazy } from 'react';
 import {useEffect, useState} from "react";
-import {getAllCodes} from "../../firebase/code.js";
+import { db } from '../../config/firebase';
 
 const Code = lazy(() => import("./Code"));
 const PageComponent = lazy(() => import("../../components/PageComponent"));
@@ -10,10 +11,27 @@ export default function CodeIndex() {
     const [loading, setLoading ] = useState(false);
     const [allCodes, setAllCodes] = useState([]);
 
+    const getAllCodes = async () => {
+        try {
+            const codeRef = collection(db, 'codes');
+            const q = query(codeRef);
+            const querySnapshot = await getDocs(q);
+            const snippets = [];
+            querySnapshot.forEach((doc) => {
+                snippets.push({ ...doc.data(), id: doc.id });
+            });
+            console.log(snippets);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
-        getAllCodes().then((codes) => {
-            console.log(codes);
-        })
+        setLoading(true);
+        getAllCodes().then(() => {
+            console.log("done");
+        });
+        setLoading(false);
     }, []);
 
 

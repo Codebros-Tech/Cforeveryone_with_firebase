@@ -10,25 +10,6 @@ import {addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, set
 import { updateProfile} from 'firebase/auth';
 import {deleteCode} from "./code.js";
 
-export async function getDashboardInformation(user) {
-    try {
-        console.log('userid ', user.uid);
-        const codeRef = collection(db, 'codes');
-        const userCodesQuery = query(codeRef, where('user_id', '==', userId));
-        const querySnapshot = await getDocs(userCodesQuery)
-        const codes = [];
-        querySnapshot.forEach((doc) => {
-            codes.push({ ...doc.data(), id: doc.id });
-        });
-
-        return {
-            codes: codes.length,
-        };
-
-    } catch (error) {
-        console.log("erorr", error);
-    }
-}
 
 export async function handleLoginWithGoogle() {
     try {

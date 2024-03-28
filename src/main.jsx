@@ -75,9 +75,7 @@ const router = createBrowserRouter(
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <ContextProvider>
-            <RouterProvider router={router} fallbackElement={<div>Loading the component</div>} />
-        </ContextProvider>
-    </React.StrictMode>
+    <ContextProvider>
+        <RouterProvider router={router} fallbackElement={<div>Loading the component</div>} />
+    </ContextProvider>
 )
