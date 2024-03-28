@@ -1,4 +1,4 @@
-import {Fragment, lazy, useContext, useEffect, useRef} from 'react'
+import {Fragment, lazy, useContext} from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link, Navigate, NavLink, Outlet} from 'react-router-dom'
@@ -61,10 +61,7 @@ export default function PrivateRoute() {
                                 <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                     <span className="absolute -inset-1.5" />
                                     <span className="sr-only">Open user menu</span>
-                                    {
-                                        currentUser && currentUser.profile &&
-                                        <img className="h-8 w-8 rounded-full" src={currentUser.profile} alt=""/>
-                                    }
+                                    <img className="h-8 w-8 rounded-full" src={currentUser.photoURL} alt=""/>
                                 </Menu.Button>
                                 </div>
                                 <Transition
@@ -87,7 +84,7 @@ export default function PrivateRoute() {
                                     </Menu.Item>
                                     <Menu.Item>
                                         <Link
-                                            onClick={(ev) => logout(ev)}
+                                            // onClick={(ev) => logout(ev)}
                                             to="#"
                                             className='block px-4 py-2 text-sm text-gray-700'
                                         >
@@ -133,10 +130,7 @@ export default function PrivateRoute() {
                         <div className="border-t border-gray-700 pb-3 pt-4">
                         <div className="flex items-center px-5">
                             <div className="flex-shrink-0">
-                                {
-                                    currentUser && currentUser.profile &&
-                                    <img className="h-10 w-10 rounded-full" src={currentUser.profile} alt=""/>
-                                }
+                                <img className="h-10 w-10 rounded-full" src={currentUser.photoURL} alt=""/>
                             </div>
                             <div className="ml-3">
                                 <div className="text-base font-medium leading-none text-white">{currentUser && currentUser.name && currentUser.name }</div>

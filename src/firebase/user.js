@@ -10,14 +10,12 @@ import {addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, set
 import { updateProfile} from 'firebase/auth';
 import {deleteCode} from "./code.js";
 
-export async function getDashboardInformation(userId) {
+export async function getDashboardInformation(user) {
     try {
+        console.log('userid ', user.uid);
         const codeRef = collection(db, 'codes');
         const userCodesQuery = query(codeRef, where('user_id', '==', userId));
-        const querySnapshot = await getDocs(userCodesQuery);
-        if (querySnapshot.empty) {
-            console.log("no codes with that userId");
-        }
+        const querySnapshot = await getDocs(userCodesQuery)
         const codes = [];
         querySnapshot.forEach((doc) => {
             codes.push({ ...doc.data(), id: doc.id });
@@ -28,8 +26,7 @@ export async function getDashboardInformation(userId) {
         };
 
     } catch (error) {
-        console.log('error ', error, ' occurred');
-        return [];
+        console.log("erorr", error);
     }
 }
 

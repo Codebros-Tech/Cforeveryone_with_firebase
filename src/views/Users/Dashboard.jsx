@@ -1,33 +1,27 @@
 import {lazy, Suspense, useContext, useEffect, useState} from "react";
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
+import {getDashboardInformation} from "@/src/firebase/user.js";
 
 const PageComponent = lazy(() => import("../../components/PageComponent"));
 const TButton = lazy(() => import("../../components/TButton"));
 
 export default function Dashboard() {
-    const { currentUser } = useContext(StateContext);
     const [dashboardInfo, setDashboardInfo] = useState({});
     const [loading, setLoading] = useState(false);
+    const { currentUser } = useContext(StateContext);
+
+    const {showToast} = useContext(StateContext);
+
+
     const [choice, setChoice] = useState({});
     const [question, setQuestion] = useState("");
     const OPENAI_API_KEY = import.meta.env.VITE_API_OPENAI_KEY;
     const [loadingCode, setLoadingCode] = useState(false);
-    const {showToast} = useContext(StateContext);
     const openai = new OpenAI({
         apiKey: OPENAI_API_KEY,
         dangerouslyAllowBrowser: true,
     });
-
-
-    useEffect(() => {
-        setLoading(true);
-
-        // getDashboardInformation(currentUser.uid).then(response => {
-        //     setDashboardInfo(response);
-        // });
-
-    }, []);
 
     async function main(text) {
         setLoadingCode(true);
@@ -47,7 +41,12 @@ export default function Dashboard() {
         setLoadingCode(false);
     }
 
-    return !currentUser ? <div>Empty</div> :  (
+    getDashboardInformation(currentUser.uid).then((res) => {
+        console.log(res);
+    });
+    // setDashboardInfo(info);
+
+    return (
         <PageComponent title="Dashboard"  buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/mine">
@@ -118,7 +117,7 @@ export default function Dashboard() {
                         <h1>My AI helper</h1>
                         <p>Can be used to generate your code or ask any questions or worries oyou have on any subjets.</p>
                         <div>
-                            <textarea type="text" className="w-full" value={question} onChange={(ev) => setQuestion(ev.target.value)}  />
+                            <textarea className="w-full" value={question} onChange={(ev) => setQuestion(ev.target.value)}  />
                             <button onClick={() => main(question)} className="p-3 bg-blue-500 text-white" disabled={loadingCode && true}>Send requests</button>
                         </div>
                         {
@@ -136,9 +135,12 @@ export default function Dashboard() {
                     </div>
                 </div>
             }
-            <div className="flex flex-col gap-2">
-
-            </div>
+            {
+                loading &&
+                <div className="flex flex-col gap-2">
+                    Patients Brother.
+                </div>
+            }
         </PageComponent>
     )
 }
