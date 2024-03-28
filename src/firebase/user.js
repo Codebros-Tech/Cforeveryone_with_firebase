@@ -1,4 +1,11 @@
-import {createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut} from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    GoogleAuthProvider,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signOut
+} from 'firebase/auth';
 import {auth, db} from '../config/firebase.js'; // Replace with your Firebase config import
 import {addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where} from 'firebase/firestore';
 import { updateProfile} from 'firebase/auth';
@@ -12,9 +19,8 @@ export const checkLoginStatus = () => {
 }
 
 
-export async function getDashboardInformation() {
+export async function getDashboardInformation(userId) {
     try {
-
         const codeRef = collection(db, 'codes');
         const userCodesQuery = query(codeRef, where('user_id', '==', userId));
         const querySnapshot = await getDocs(userCodesQuery);

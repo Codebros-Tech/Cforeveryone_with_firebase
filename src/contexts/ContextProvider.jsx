@@ -18,9 +18,7 @@ export const ContextProvider = ({ children }) => {
 
         auth.onAuthStateChanged(handleUserChange);
 
-        if (token) {
-            setCurrentUser(auth.currentUser);
-        }
+        setCurrentUser(auth.currentUser);
 
         return () => {
             auth.onAuthStateChanged(handleUserChange)
