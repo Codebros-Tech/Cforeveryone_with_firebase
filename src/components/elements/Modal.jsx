@@ -4,7 +4,6 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import PropTypes from 'prop-types'
 
 export default function Modal({yesFunction ,title ,text, setModalState}) {
-
   const [open, setOpen] = useState(true);
 
   const cancelButtonRef = useRef(null)

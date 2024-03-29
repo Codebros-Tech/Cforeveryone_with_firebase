@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import {Suspense} from "react";
 
 export default function PageComponent({small = "" ,title, buttons, children}) {
     return (
@@ -15,7 +16,9 @@ export default function PageComponent({small = "" ,title, buttons, children}) {
             </header>
             <main>
             <div className="mx-auto max-w-7xl min-h-screen py-6 sm:px-6 lg:px-8">
-                {children}
+                <Suspense fallback={<div>Loading from Page Component</div>}>
+                    {children}
+                </Suspense>
             </div>
             </main>
         </>

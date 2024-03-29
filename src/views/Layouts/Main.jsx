@@ -3,7 +3,7 @@ import { Outlet} from 'react-router-dom'
 
 const MainHeader = lazy(() => import("../../components/Header/MainHeader.jsx"));
 
-export default function Hero() {
+export default function Main() {
     return (
         <div className="bg-white">
             <MainHeader />

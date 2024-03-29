@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router-dom'
 import { ContextProvider } from './contexts/ContextProvider.jsx'
 
 import {Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom"
+
 import Dashboard from "./views/Users/Dashboard"
 import Login from './views/Guest/Login'
 import GuestLayout from "./views/Layouts/GuestLayout"
@@ -31,7 +32,6 @@ const router = createBrowserRouter(
         <Route>
             <Route element={<Main />}>
                 <Route path="/" element={<WelcomePage />} />
-
                 <Route path="/team" element={<Team />} />
             </Route>
 
