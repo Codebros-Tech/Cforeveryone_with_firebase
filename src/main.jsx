@@ -26,6 +26,7 @@ import MyCodes from "./views/Code/MyCodes"
 import CodeView from './views/Code/CodeView.jsx';
 import Contact from "./views/Pages/Contact"
 import ChatPage from "@/src/views/Pages/ChatPage.jsx";
+import {Suspense} from "react";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -69,6 +70,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <ContextProvider>
-        <RouterProvider router={router} fallbackElement={<div>Loading the component</div>} />
+        <Suspense fallback={<div>Component is Loading</div>}>
+            <RouterProvider router={router} fallbackElement={<div>Loading the component</div>} />
+        </Suspense>
     </ContextProvider>
 )
