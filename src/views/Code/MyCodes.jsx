@@ -1,8 +1,8 @@
 import {lazy} from 'react';
 
 const Code = lazy(() => import("./Code"));
-const PageComponent = lazy(() => import("../../components/PageComponent"));
-const TButton = lazy(() => import("../../components/TButton"));
+const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
+const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
 import { StateContext } from "../../contexts/ContextProvider";
 import {getUserCodes} from "../../firebase/code.js";

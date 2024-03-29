@@ -1,7 +1,7 @@
 import {lazy} from "react";
 
-const ChatNavbar = lazy(() => import("@/src/components/ChatNavbar.jsx"));
-const Search = lazy(() => import("@/src/components/Search.jsx"));
+const ChatNavbar = lazy(() => import("@/src/components/Chat/ChatNavbar.jsx"));
+const Search = lazy(() => import("@/src/components/Chat/Search.jsx"));
 
 export default function Sidebar() {
     return (

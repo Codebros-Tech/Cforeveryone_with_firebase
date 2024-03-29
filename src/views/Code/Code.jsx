@@ -4,7 +4,7 @@ import { StateContext } from '../../contexts/ContextProvider';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
 
-const Modal = lazy(() => import('../../components/Modal'));
+const Modal = lazy(() => import('../../components/elements/Modal.jsx'));
 
 export default function Code({code}) {
 

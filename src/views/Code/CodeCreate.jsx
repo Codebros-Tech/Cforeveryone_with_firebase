@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { StateContext } from '../../contexts/ContextProvider.jsx';
 import {postCode} from "../../firebase/code.js";
 
-const TButton = lazy(() => import('../../components/TButton.jsx'));
-const PageComponent =  lazy(() => import('../../components/PageComponent.jsx'));
+const TButton = lazy(() => import('../../components/elements/TButton.jsx'));
+const PageComponent =  lazy(() => import('../Layouts/PageComponent.jsx'));
 
 export default function CodeCreate() {
     const { id } = useParams()

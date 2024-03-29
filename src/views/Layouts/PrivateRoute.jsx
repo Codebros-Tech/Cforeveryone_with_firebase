@@ -2,7 +2,7 @@ import { Suspense, lazy, useContext} from 'react'
 import {Navigate, Outlet} from 'react-router-dom'
 import { StateContext} from "@/src/contexts/ContextProvider.jsx";
 
-const Toast = lazy(() => import('@/src/components/Toast'));
+const Toast = lazy(() => import('@/src/components/elements/Toast.jsx'));
 const Navigation = lazy(() => import('@/src/components/Navcomponents/Navigation.jsx'));
 
 export default function PrivateRoute() {

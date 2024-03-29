@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
-const Sidebar = lazy(() => import('@/src/components/Sidebar.jsx'));
-const Chats = lazy(() => import("@/src/components/Chats.jsx"));
+const Sidebar = lazy(() => import('@/src/components/Chat/Sidebar.jsx'));
+const Chats = lazy(() => import("@/src/components/Chat/Chats.jsx"));
 
 export default function ChatPage(){
     return (

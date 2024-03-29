@@ -1,16 +1,6 @@
-import { useContext } from "react";
-import { Link, Navigate } from "react-router-dom"
-import { StateContext } from '../contexts/ContextProvider'
+import { Link } from "react-router-dom"
 
-export default function Hero () {
-
-    const { userToken } = useContext(StateContext);
-
-    if (userToken) {
-        return <Navigate to='/dashboard' />
-    }
-
-
+export default function WelcomePage () {
     return (
         <div className="relative isolate px-6 pt-14  animate-fade-in-downlg:px-8">
                 <div

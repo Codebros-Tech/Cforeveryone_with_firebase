@@ -4,8 +4,8 @@ import { collection, getDocs, query  } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
 const Code = lazy(() => import("./Code"));
-const PageComponent = lazy(() => import("../../components/PageComponent"));
-const TButton = lazy(() => import("../../components/TButton"));
+const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
+const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
 export default function CodeIndex() {
     const [loading, setLoading ] = useState(true);

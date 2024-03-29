@@ -1,6 +1,6 @@
 import {lazy} from "react";
 
-const PageComponent = lazy(() => import("../../components/PageComponent"));
+const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
 
 export default function Problems() {
     return (

@@ -2,10 +2,10 @@ import {lazy, useContext, useEffect, useState} from "react";
 import { StateContext } from "../../contexts/ContextProvider";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
-const DashboardAI = lazy(() => import("@/src/components/DashboardAI.jsx"));
+const DashboardAI = lazy(() => import("@/src/components/Dashboard/DashboardAI.jsx"));
 
-const PageComponent = lazy(() => import("../../components/PageComponent"));
-const TButton = lazy(() => import("../../components/TButton"));
+const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
+const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
 export default function Dashboard() {
     const [dashboardInfo, setDashboardInfo] = useState({});

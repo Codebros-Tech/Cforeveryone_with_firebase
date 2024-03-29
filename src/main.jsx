@@ -12,9 +12,9 @@ import PrivateRoute from "./views/Layouts/PrivateRoute.jsx"
 import Signup from "./views/Guest/Signup"
 import Users from "./views/Users/Users"
 import Team from "./views/Pages/Team"
-import Hero from "./components/Hero"
+import WelcomePage from "./views/Pages/WelcomePage.jsx"
 import About from "./views/Pages/About"
-import NotFound from './components/NotFound'
+import NotFound from './views/Pages/NotFound.jsx'
 import UserInfo from "./views/Users/UserInfo"
 import InfoUpdate from "./views/Users/InfoUpdate"
 import AccountInfo from "./views/Users/AccountInfo"
@@ -30,7 +30,7 @@ const router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
             <Route element={<Main />}>
-                <Route path="/" element={<Hero />} />
+                <Route path="/" element={<WelcomePage />} />
 
                 <Route path="/team" element={<Team />} />
             </Route>
