@@ -2,6 +2,7 @@ import {Menu, Transition} from "@headlessui/react";
 import {Fragment, useContext} from "react";
 import {Link} from "react-router-dom";
 import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {logoutUser} from "@/src/firebase/user.js";
 
 export default function DesktopNavProfile() {
     const {currentUser} = useContext(StateContext);
@@ -41,6 +42,7 @@ export default function DesktopNavProfile() {
                             <Menu.Item>
                                 <Link
                                     to="#"
+                                    onClick={() => logoutUser()}
                                     className='block px-4 py-2 text-sm text-gray-700'
                                 >
                                     Sign Out

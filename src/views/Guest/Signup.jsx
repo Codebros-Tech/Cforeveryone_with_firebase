@@ -35,7 +35,6 @@ export default function Signup() {
             passwordRef.current.value,
         ).then(response => {
             showToast("Account Created Successfully");
-            console.log(response);
             navigate('/dashboard');
         })
     }

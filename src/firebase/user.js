@@ -3,11 +3,11 @@ import {
     GoogleAuthProvider,
     signInWithEmailAndPassword,
     signInWithPopup,
-    signOut
+    signOut,
+    updateProfile
 } from 'firebase/auth';
 import {auth, db} from '../config/firebase.js';
 import {addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where} from 'firebase/firestore';
-import { updateProfile} from 'firebase/auth';
 import {deleteCode} from "./code.js";
 
 
@@ -21,13 +21,10 @@ export async function handleLoginWithGoogle() {
     }
 }
 
-export function handleLoginWithEmailAndPassword(email, password) {
+export async function handleLoginWithEmailAndPassword(email, password) {
     try {
-        let user;
-        signInWithEmailAndPassword(auth, email, password).then((result) => {
-            user = result.user;
-        });
-        return user;
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        return result.user;
     } catch (error) {
         console.error(error);
     }

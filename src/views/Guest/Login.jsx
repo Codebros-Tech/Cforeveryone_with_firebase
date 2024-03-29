@@ -23,8 +23,7 @@ export default function Login() {
     }
 
     const loginWithGoogle = () => {
-        handleLoginWithGoogle().then(response => {
-            setCurrentUser(response);
+        handleLoginWithGoogle().then(() => {
             navigate('/dashboard');
         })
     }
@@ -32,7 +31,7 @@ export default function Login() {
     return (
         <>
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                    Sign in to Account
+                Sign in to Account
             </h2>
 
             {

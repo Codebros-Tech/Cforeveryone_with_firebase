@@ -1,4 +1,4 @@
-import {lazy} from "react";
+import {lazy, Suspense} from "react";
 
 const DesktopNavName = lazy(()=> import("@/src/components/Navcomponents/DesktopNavName.jsx"));
 const DesktopNavProfile = lazy(() => import("@/src/components/Navcomponents/DesktopNavProfile.jsx"));
@@ -10,7 +10,7 @@ export default function Navigation() {
     return (
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
-                <>
+                <Suspense fallback={<div>Loading from Navigation</div>}>
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-16 items-center justify-between">
                             <DesktopNavName />
@@ -20,7 +20,7 @@ export default function Navigation() {
                     </div>
 
                     <MobileNavigation />
-                </>
+                </Suspense>
             )}
         </Disclosure>
     )
