@@ -1,9 +1,9 @@
 import {lazy} from "react";
 
-const DesktopNavName = lazy(()=> import("@/src/components/DesktopNavName.jsx"));
-const DesktopNavProfile = lazy(() => import("@/src/components/DesktopNavProfile.jsx"));
-const MobileMenuButton = lazy(() => import("@/src/components/MobileMenuButton.jsx"));
-const MobileNavigation = lazy(() => import("@/src/components/MobileNavigation.jsx"));
+const DesktopNavName = lazy(()=> import("@/src/components/Navcomponents/DesktopNavName.jsx"));
+const DesktopNavProfile = lazy(() => import("@/src/components/Navcomponents/DesktopNavProfile.jsx"));
+const MobileMenuButton = lazy(() => import("@/src/components/Navcomponents/MobileMenuButton.jsx"));
+const MobileNavigation = lazy(() => import("@/src/components/Navcomponents/MobileNavigation.jsx"));
 import {Disclosure} from "@headlessui/react";
 
 export default function Navigation() {

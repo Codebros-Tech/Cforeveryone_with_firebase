@@ -18,7 +18,6 @@ import NotFound from './components/NotFound'
 import UserInfo from "./views/Users/UserInfo"
 import InfoUpdate from "./views/Users/InfoUpdate"
 import AccountInfo from "./views/Users/AccountInfo"
-import Features from "./views/Guest/Features"
 import Main from './views/Layouts/Main'
 import CodeCreate from "./views/Code/CodeCreate"
 import CodeIndex from "./views/Code/CodeIndex"
@@ -34,7 +33,6 @@ const router = createBrowserRouter(
                 <Route path="/" element={<Hero />} />
 
                 <Route path="/team" element={<Team />} />
-                <Route path="/features" element={<Features />} />
             </Route>
 
             <Route path="/" element={<PrivateRoute />}>

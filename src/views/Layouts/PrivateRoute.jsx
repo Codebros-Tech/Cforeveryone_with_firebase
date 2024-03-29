@@ -3,7 +3,7 @@ import {Navigate, Outlet} from 'react-router-dom'
 import { StateContext} from "@/src/contexts/ContextProvider.jsx";
 
 const Toast = lazy(() => import('@/src/components/Toast'));
-const Navigation = lazy(() => import('@/src/components/Navigation.jsx'));
+const Navigation = lazy(() => import('@/src/components/Navcomponents/Navigation.jsx'));
 
 export default function PrivateRoute() {
     const { currentUser } = useContext(StateContext);
