@@ -1,7 +1,13 @@
-export default function Chats () {
+import {lazy} from "react";
+
+const UserProfileDetail = lazy(() => import("./UserProfileDetail.jsx"));
+export default function Chats() {
     return (
-        <div className={"flex-[2]"}>
-            Chats section
+        <div>
+            <UserProfileDetail />
+            <UserProfileDetail />
+            <UserProfileDetail />
+            <UserProfileDetail />
         </div>
     )
 }
