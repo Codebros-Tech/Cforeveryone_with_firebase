@@ -6,3 +6,8 @@ input, textarea {
     border: 1px solid #c0c0c0 !important;
     outline: none;
 }
+
+.messages-container {
+    height: calc(100% - 110px);
+    overflow-x: auto
+}

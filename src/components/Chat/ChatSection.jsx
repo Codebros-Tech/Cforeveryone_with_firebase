@@ -2,6 +2,7 @@ import {CameraIcon, MoreHorizontal, PlusIcon} from "lucide-react";
 import {lazy, Suspense} from "react";
 
 const Messages = lazy(() => import("@/src/components/Chat/Messages.jsx"));
+const Input = lazy(() => import("@/src/components/Chat/Input.jsx"));
 
 export default function ChatSection () {
     return (
@@ -16,6 +17,7 @@ export default function ChatSection () {
                     </div>
                 </div>
                 <Messages/>
+                <Input />
             </div>
         </Suspense>
     )
