@@ -10,16 +10,14 @@ export default function PrivateRoute() {
 
     return !currentUser
     ?  <Navigate to={'/login'} /> : (
-        <>
+        <Suspense fallback={<div>Loading ...</div>}>
             <div className='relative'>
                 <Navigation />
 
-                <Suspense fallback={<div>Loading ....</div>}>
-                    <Outlet />
-                </Suspense>
+                <Outlet />
 
                 <Toast />
             </div>
-        </>
+        </Suspense>
     )
 }
