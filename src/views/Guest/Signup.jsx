@@ -1,8 +1,12 @@
 import {useContext, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom"
 import { PhotoIcon } from '@heroicons/react/24/outline';
-import {handleSignupWithEmailAndPassword} from "../../firebase/user.js";
 import {StateContext} from "../../contexts/ContextProvider.jsx";
+import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import {auth, db, storage} from "@/src/config/firebase.js";
+import {doc, serverTimestamp, setDoc} from "firebase/firestore";
+import {ref} from "firebase/storage";
+
 
 export default function Signup() {
     const { showToast } = useContext(StateContext);
@@ -17,10 +21,15 @@ export default function Signup() {
         message: null,
     });
 
-    const submitForm = (ev) => {
-        ev.preventDefault();
 
-        if (passwordRef.current.value !== passwordConfirmationRef.current.value) {
+    const submitForm = async  (ev) => {
+        ev.preventDefault();
+        const name = nameRef.current.value;
+        const email = emailRef.current.value;
+        const password = passwordRef.current.value;
+        const passwordConfirmation = passwordConfirmationRef.current.value;
+
+        if (password !== passwordConfirmation) {
             passwordConfirmationRef.current.focus = true;
             setError({
                 message: "Passwords do not match",
@@ -29,30 +38,32 @@ export default function Signup() {
             return;
         }
 
-        handleSignupWithEmailAndPassword(
-            nameRef.current.value,
-            emailRef.current.value,
-            passwordRef.current.value,
-        ).then(response => {
+        try {
+            const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredentials.user;
+            const profileUpdates = {displayName: name};
+            await updateProfile(auth.currentUser, profileUpdates);
+            await setDoc(doc(db, 'users', user.uid), {
+                name: name,
+                email: email,
+                timestamp: serverTimestamp(),
+                password: password,
+            });
+
             showToast("Account Created Successfully");
             navigate('/dashboard');
-        })
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     const onImageChoose = (ev) => {
-        // returns the file that the user entered, in this case its an image.
         const file = ev.target.files[0];
-
-        // this is the function that reads the image.
         const reader = new FileReader();
-
-        // when the reader loads, it will contain a variable that contains the result.
         reader.onload = () => {
             setImageData(reader.result);
-
             ev.target.value = ""; // we then emptied the component containing the image.
         }
-
         reader.readAsDataURL(file);
     }
 
@@ -61,6 +72,14 @@ export default function Signup() {
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                 Create your account and start coding
             </h2>
+            <div className={"flex items-center"}>
+                <button
+                    type="submit"
+                    className="mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                    Continue with Google
+                </button>
+            </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 {
                     error.label &&

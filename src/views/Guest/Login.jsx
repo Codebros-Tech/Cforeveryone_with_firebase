@@ -1,7 +1,8 @@
 import {useContext, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {handleLoginWithEmailAndPassword, handleLoginWithGoogle} from '../../firebase/user.js';
 import {StateContext} from "../../contexts/ContextProvider.jsx";
+import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
+import {auth} from "@/src/config/firebase.js";
 
 export default function Login() {
     const emailRef= useRef(null);
@@ -10,10 +11,10 @@ export default function Login() {
     const { setCurrentUser } = useContext(StateContext);
     const navigate = useNavigate();
 
-    const submitForm = (event) => {
+    const submitForm = async (event) => {
         event.preventDefault();
 
-        handleLoginWithEmailAndPassword(
+        await handleLoginWithEmailAndPassword(
             emailRef.current.value,
             passwordRef.current.value
         ).then((response) => {
@@ -22,10 +23,25 @@ export default function Login() {
         });
     }
 
-    const loginWithGoogle = () => {
-        handleLoginWithGoogle().then(() => {
+    async function handleLoginWithEmailAndPassword() {
+        const email = emailRef.current.value;
+        const password = passwordRef.current.value;
+        try {
+            const result = await signInWithEmailAndPassword(auth, email, password);
+            return result.user;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function handleLoginWithGoogle() {
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
             navigate('/dashboard');
-        })
+        } catch (error) {
+            console.error('Login error:', error);
+        }
     }
 
     return (
@@ -99,7 +115,7 @@ export default function Login() {
                 </form>
 
                 <div className={"mx-auto"}>
-                    <button onClick={() => loginWithGoogle() }
+                    <button onClick={() => handleLoginWithGoogle() }
                             className={"py-2 my-4 bg-blue-500 text-white px-2"}>Login with
                         Google
                     </button>
