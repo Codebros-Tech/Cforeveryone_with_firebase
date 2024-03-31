@@ -3,6 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {StateContext} from "../../contexts/ContextProvider.jsx";
 import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
 import {auth} from "@/src/config/firebase.js";
+import {handleLoginWithGoogle} from "@/src/firebase/user.js";
 
 export default function Login() {
     const emailRef= useRef(null);
@@ -34,15 +35,6 @@ export default function Login() {
         }
     }
 
-    async function handleLoginWithGoogle() {
-        try {
-            const provider = new GoogleAuthProvider();
-            await signInWithPopup(auth, provider);
-            navigate('/dashboard');
-        } catch (error) {
-            console.error('Login error:', error);
-        }
-    }
 
     return (
         <>
@@ -115,7 +107,7 @@ export default function Login() {
                 </form>
 
                 <div className={"mx-auto"}>
-                    <button onClick={() => handleLoginWithGoogle() }
+                    <button onClick={() => handleLoginWithGoogle().then(() => navigate('/dashboard'))}
                             className={"py-2 my-4 bg-blue-500 text-white px-2"}>Login with
                         Google
                     </button>

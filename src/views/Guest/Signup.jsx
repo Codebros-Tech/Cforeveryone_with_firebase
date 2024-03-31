@@ -6,6 +6,7 @@ import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth, db, storage} from "@/src/config/firebase.js";
 import {doc, serverTimestamp, setDoc} from "firebase/firestore";
 import {ref} from "firebase/storage";
+import {handleLoginWithGoogle} from "@/src/firebase/user.js";
 
 
 export default function Signup() {
@@ -62,7 +63,7 @@ export default function Signup() {
         const reader = new FileReader();
         reader.onload = () => {
             setImageData(reader.result);
-            ev.target.value = ""; // we then emptied the component containing the image.
+            ev.target.value = "";
         }
         reader.readAsDataURL(file);
     }
@@ -75,6 +76,7 @@ export default function Signup() {
             <div className={"flex items-center"}>
                 <button
                     type="submit"
+                    onClick={() => {handleLoginWithGoogle().then(() => navigate('/dashboard'))}}
                     className="mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                     Continue with Google

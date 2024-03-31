@@ -1,4 +1,4 @@
-import { signOut } from 'firebase/auth';
+import {GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/auth';
 import {auth, db} from '../config/firebase.js';
 import {addDoc, collection , deleteDoc, getDocs, query, where} from 'firebase/firestore';
 import {deleteCode} from "./code.js";
@@ -53,5 +53,14 @@ export  async function addFeedback(feedbackText) {
         await addDoc(feedbackRef, data);
     } catch (error) {
         console.error('Error adding feedback:', error);
+    }
+}
+
+export async function handleLoginWithGoogle() {
+    try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+    } catch (error) {
+        console.error('Login error:', error);
     }
 }
