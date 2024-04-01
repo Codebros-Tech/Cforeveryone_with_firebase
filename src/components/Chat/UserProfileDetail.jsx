@@ -13,7 +13,12 @@ export default function UserProfileDetail({user}) {
             const res = await getDocs(db, "chats", combinedId);
 
             if (!res.exists()) {
-                await setDoc()
+                // if it doesn't exist, create an empty array for the object property called messages.
+                await setDoc(doc, (db, "chats", combinedId), {
+                    messages: [
+
+                    ]
+                })
             }
         } catch (error) {
             //
