@@ -14,7 +14,6 @@ import Signup from "./views/Guest/Signup"
 import Users from "./views/Users/Users"
 import Team from "./views/Pages/Team"
 import WelcomePage from "./views/Pages/WelcomePage.jsx"
-import About from "./views/Pages/About"
 import NotFound from './views/Pages/NotFound.jsx'
 import UserInfo from "./views/Users/UserInfo"
 import InfoUpdate from "./views/Users/InfoUpdate"
@@ -60,7 +59,6 @@ const router = createBrowserRouter(
             <Route path="/" element={<GuestLayout />}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/about" element={<About />} />
             </Route>
         </Route>
     )

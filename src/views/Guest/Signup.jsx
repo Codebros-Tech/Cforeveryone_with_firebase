@@ -49,18 +49,21 @@ export default function Signup() {
             const storageRef = ref(storage, user.uid);
             const uploadTask = uploadBytesResumable(storageRef, file);
 
-            uploadTask.on(
-                (error) => {
-                    console.log(error);
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadUrl) => {
-                        await updateProfile(user,{
-                            photoURL: downloadUrl
+            if (file) {
+                uploadTask.on(
+                    (error) => {
+                        console.log(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadUrl) => {
+                            console.log(downloadUrl);
+                            await updateProfile(user,{
+                                photoURL: downloadUrl
+                            })
                         })
-                    })
-                }
-            )
+                    }
+                )
+            }
 
             await setDoc(doc(db, 'users', user.uid), {
                 displayName: name,
@@ -68,6 +71,8 @@ export default function Signup() {
                 timestamp: serverTimestamp(),
                 password: password,
             });
+
+            await setDoc(doc(db, 'userChat', user.uid),  {});
 
             showToast("Account Created Successfully");
             navigate('/dashboard');

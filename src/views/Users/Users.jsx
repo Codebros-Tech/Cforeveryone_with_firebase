@@ -7,19 +7,20 @@ const User = lazy(() => import("./User"))
 export default function People() {
     const [users , setUsers] = useState([]);
     const [loading , setLoading] = useState(false);
+    const [error, setError] = useState(false)
 
     const getAllUserInstance = async () => {
         try {
             const users = await getAllUsers();
             setUsers(users);
         } catch (error) {
-            console.error('error fetching all the users', error);
+            setError(true);
         }
     }
 
     useEffect(() => {
         setLoading(true);
-        getAllUserInstance().then(() => console.log('done fetching the users'));
+        getAllUserInstance()
         setLoading(false);
     }, [])
 
@@ -35,6 +36,10 @@ export default function People() {
                             ))
                     }
                 </div>
+            }
+
+            {
+                error && <div>Something went wrong. Try refreshing the page.</div>
             }
 
             {

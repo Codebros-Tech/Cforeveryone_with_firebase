@@ -11,7 +11,7 @@ export default function User({ user }) {
                 </div>
 
                 <div>
-                    <h5 className='font-semibold uppercase'>{user.name}</h5>
+                    <h5 className='font-semibold uppercase'>{user.displayName}</h5>
                     <h5 className='italic'>{user.email}</h5>
                     <h5>{user && user.matricule}</h5>
                     <div className='flex items-center mt-2 justify-between'>

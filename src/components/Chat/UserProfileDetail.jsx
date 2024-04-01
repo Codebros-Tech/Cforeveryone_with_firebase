@@ -1,13 +1,38 @@
-export default function UserProfileDetail() {
+import PropTypes from "prop-types";
+import {useContext} from "react";
+import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {getDocs, setDoc} from "firebase/firestore";
+import {db} from "@/src/config/firebase.js";
+
+export default function UserProfileDetail({user}) {
+    const { currentUser } = useContext(StateContext);
+    const handleSelect = async () => {
+        const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid
+
+        try {
+            const res = await getDocs(db, "chats", combinedId);
+
+            if (!res.exists()) {
+                await setDoc()
+            }
+        } catch (error) {
+            //
+        }
+    }
+
     return (
-        <div className={"flex p-3 gap-3 text-white hover:bg-[#2f2d52] cursor-pointer items-center"}>
+        <div onClick={() => handleSelect()} className={"flex p-3 gap-3 text-white hover:bg-[#2f2d52] cursor-pointer items-center"}>
             <img className={"w-[50px] h-[50px] rounded-[50%]"}
-                 src={"https://lh3.googleusercontent.com/a/ACg8ocJ47z4BhLt8WeK4LnB17u55YZZizu4m4HJ0b3HxJUyLyg=s96-c"}
+                 src={user?.photoURL}
                  alt={"User Image"}/>
             <div>
-                <span className={"text-lg font-medium"}>Jane</span>
+                <span className={"text-lg font-medium"}>{user?.displayName}</span>
                 <p className={"text-sm text-[lightGray]"}>Hello</p>
             </div>
         </div>
     )
+}
+
+UserProfileDetail.propTypes = {
+    user: PropTypes.object,
 }
