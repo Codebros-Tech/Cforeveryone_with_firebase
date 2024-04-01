@@ -6,7 +6,7 @@ export default function DashboardAI() {
     const {showToast} = useContext(StateContext);
     const [choice, setChoice] = useState({});
     const [question, setQuestion] = useState("");
-    const OPENAI_API_KEY = import.meta.env.VITE_API_OPENAI_KEY;
+    const OPENAI_API_KEY = import.meta.env.VITE_API_OPENAI_KEY ?? 'something';
     const [loadingCode, setLoadingCode] = useState(false);
     const openai = new OpenAI({
         apiKey: OPENAI_API_KEY,
