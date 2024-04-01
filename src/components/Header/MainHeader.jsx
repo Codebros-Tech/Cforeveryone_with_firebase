@@ -6,7 +6,6 @@ import {useState} from "react";
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Our Team', href: '/team' },
 ]
 
 export default function MainHeader() {

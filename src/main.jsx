@@ -12,7 +12,6 @@ import GuestLayout from "./views/Layouts/GuestLayout"
 import PrivateRoute from "./views/Layouts/PrivateRoute.jsx"
 import Signup from "./views/Guest/Signup"
 import Users from "./views/Users/Users"
-import Team from "./views/Pages/Team"
 import WelcomePage from "./views/Pages/WelcomePage.jsx"
 import NotFound from './views/Pages/NotFound.jsx'
 import UserInfo from "./views/Users/UserInfo"
@@ -31,7 +30,6 @@ const router = createBrowserRouter(
         <Route>
             <Route element={<Main />}>
                 <Route path="/" element={<WelcomePage />} />
-                <Route path="/team" element={<Team />} />
             </Route>
 
             <Route path="/" element={<PrivateRoute />}>

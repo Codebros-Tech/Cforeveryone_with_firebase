@@ -26,7 +26,7 @@ export const ContextProvider = ({ children }) => {
 
 
     return (
-        <StateContext.Provider value={{currentUser, setCurrentUser, toast, setToast, showToast}}>
+        <StateContext.Provider value={{currentUser, toast, setToast, showToast}}>
             {children}
         </StateContext.Provider>
     )

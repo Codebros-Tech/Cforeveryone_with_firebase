@@ -1,6 +1,5 @@
-import {useContext, useRef, useState} from "react";
+import { useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {StateContext} from "../../contexts/ContextProvider.jsx";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "@/src/config/firebase.js";
 import {handleLoginWithGoogle} from "@/src/firebase/user.js";
@@ -8,33 +7,20 @@ import {handleLoginWithGoogle} from "@/src/firebase/user.js";
 export default function Login() {
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
-    const [error, setError] = useState({message: null, linkLabel: null, link: null});
-    const { setCurrentUser } = useContext(StateContext);
+    const [error, setError] = useState(false);
     const navigate = useNavigate();
 
-    const submitForm = async (event) => {
+    async function handleLoginWithEmailAndPassword(event) {
         event.preventDefault();
-
-        await handleLoginWithEmailAndPassword(
-            emailRef.current.value,
-            passwordRef.current.value
-        ).then((response) => {
-            setCurrentUser(response);
-            navigate('/dashboard');
-        });
-    }
-
-    async function handleLoginWithEmailAndPassword() {
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
         try {
-            const result = await signInWithEmailAndPassword(auth, email, password);
-            return result.user;
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate('/dashboard');
         } catch (error) {
-            console.error(error);
+            setError(true);
         }
     }
-
 
     return (
         <>
@@ -43,19 +29,15 @@ export default function Login() {
             </h2>
 
             {
-                error.message &&
+                error &&
                 <div className={"mx-auto bg-red-800 py-2 rounded-md text-white w-5/12 px-6 mt-5"}>
-                    {error.message}
-                    {
-                        error.link &&
-                        <Link className={"block underline"} to={error.link}>{error.linkLabel}</Link>
-                    }
+                   Something went wrong.
                 </div>
             }
 
             <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
 
-                <form className="space-y-6" onSubmit={(ev) => submitForm(ev)}>
+                <form className="space-y-6" onSubmit={handleLoginWithEmailAndPassword}>
                     <div>
                         <label htmlFor="#email" className="block text-sm font-medium leading-6 text-gray-900">
                             Email address
@@ -116,7 +98,7 @@ export default function Login() {
                 <p className="mt-10 text-center text-sm text-gray-500">
                     Don&rsquo;t have an Account?{' '}
                     <Link to="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                        Click here to create one.
+                        Create One
                     </Link>
                 </p>
             </div>

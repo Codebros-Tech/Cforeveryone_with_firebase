@@ -22,7 +22,6 @@ export async function deleteUserAccount(userId) {
     }
 }
 
-
 export  async function getAllUsers() {
     const usersRef = collection(db, 'users');
     const querySnapshot = await getDocs(usersRef);
@@ -41,7 +40,7 @@ export async function logoutUser() {
     }
 }
 
-export  async function addFeedback(feedbackText) {
+export async function addFeedback(feedbackText) {
     const feedbackRef = collection(db, 'feedback'); // Replace with your feedback collection name
     const data = {
         text: feedbackText,
