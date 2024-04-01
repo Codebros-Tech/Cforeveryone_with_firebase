@@ -11,11 +11,11 @@ export default function Message({owner}) {
                 <span className={"whitespace-nowrap"}>just now</span>
             </div>
             <div className={'max-w-[80%] flex  flex-col gap-2.5'}>
-                <p className={`bg-white rounded-br-xl max-w-[max-content] rounded-bl-xl py-2.5 px-5 ${owner ? 'bg-[#8da4f1] text-white rounded-tl-xl' : 'rounded-tr-xl'}`}>Hello</p>
-                <img className={"w-[50%] h-auto"}
-                    src={"https://lh3.googleusercontent.com/a/ACg8ocJ47z4BhLt8WeK4LnB17u55YZZizu4m4HJ0b3HxJUyLyg=s96-c"}
-                    alt={"Image from user."}
-                />
+                <p className={`rounded-br-xl max-w-[max-content] rounded-bl-xl py-2.5 px-5 ${owner ? 'bg-[#8da4f1] text-white rounded-tl-xl' : 'rounded-tr-xl bg-white'}`}>Hello</p>
+                {/*<img className={"w-[50%] h-auto"}*/}
+                {/*    src={"https://lh3.googleusercontent.com/a/ACg8ocJ47z4BhLt8WeK4LnB17u55YZZizu4m4HJ0b3HxJUyLyg=s96-c"}*/}
+                {/*    alt={"Image from user."}*/}
+                {/*/>*/}
             </div>
         </div>
     )

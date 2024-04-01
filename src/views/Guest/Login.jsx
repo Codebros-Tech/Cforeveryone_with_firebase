@@ -1,7 +1,7 @@
 import {useContext, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {StateContext} from "../../contexts/ContextProvider.jsx";
-import {GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
+import {signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "@/src/config/firebase.js";
 import {handleLoginWithGoogle} from "@/src/firebase/user.js";
 

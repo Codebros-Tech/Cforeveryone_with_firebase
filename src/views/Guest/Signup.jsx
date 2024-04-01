@@ -5,7 +5,7 @@ import {StateContext} from "../../contexts/ContextProvider.jsx";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth, db, storage} from "@/src/config/firebase.js";
 import {doc, serverTimestamp, setDoc} from "firebase/firestore";
-import {ref} from "firebase/storage";
+import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {handleLoginWithGoogle} from "@/src/firebase/user.js";
 
 
@@ -21,6 +21,7 @@ export default function Signup() {
     const [error, setError] = useState({
         message: null,
     });
+    let file;
 
 
     const submitForm = async  (ev) => {
@@ -44,8 +45,25 @@ export default function Signup() {
             const user = userCredentials.user;
             const profileUpdates = {displayName: name};
             await updateProfile(auth.currentUser, profileUpdates);
+
+            const storageRef = ref(storage, user.uid);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on(
+                (error) => {
+                    console.log(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(async (downloadUrl) => {
+                        await updateProfile(user,{
+                            photoURL: downloadUrl
+                        })
+                    })
+                }
+            )
+
             await setDoc(doc(db, 'users', user.uid), {
-                name: name,
+                displayName: name,
                 email: email,
                 timestamp: serverTimestamp(),
                 password: password,
@@ -59,13 +77,13 @@ export default function Signup() {
     }
 
     const onImageChoose = (ev) => {
-        const file = ev.target.files[0];
+        file = ev.target.files[0];
         const reader = new FileReader();
+        reader.readAsDataURL(file);
         reader.onload = () => {
             setImageData(reader.result);
             ev.target.value = "";
         }
-        reader.readAsDataURL(file);
     }
 
     return (
@@ -132,7 +150,7 @@ export default function Signup() {
                             ref={nameRef}
                             autoComplete="name"
                             required
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         </div>
                     </div>
@@ -148,7 +166,7 @@ export default function Signup() {
                             autoComplete="email"
                             ref={emailRef}
                             required
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         </div>
                     </div>
@@ -166,7 +184,7 @@ export default function Signup() {
                                 type="password"
                                 autoComplete="new-password"
                                 required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -184,7 +202,7 @@ export default function Signup() {
                                 ref={passwordConfirmationRef}
                                 autoComplete={"password"}
                                 required
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
