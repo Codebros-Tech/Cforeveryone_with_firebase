@@ -92,8 +92,6 @@ export async function addCodeLike(codeId, userId) {
     );
     const likeQuerySnapshot = await getDoc(likeQuery);
 
-
-
     const data = {
         user_id: userId,
         liked_at: new Date(),
