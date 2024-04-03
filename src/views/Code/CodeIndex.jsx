@@ -39,6 +39,9 @@ export default function CodeIndex() {
     return (
         <PageComponent title="All Codes" buttons={(
             <div className='flex gap-2'>
+                <TButton color='green' to="/codes">
+                    My Codes
+                </TButton>
                 <TButton color='green' to="/codes/create">
                     New
                 </TButton>

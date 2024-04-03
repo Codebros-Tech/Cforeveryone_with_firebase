@@ -78,6 +78,7 @@ export async function getUserCodes() {
     const querySnapshot = await getDocs(q);
     const snippets = [];
     querySnapshot.forEach((doc) => {
+
         snippets.push({ ...doc.data(), id: doc.id });
     });
     return snippets;
