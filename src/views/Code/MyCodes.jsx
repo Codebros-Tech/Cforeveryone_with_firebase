@@ -1,4 +1,4 @@
-import {lazy, Suspense} from 'react';
+import {lazy, Suspense, useState} from 'react';
 
 const Code = lazy(() => import("./Code"));
 const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
@@ -6,11 +6,12 @@ const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
 import { StateContext } from "../../contexts/ContextProvider";
 import {getUserCodes} from "../../firebase/code.js";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 
 export default function MyCodes() {
     const [loading, setLoading] = useState(false);
-    const { myCodes, setMyCodes } = useContext(StateContext);
+    const [error, setError] = useState(false)
+    const [myCodes, setMyCodes] = useState([]);
 
     useEffect(() => {
         const fetcher = async () => {
@@ -21,6 +22,9 @@ export default function MyCodes() {
                 setLoading(false);
             } catch (error) {
                 console.log(error);
+                setError(true);
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -45,6 +49,13 @@ export default function MyCodes() {
                         Patience is the key to a good life...
                     </div>
                 }
+
+                {
+                    error &&
+                    <div className={'bg-red-500 font-medium text white py-3 px-3'}>
+                        Error occurred when fetching the data.
+                    </div>
+                }
                 {
                     !loading &&
                     <div>
@@ -55,7 +66,7 @@ export default function MyCodes() {
                             ))
                         }
                         {
-                            myCodes.length === 0 &&
+                            !error && myCodes.length === 0 &&
                             <div className="flex justify-center items-center">
                                 You have not posted Any codes yet.
                             </div>
