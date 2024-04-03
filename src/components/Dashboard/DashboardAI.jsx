@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 import OpenAI from "openai";
 import {StateContext} from "@/src/contexts/ContextProvider.jsx";
-import { config } from 'dotenv'
+import { GenerativeModel} from "@google/generative-ai";
 
 export default function DashboardAI() {
     const {showToast} = useContext(StateContext);
@@ -14,7 +14,6 @@ export default function DashboardAI() {
         dangerouslyAllowBrowser: true,
     });
 
-    console.log(process.env)
 
     async function main(text) {
         setLoadingCode(true);

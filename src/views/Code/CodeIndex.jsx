@@ -42,9 +42,6 @@ export default function CodeIndex() {
                 <TButton color='green' to="/codes/create">
                     New
                 </TButton>
-                <TButton color='green' to="/codes/mine">
-                    My Codes.
-                </TButton>
             </div>
         )}>
 
