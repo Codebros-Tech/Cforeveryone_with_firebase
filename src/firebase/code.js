@@ -73,7 +73,7 @@ export async function getCodeComments(codeId) {
 
 export async function getUserCodes() {
     const userId = auth.currentUser.uid;
-    const codeRef = collection(db, 'codes');
+    const codeRef  = collection(db, 'codes');
     const q = query(codeRef, where('user_id', '==', userId));
     const querySnapshot = await getDocs(q);
     const snippets = [];

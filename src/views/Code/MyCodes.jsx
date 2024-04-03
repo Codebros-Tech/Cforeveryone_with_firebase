@@ -13,13 +13,18 @@ export default function MyCodes() {
     const { myCodes, setMyCodes } = useContext(StateContext);
 
     useEffect(() => {
-        setLoading(true);
-        getUserCodes().then((snippets) => {
-            setMyCodes(snippets);
-        }).catch((error) => {
-            console.log(error);
-        })
-        setLoading(false);
+        const fetcher = async () => {
+            try {
+                setLoading(true);
+                const codes = await getUserCodes();
+                setMyCodes(codes);
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetcher();
     }, []);
 
     return (
@@ -44,9 +49,9 @@ export default function MyCodes() {
                     !loading &&
                     <div>
                         {
-                            myCodes &&
+                            myCodes && myCodes.length > 0 &&
                             myCodes.map((code, index) => (
-                                <Code key={index} thecode={code} />
+                                <Code key={index} code={code} />
                             ))
                         }
                         {

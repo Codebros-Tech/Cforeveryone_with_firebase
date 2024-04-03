@@ -4,14 +4,14 @@ import { StateContext } from '../../contexts/ContextProvider';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
 
-const Modal = lazy(() => import('../../components/elements/Modal.jsx'));
+// const Modal = lazy(() => import('../../components/elements/Modal.jsx'));
 
 export default function Code({code}) {
 
     const {showToast} = useContext(StateContext);
 
     return (
-        <div className="flex rounded w-full mt-3">
+        <div key={code.uid} className="flex rounded w-full mt-3">
             <div className={"px-2 bg-black text-gray-500 w-full md:w-11/12"}>
                 <div>
                     <div className='flex flex-col justify-between'>
