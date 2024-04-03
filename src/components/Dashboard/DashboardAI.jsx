@@ -1,17 +1,20 @@
 import {useContext, useState} from "react";
 import OpenAI from "openai";
 import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import { config } from 'dotenv'
 
 export default function DashboardAI() {
     const {showToast} = useContext(StateContext);
     const [choice, setChoice] = useState({});
     const [question, setQuestion] = useState("");
-    const OPENAI_API_KEY = import.meta.env.VITE_API_OPENAI_KEY ?? 'something';
+    const OPENAI_API_KEY = import.meta.env.VITE_API_OPENAI_KEY;
     const [loadingCode, setLoadingCode] = useState(false);
     const openai = new OpenAI({
         apiKey: OPENAI_API_KEY,
         dangerouslyAllowBrowser: true,
     });
+
+    console.log(process.env)
 
     async function main(text) {
         setLoadingCode(true);
