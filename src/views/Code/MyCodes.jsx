@@ -12,14 +12,16 @@ export default function MyCodes() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false)
     const [myCodes, setMyCodes] = useState([]);
+    const { currentUser } = useContext(StateContext);
 
     useEffect(() => {
         const fetcher = async () => {
             try {
                 setLoading(true);
-                const codes = await getUserCodes();
+                const codes = await getUserCodes(currentUser);
                 setMyCodes(codes);
                 setLoading(false);
+                setError(false);
             } catch (error) {
                 console.log(error);
                 setError(true);
@@ -29,7 +31,7 @@ export default function MyCodes() {
         }
 
         fetcher();
-    }, []);
+    }, [currentUser.uid]);
 
     return (
         <PageComponent title="My Codes" buttons={(

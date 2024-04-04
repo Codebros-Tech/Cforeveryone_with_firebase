@@ -10,8 +10,8 @@ export async function postCode(code, title, description, language = 'C') {
         title: title,
         description: description,
         language: language,
-        user_id: auth.currentUser.uid,
-        created_at: new Date(),
+        userId: auth.currentUser.uid,
+        createdAt: new Date(),
     };
     try {
         const docRef = await addDoc(codeRef, data);
@@ -46,8 +46,8 @@ export async function addCodeComment(codeId, commentText) {
     const commentRef = collection(db, 'codes', codeId, 'comments');
     const data = {
         text: commentText,
-        user_id: auth.currentUser.uid,
-        created_at: new Date(),
+        userId: auth.currentUser.uid,
+        createdAt: new Date(),
     };
     try {
         await addDoc(commentRef, data);
@@ -71,16 +71,17 @@ export async function getCodeComments(codeId) {
    }
 }
 
-export async function getUserCodes() {
-    const userId = auth.currentUser.uid;
-    const codeRef  = collection(db, 'codes');
-    const q = query(codeRef, where('user_id', '==', userId));
-    const querySnapshot = await getDocs(q);
+export async  function getUserCodes(currentUser) {
+    let userId = currentUser.uid;
     const snippets = [];
-    querySnapshot.forEach((doc) => {
-
-        snippets.push({ ...doc.data(), id: doc.id });
-    });
+    if (userId) {
+        const codeRef  = collection(db, 'codes');
+        const q = query(codeRef, where('userId', '==', userId));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            snippets.push({...doc.data(), id: doc.id});
+        });
+    }
     return snippets;
 }
 
@@ -88,14 +89,14 @@ export async function addCodeLike(codeId, userId) {
     const likesRef = collection(db, 'codes', codeId, 'likes');
     const likeQuery = query(
         likesRef,
-        where('user_id', '==', userId),
-        where('code_id', '==', codeId),
+        where('userId', '==', userId),
+        where('codeId', '==', codeId),
     );
     const likeQuerySnapshot = await getDoc(likeQuery);
 
     const data = {
-        user_id: userId,
-        liked_at: new Date(),
+        userId: userId,
+        likedAt: new Date(),
     };
     try {
         await addDoc(likesRef, data);
@@ -105,7 +106,7 @@ export async function addCodeLike(codeId, userId) {
 }
 
 export async function addSuggestion(snippetId, suggestionText) {
-    const suggestionsRef = collection(db, 'codeSnippets', snippetId, 'suggestions');
+    const suggestionsRef = collection(db, 'codes', snippetId, 'suggestions');
     const data = {
         text: suggestionText,
         author: auth.currentUser.uid,
@@ -137,8 +138,8 @@ export async function addUserToCodeViewers(codeId, userId) {
 
     if (querySnapshot.empty) {
         const data = {
-            user_id: userId,
-            viewed_at: new Date(),
+            userId: userId,
+            viewedAt: new Date(),
         };
         try {
             await addDoc(viewedRef, data);

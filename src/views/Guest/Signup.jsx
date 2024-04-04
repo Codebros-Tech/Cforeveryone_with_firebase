@@ -6,7 +6,7 @@ import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth, db, storage} from "@/src/config/firebase.js";
 import {doc, serverTimestamp, setDoc} from "firebase/firestore";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
-import {handleLoginWithGoogle} from "@/src/firebase/user.js";
+import {handleLoginWithGoogle, storeUserInformation} from "@/src/firebase/user.js";
 
 
 export default function Signup() {
@@ -41,8 +41,9 @@ export default function Signup() {
         }
 
         try {
-            const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredentials.user;
+            const result = await createUserWithEmailAndPassword(auth, email, password);
+            const user = result.user;
+
             const profileUpdates = {displayName: name};
             await updateProfile(auth.currentUser, profileUpdates);
 
@@ -65,12 +66,7 @@ export default function Signup() {
                 )
             }
 
-            await setDoc(doc(db, 'users', user.uid), {
-                displayName: name,
-                email: email,
-                timestamp: serverTimestamp(),
-                password: password,
-            });
+            await storeUserInformation(user);
 
             await setDoc(doc(db, 'userChat', user.uid),  {});
 

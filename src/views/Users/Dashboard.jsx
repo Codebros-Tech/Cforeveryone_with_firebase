@@ -23,7 +23,7 @@ export default function Dashboard() {
         try {
             const codeRef = collection(db, 'codes');
             if (id) {
-                const userCodesQuery = query(codeRef, where('user_id', '==', id));
+                const userCodesQuery = query(codeRef, where('userId', '==', id));
                 const querySnapshot = await getDocs(userCodesQuery)
                 const codes = [];
                 querySnapshot.forEach((doc) => {
