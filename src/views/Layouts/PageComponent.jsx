@@ -15,7 +15,7 @@ export default function PageComponent({small = "" ,title, buttons, children}) {
                 </div>
             </header>
             <main>
-            <div className="mx-auto max-w-7xl min-h-screen py-6 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl min-h-screen sm:px-6 lg:px-8">
                 <Suspense fallback={<div>Loading from Page Component</div>}>
                     {children}
                 </Suspense>
