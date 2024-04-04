@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import {lazy, useContext} from 'react';
 import {useEffect, useRef, useState} from "react";
 import { useParams } from "react-router-dom";
 
@@ -8,14 +8,11 @@ const PageComponent = lazy(() => import( "../Layouts/PageComponent.jsx"));
 const TButton = lazy(() => import( "../../components/elements/TButton.jsx"));
 const Code = lazy(() => import( './Code.jsx'));
 const Comment = lazy(() => import('./Comment.jsx'));
+const NotFound = lazy(() => import("@/src/views/Pages/NotFound.jsx"))
 
-import {
-    addCodeComment,
-    addUserToCodeViewers,
-    getCodeById,
-    getCodeComments,
-} from "../../firebase/code.js";
+import {addCodeComment, addUserToCodeViewers, getCodeById } from "../../firebase/code.js";
 import {auth} from "../../config/firebase.js";
+import {StateContext} from "@/src/contexts/ContextProvider.jsx";
 
 export default function CodeView() {
     const { id } = useParams();
@@ -23,25 +20,19 @@ export default function CodeView() {
     const [comments, setComments] = useState([]);
     const [code, setCode] = useState({});
     const [startTime, setStartTime ] = useState(0.0);
-    const commentRef = useRef(null);
+    const [commentText, setCommentText] = useState("");
 
-    const getComments = async () => {
-        const fetchedComments = await getCodeComments(id);
-        setComments(fetchedComments);
-    }
-
-    useEffect(() => {
-        getComments();
-    }, []);
-
-    const getCodeInstance = async () =>  {
-        const codeInstance = await getCodeById(id);
-        setCode(codeInstance);
-    }
+    const { currentUser, showToast  } = useContext(StateContext);
 
     useEffect(() => {
         setLoading(true);
-        getCodeInstance();
+        const codeFetcher = async () =>  {
+            const code = await getCodeById(id);
+            setCode(code);
+            setLoading(false);
+        }
+
+        codeFetcher();
 
         const initialTime = performance.now();
         setStartTime(initialTime);
@@ -58,11 +49,12 @@ export default function CodeView() {
 
         addUserToCodeViewers(id, auth.currentUser.uid, duration).then(r => console.log("user has been added to viewed users ", r));
     }
-    const submitComment = (ev) => {
-        ev.preventDefault();
-        const comment = commentRef.current.value;
-        commentRef.current.value = "";
-        addCodeComment(id, comment).then(r => console.log("Comment added to the code."));
+    const submitComment = async (ev) => {
+        ev.preventDefault()
+        setCommentText("")
+        const comment = await addCodeComment(currentUser, id, commentText)
+        console.log("The comment posted is ", comment)
+        showToast("Comment added");
     }
 
     return (
@@ -80,15 +72,15 @@ export default function CodeView() {
         small={`${code.description}`}
         >
             {
-                !loading  &&
+                !loading  && code &&
                 <div>
                     <div className={"flex flex-col items-center sm:block"}>
-                        <Code thecode={code} commentHide/>
+                        <Code numRows={13} code={code}/>
                     </div>
                     <form onSubmit={submitComment}>
                         <div className="w-full relative">
                             <div className="relative">
-                                <textarea ref={commentRef} className="w-full py-3 pe-14" placeholder="Type the comment here." />
+                                <textarea value={commentText} onChange={(ev) => setCommentText(ev.target.value)} className="w-full px-4 py-3 pe-14" placeholder="Type the comment here." />
                             </div>
                             <button type="submit" className="flex items-center border-1 bg-blue-500 text-white py-2 rounded-[30px] text-xl absolute right-0 top-[10px]  ">
                                 <PaperAirplaneIcon width={45} height={30} color="white" />
@@ -114,6 +106,10 @@ export default function CodeView() {
                             </div>
                     }
                 </div>
+            }
+            {
+                !code &&
+                <NotFound />
             }
             {
                 loading &&

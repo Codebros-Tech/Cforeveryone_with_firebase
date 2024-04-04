@@ -34,11 +34,15 @@ export async function deleteUserAccount(userId) {
 }
 
 export async function getUserById(id) {
-    if (!id) {
-        console.error('empty id passed');
-    } else {
-        const userDoc = await getDoc(doc(db, 'users', id))
-        return userDoc.data();
+    try {
+        if (!id) {
+            console.error('empty id passed');
+        } else {
+            const userDoc = await getDoc(doc(db, 'users', id))
+            return userDoc.data();
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 

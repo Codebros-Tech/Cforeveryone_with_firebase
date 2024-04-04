@@ -4,16 +4,17 @@ import { StateContext } from '../../contexts/ContextProvider';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
 import {getUserById} from "@/src/firebase/user.js";
-import {TailSpin,Rings} from "react-loader-spinner";
+import {Rings} from "react-loader-spinner";
+import {Link} from "react-router-dom";
 
-export default function Code({code}) {
+export default function Code({code, numRows = 1}) {
 
     const {showToast} = useContext(StateContext);
     const [user, setUser] = useState(null)
     const [loadingUser, setLoadingUser] = useState(true)
 
     useEffect(() => {
-        const getUser = async () => {
+        const userFetcher = async () => {
             try {
                 const user = await getUserById(code.userId);
                 if (user) {
@@ -26,7 +27,18 @@ export default function Code({code}) {
             }
         }
 
-        getUser()
+        const commentFetcher = async () => {
+            try {
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        userFetcher()
+        commentFetcher();
+
+
     }, []);
 
     return (
@@ -47,23 +59,29 @@ export default function Code({code}) {
                     }
                 </div>
 
-                <div>
-                    <div className='flex flex-col justify-between'>
-                        <h3 className="font-semibold text-center sm:text-md">{code.title}</h3>
-                        <p className={"text-white text-opacity-75"}>{code.description}</p>
+                <Link to={'/codes/'+ code.id} >
+                    <div>
+                        <div className='flex flex-col justify-between'>
+                            <h3 className="font-semibold text-center sm:text-md">{code.title}</h3>
+                            <p className={"text-white text-opacity-75"}>{code.description}</p>
+                        </div>
                     </div>
-                </div>
-                <CopyToClipboard text={code.text} onCopy={() => {
-                    showToast("Code has been copied to clipboard");
-                }}>
-                    <button className="text-[13px] bg-gray-800 text-white px-9 py-2 my-2" title='Copy code to clipboard text-center '>
-                        Copy to clipboard
-                    </button>
-                </CopyToClipboard>
-                <motion.div
-                    className="mt-2"
-                >
-                    <motion.textarea initial={{ opacity: 1, scale: 1}} transition={{ duration: 2}} exit={{ opacity: 0, scale: 0}} className="w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto" defaultValue={code.text} disabled />
+                    <CopyToClipboard text={code.text} onCopy={() => {
+                        showToast("Code has been copied to clipboard");
+                    }}>
+                        <button className="text-[13px] bg-gray-800 text-white px-9 py-2 my-2"
+                                title='Copy code to clipboard text-center '>
+                            Copy to clipboard
+                        </button>
+                    </CopyToClipboard>
+                </Link>
+                <motion.div className="mt-2">
+                    <motion.textarea
+                        rows={numRows}
+                        initial={{opacity: 1, scale: 1}} transition={{duration: 2}}
+                         exit={{opacity: 0, scale: 0}}
+                         className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
+                         defaultValue={code.text} disabled/>
                 </motion.div>
             </div>
         </div>
@@ -72,5 +90,5 @@ export default function Code({code}) {
 
 Code.propTypes = {
     code: PropTypes.object,
-    commentHide: PropTypes.bool,
+    numRows: PropTypes.number,
 }

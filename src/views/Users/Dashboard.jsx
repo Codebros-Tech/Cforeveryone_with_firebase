@@ -2,6 +2,8 @@ import {lazy, useContext, useEffect, useState} from "react";
 import { StateContext } from "../../contexts/ContextProvider";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
+import {Rings, Watch} from 'react-loader-spinner'
+
 const DashboardAI = lazy(() => import("@/src/components/Dashboard/DashboardAI.jsx"));
 
 const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
@@ -60,7 +62,15 @@ export default function Dashboard() {
                     <div className="max-w-6xl grid grid-cols-2 gap-y-5 gap-x-3 sm:grid-cols-3 text-center font-bold">
                         <div className="shadow-sm">
                             <h3>Codes Posted</h3>
-                            <h1 className="text-[40px]">{dashboardInfo.codes}</h1>
+                            { dashboardInfo.codes &&
+                                <h1 className="text-[40px]">{dashboardInfo.codes}</h1>
+                            }
+                            {
+                                !dashboardInfo.codes &&
+                               <div className={"flex items-center justify-center"}>
+                                   <Rings height={80} width={80}  />
+                               </div>
+                            }
                         </div>
                     </div>
 

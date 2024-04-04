@@ -20,7 +20,7 @@ export default function CodeIndex() {
                 const querySnapshot = await getDocs(q);
                 const fetchedCodes = querySnapshot.docs.map((doc) => ({
                     id: doc.id,
-                    ...doc.data(), 
+                    ...doc.data(),
                   }));
             
                 setAllCodes(fetchedCodes);

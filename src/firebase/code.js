@@ -1,6 +1,5 @@
-import { auth } from '../config/firebase.js';
-import { collection, getDocs, addDoc, query, doc, where, deleteDoc, getDoc } from 'firebase/firestore';
-import { db } from '../config/firebase.js';
+import {auth, db} from '../config/firebase.js';
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where} from 'firebase/firestore';
 
 
 export async function postCode(code, title, description, language = 'C') {
@@ -24,10 +23,9 @@ export async function postCode(code, title, description, language = 'C') {
 export async function getCodeById(codeId) {
     const docRef = doc(db, 'codes', codeId);
     const docSnap = await getDoc(docRef);
-    if (docSnap.exists) {
+    if (docSnap.exists()) {
         return docSnap.data();
     } else {
-        // Handle the case where the snippet doesn't exist
         console.error('No such document!');
         return null;
     }
@@ -42,7 +40,7 @@ export async function deleteCode(codeId) {
     }
 }
 
-export async function addCodeComment(codeId, commentText) {
+export async function addCodeComment(user, codeId, commentText) {
     const commentRef = collection(db, 'codes', codeId, 'comments');
     const data = {
         text: commentText,
@@ -50,25 +48,20 @@ export async function addCodeComment(codeId, commentText) {
         createdAt: new Date(),
     };
     try {
-        await addDoc(commentRef, data);
+        return await addDoc(commentRef, data);
     } catch (error) {
         console.error('Error adding comment:', error);
     }
 }
 
 export async function getCodeComments(codeId) {
-   try {
-       const comments = collection(db, 'codes', codeId, 'comments');
-       const q = query(comments);
-       const querySnapshot = await getDocs(q);
-       const snippets = [];
-       querySnapshot.forEach((doc) => {
-           snippets.push({ ...doc.data(), id: doc.id });
-       });
-       return snippets;
-   } catch (error ) {
-       console.error("Error occurred when fetching the code comments");
-   }
+    try {
+        const codeCollection = collection(db, 'codes', codeId)
+        const q = query(codeCollection);
+        // const comment
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export async  function getUserCodes(currentUser) {
