@@ -60,16 +60,15 @@ export async function logoutUser() {
     }
 }
 
-export async function addFeedback(feedbackText) {
-    const feedbackRef = collection(db, 'feedback'); // Replace with your feedback collection name
+export async function addFeedback(user, feedbackText) {
+    const feedbackRef = collection(db, 'feedback');
     const data = {
         text: feedbackText,
-        userId: auth.currentUser.uid,
-        name: auth.currentUser.displayName,
-        createdAt: new Date(),
+        userId: user.uid,
+        createdAt: serverTimestamp(),
     };
     try {
-        await addDoc(feedbackRef, data);
+        return await addDoc(feedbackRef, data);
     } catch (error) {
         console.error('Error adding feedback:', error);
     }
