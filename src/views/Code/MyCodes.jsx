@@ -63,9 +63,13 @@ export default function MyCodes() {
                     <div>
                         {
                             myCodes && myCodes.length > 0 &&
-                            myCodes.map((code, index) => (
-                                <Code key={index} code={code} />
-                            ))
+                            <div className={"grid lg:grid-cols-2 gap-x-2.5 items-center"}>
+                                {
+                                    myCodes.map((code, index) => (
+                                        <Code key={index} code={code} />
+                                    ))
+                                }
+                            </div>
                         }
                         {
                             !error && myCodes.length === 0 &&

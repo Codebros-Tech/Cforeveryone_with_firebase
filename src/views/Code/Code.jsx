@@ -31,7 +31,7 @@ export default function Code({code}) {
 
     return (
         <div key={code.uid} className="flex rounded w-full mt-3">
-            <div className={"px-2 py-3 bg-black text-gray-500 w-full md:w-11/12"}>
+            <div className={"px-2 py-3 bg-black text-gray-500 w-full"}>
                 <div className={"flex items-center h-12 gap-2 cursor-pointer"}>
                     {
                         user &&

@@ -50,7 +50,7 @@ export default function CodeIndex() {
 
             {
                 !loading  &&
-                <div className={"flex flex-col items-center sm:block"}>
+                <div className={"grid lg:grid-cols-2 gap-x-2.5 items-center"}>
                     {
                         allCodes.map((code, index) => (
                             <Code key={index} code={code} />
