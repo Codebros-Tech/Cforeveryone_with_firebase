@@ -1,5 +1,5 @@
 import {lazy, useContext} from 'react';
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
@@ -10,7 +10,7 @@ const Code = lazy(() => import( './Code.jsx'));
 const Comment = lazy(() => import('./Comment.jsx'));
 const NotFound = lazy(() => import("@/src/views/Pages/NotFound.jsx"))
 
-import {addCodeComment, addUserToCodeViewers, getCodeById } from "../../firebase/code.js";
+import {addCodeComment, addUserToCodeViewers, getCodeById, getCodeComments} from "../../firebase/code.js";
 import {auth} from "../../config/firebase.js";
 import {StateContext} from "@/src/contexts/ContextProvider.jsx";
 
@@ -32,7 +32,15 @@ export default function CodeView() {
             setLoading(false);
         }
 
+        const commentFetcher = async () => {
+            const commentsArray = await getCodeComments(id);
+            setComments(commentsArray)
+        }
+
         codeFetcher();
+
+        commentFetcher();
+
 
         const initialTime = performance.now();
         setStartTime(initialTime);
@@ -49,11 +57,12 @@ export default function CodeView() {
 
         addUserToCodeViewers(id, auth.currentUser.uid, duration).then(r => console.log("user has been added to viewed users ", r));
     }
+
     const submitComment = async (ev) => {
         ev.preventDefault()
         setCommentText("")
-        const comment = await addCodeComment(currentUser, id, commentText)
-        console.log("The comment posted is ", comment)
+        const commentRef = await addCodeComment(currentUser, id, commentText)
+        console.log("The comment posted is ", commentRef);
         showToast("Comment added");
     }
 

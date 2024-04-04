@@ -26,40 +26,27 @@ export default function Code({code, numRows = 1}) {
                 setLoadingUser(false);
             }
         }
-
-        const commentFetcher = async () => {
-            try {
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
         userFetcher()
-        commentFetcher();
-
-
-    }, []);
+    }, [code]);
 
     return (
-        <div key={code.uid} className="flex rounded w-full mt-3">
+        <div key={code.id} className="flex rounded w-full mt-3">
             <div className={"px-2 py-3 bg-black text-gray-500 w-full"}>
-                <div className={"flex items-center h-12 gap-2 cursor-pointer"}>
-                    {
-                        user &&
-                        <>
-                            <img className={"rounded-[50%] h-12 float-left"} src={user.photoURL} alt={"User Url"}/>
-                            <div className={"flex flex-col font-bold"}>
-                                <div>{user.displayName}</div>
-                            </div>
-                        </>
-                    }
-                    {
-                        loadingUser && <Rings color="#00BFFF" height={100} width={100} />
-                    }
-                </div>
-
-                <Link to={'/codes/'+ code.id} >
+                <Link to={'/codes/' + code.id}>
+                    <div className={"flex items-center h-12 gap-2 cursor-pointer"}>
+                        {
+                            user &&
+                            <>
+                                <img className={"rounded-[50%] h-12 float-left"} src={user.photoURL} alt={"User Url"}/>
+                                <div className={"flex flex-col font-bold"}>
+                                    <div>{user.displayName}</div>
+                                </div>
+                            </>
+                        }
+                        {
+                            loadingUser && <Rings color="#00BFFF" height={100} width={100}/>
+                        }
+                    </div>
                     <div>
                         <div className='flex flex-col justify-between'>
                             <h3 className="font-semibold text-center sm:text-md">{code.title}</h3>
@@ -79,9 +66,9 @@ export default function Code({code, numRows = 1}) {
                     <motion.textarea
                         rows={numRows}
                         initial={{opacity: 1, scale: 1}} transition={{duration: 2}}
-                         exit={{opacity: 0, scale: 0}}
-                         className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
-                         defaultValue={code.text} disabled/>
+                        exit={{opacity: 0, scale: 0}}
+                        className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
+                        defaultValue={code.text} disabled/>
                 </motion.div>
             </div>
         </div>

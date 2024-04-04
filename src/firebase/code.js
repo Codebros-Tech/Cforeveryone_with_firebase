@@ -56,9 +56,10 @@ export async function addCodeComment(user, codeId, commentText) {
 
 export async function getCodeComments(codeId) {
     try {
-        const codeCollection = collection(db, 'codes', codeId)
-        const q = query(codeCollection);
-        // const comment
+        const commentCollection = collection(db, 'codes', codeId, 'comments')
+        const q = query(commentCollection);
+        const commentSnapshot = await getDocs(q);
+        return commentSnapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}));
     } catch (error) {
         console.log(error);
     }
