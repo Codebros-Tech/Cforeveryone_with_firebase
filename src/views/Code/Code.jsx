@@ -5,17 +5,16 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
 import {getUserById} from "@/src/firebase/user.js";
 import {Rings} from "react-loader-spinner";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
+import {toggleCodeLike} from "@/src/firebase/code.js";
 
 export default function Code({code, numRows = 1}) {
 
-    const {showToast} = useContext(StateContext);
+    const {id } = useParams();
+
+    const {currentUser ,showToast} = useContext(StateContext);
     const [user, setUser] = useState(null)
     const [loadingUser, setLoadingUser] = useState(true)
-
-    const toggleCodeLike = async () => {
-
-    }
 
     useEffect(() => {
         const userFetcher = async () => {
@@ -73,10 +72,16 @@ export default function Code({code, numRows = 1}) {
                         exit={{opacity: 0, scale: 0}}
                         className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
                         defaultValue={code.text} disabled/>
-                    <div className={"grid grid-cols-2 w-full rounded-md"}>
-                        <button onClick={toggleCodeLike} className={"w-fit py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
+                    <div className={"grid grid-cols-2 gap-x-2 w-full rounded-md"}>
+                        <button onClick={toggleCodeLike} className={"py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
                             Like
                         </button>
+                        {
+                            !id &&
+                            <Link to={'/codes/' + code.id} className={"py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
+                                Comment
+                            </Link>
+                        }
                     </div>
                 </motion.div>
             </div>
