@@ -1,6 +1,6 @@
 export const navigation = [
     { name: 'Dashboard', to: '/dashboard'},
-    { name: "Codes and Issues", to: '/codes'},
+    { name: "Codes", to: '/codes'},
     { name: "Contact Us", to: '/contact'},
 ]
 

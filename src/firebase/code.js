@@ -79,12 +79,11 @@ export async  function getUserCodes(currentUser) {
     return snippets;
 }
 
-export async function addCodeLike(codeId, userId) {
+export async function toggleCodeLike(codeId, userId) {
     const likesRef = collection(db, 'codes', codeId, 'likes');
     const likeQuery = query(
         likesRef,
         where('userId', '==', userId),
-        where('codeId', '==', codeId),
     );
     const likeQuerySnapshot = await getDoc(likeQuery);
 
@@ -92,6 +91,7 @@ export async function addCodeLike(codeId, userId) {
         userId: userId,
         likedAt: new Date(),
     };
+
     try {
         await addDoc(likesRef, data);
     } catch (error) {

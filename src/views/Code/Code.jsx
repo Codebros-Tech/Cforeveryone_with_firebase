@@ -13,6 +13,10 @@ export default function Code({code, numRows = 1}) {
     const [user, setUser] = useState(null)
     const [loadingUser, setLoadingUser] = useState(true)
 
+    const toggleCodeLike = async () => {
+
+    }
+
     useEffect(() => {
         const userFetcher = async () => {
             try {
@@ -53,22 +57,27 @@ export default function Code({code, numRows = 1}) {
                             <p className={"text-white text-opacity-75"}>{code.description}</p>
                         </div>
                     </div>
-                    <CopyToClipboard text={code.text} onCopy={() => {
-                        showToast("Code has been copied to clipboard");
-                    }}>
-                        <button className="text-[13px] bg-gray-800 text-white px-9 py-2 my-2"
-                                title='Copy code to clipboard text-center '>
-                            Copy to clipboard
-                        </button>
-                    </CopyToClipboard>
                 </Link>
-                <motion.div className="mt-2">
+                <CopyToClipboard text={code.text} onCopy={() => {
+                    showToast("Code has been copied to clipboard");
+                }}>
+                    <button className="text-[13px] bg-gray-800 text-white px-9 py-2 my-2"
+                            title='Copy code to clipboard text-center '>
+                        Copy to clipboard
+                    </button>
+                </CopyToClipboard>
+                <motion.div className="mt-2 relative">
                     <motion.textarea
                         rows={numRows}
                         initial={{opacity: 1, scale: 1}} transition={{duration: 2}}
                         exit={{opacity: 0, scale: 0}}
                         className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
                         defaultValue={code.text} disabled/>
+                    <div className={"grid grid-cols-2 w-full rounded-md"}>
+                        <button onClick={toggleCodeLike} className={"w-fit py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
+                            Like
+                        </button>
+                    </div>
                 </motion.div>
             </div>
         </div>

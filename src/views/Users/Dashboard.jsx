@@ -87,8 +87,8 @@ export default function Dashboard() {
                             <div
                                 className="flex w-full h-4 overflow-hidden font-sans text-xs font-medium rounded-full flex-start bg-blue-gray-50">
                                 <div
-                                    className="flex items-center justify-center w-[80%] h-full overflow-hidden text-white break-all bg-gray-900 rounded-full ">
-                                    80% Completed
+                                    className="flex items-center justify-center w-[2%] h-full overflow-hidden text-white break-all bg-gray-900 rounded-full ">
+                                    2% Completed
                                 </div>
                             </div>
                         </div>
