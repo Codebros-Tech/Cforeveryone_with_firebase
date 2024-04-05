@@ -33,11 +33,14 @@ export default function Code({code, numRows = 1}) {
                 setLoadingUser(false);
             }
         }
-        userFetcher()
 
-        getCodeCommentsCount(code.id).then((count) => {
+        const fetchCommentCount = async () => {
+            const count = await getCodeCommentsCount(code.id);
             setCommentCount(count);
-        })
+        }
+
+        userFetcher()
+        fetchCommentCount();
     }, [code]);
 
     const removeCode = async () => {

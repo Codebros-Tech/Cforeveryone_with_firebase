@@ -102,7 +102,7 @@ export default function CodeView() {
                                 {
                                     comments.map((comment, index) => (
                                         <div key={index}>
-                                            <Comment comment={comment} />
+                                            <Comment codeId={id} comment={comment} />
                                         </div>
                                     ))
                                 }

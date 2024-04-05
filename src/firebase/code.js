@@ -54,6 +54,15 @@ export async function addCodeComment(user, codeId, commentText) {
     }
 }
 
+export async function deleteCodeComment(codeId, commentId) {
+    try {
+        const commentDoc = doc(db, 'codes', codeId, 'comments', commentId);
+        return await deleteDoc(commentDoc);
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+    }
+}
+
 export async function getCodeComments(codeId) {
     try {
         const commentCollection = collection(db, 'codes', codeId, 'comments')
@@ -67,10 +76,12 @@ export async function getCodeComments(codeId) {
 
 export async function getCodeCommentsCount(codeId) {
     try {
-        const commentCollection = collection(db, 'codes', codeId, 'comments')
-        const q = query(commentCollection);
-        const commentSnapshot = await getDocs(q);
-        return commentSnapshot.size;
+        if (codeId) {
+            const commentCollection = collection(db, 'codes', codeId, 'comments')
+            const q = query(commentCollection);
+            const commentSnapshot = await getDocs(q);
+            return commentSnapshot.size;
+        }
     } catch (error) {
         console.log(error);
     }
