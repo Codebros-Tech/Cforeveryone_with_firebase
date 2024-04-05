@@ -6,10 +6,7 @@ const Toast = lazy(() => import('@/src/components/elements/Toast.jsx'));
 const Navigation = lazy(() => import('@/src/components/Navcomponents/Navigation.jsx'));
 
 export default function PrivateRoute() {
-    const { currentUser } = useContext(StateContext);
-
-    return !currentUser
-    ?  <Navigate to={'/login'} /> : (
+    return (
         <Suspense fallback={<div>Loading ...</div>}>
             <div className='relative'>
                 <Navigation />

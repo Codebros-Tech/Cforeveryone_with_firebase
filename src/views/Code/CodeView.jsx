@@ -1,6 +1,6 @@
 import {lazy, useContext} from 'react';
 import {useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 
@@ -50,19 +50,18 @@ export default function CodeView() {
         }
     }, [id]);
 
-    const sendRequest = () => {
+    const sendRequest = async () => {
         const endTime = performance.now();
         const durationFloat = (endTime - startTime) / 1000;
         const duration =  durationFloat.toFixed(0);
 
-        addUserToCodeViewers(id, auth.currentUser.uid, duration).then(r => console.log("user has been added to viewed users ", r));
+        addUserToCodeViewers(id, currentUser.uid, duration).then(r => console.log("user has been added to viewed users ", r));
     }
 
     const submitComment = async (ev) => {
         ev.preventDefault()
         setCommentText("")
-        const commentRef = await addCodeComment(currentUser, id, commentText)
-        console.log("The comment posted is ", commentRef);
+        await addCodeComment(currentUser, id, commentText)
         showToast("Comment added");
     }
 
@@ -86,16 +85,25 @@ export default function CodeView() {
                     <div className={"flex flex-col items-center sm:block"}>
                         <Code numRows={13} code={code}/>
                     </div>
-                    <form onSubmit={submitComment}>
-                        <div className="w-full relative">
-                            <div className="relative">
-                                <textarea value={commentText} onChange={(ev) => setCommentText(ev.target.value)} className="w-full px-4 py-3 pe-14" placeholder="Type the comment here." />
+                    {
+                        currentUser &&
+                        <form onSubmit={submitComment}>
+                            <div className="w-full relative">
+                                <div className="relative">
+                                    <textarea value={commentText} onChange={(ev) => setCommentText(ev.target.value)} className="w-full px-4 py-3 pe-14" placeholder="Type the comment here." />
+                                </div>
+                                <button type="submit" className="flex items-center border-1 bg-blue-500 text-white py-2 rounded-[30px] text-xl absolute right-0 top-[10px]  ">
+                                    <PaperAirplaneIcon width={45} height={30} color="white" />
+                                </button>
                             </div>
-                            <button type="submit" className="flex items-center border-1 bg-blue-500 text-white py-2 rounded-[30px] text-xl absolute right-0 top-[10px]  ">
-                                <PaperAirplaneIcon width={45} height={30} color="white" />
-                            </button>
+                        </form>
+                    }
+                    {
+                        !currentUser &&
+                        <div className={"block py-3 px-2 bg-blue-500 text-white"}>
+                            <Link to={'/login'}>Login to comment</Link>
                         </div>
-                    </form>
+                    }
                     {
                         comments &&
                             <div className="max-w-[1200px] h-[70vh] overflow-auto border-2  mx-auto px-2 py-4">

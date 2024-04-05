@@ -20,7 +20,7 @@ export default function Comment({codeId ,comment}) {
     }, [comment]);
 
     return (
-        <div className={`bg-blue-100 ${currentUser.uid === comment.userId ? 'ms-auto bg-blue-400' : 'me-auto' } mb-2 py-3 relative md:py-4 text-[15px] ps-3 w-[90%] border-gray-100 border-1 text-gray-700`}>
+        <div className={`bg-blue-100 ${currentUser?.uid === comment.userId ? 'ms-auto bg-blue-400' : 'me-auto' } mb-2 py-3 relative md:py-4 text-[15px] ps-3 w-[90%] border-gray-100 border-1 text-gray-700`}>
             <div className=''>
                 <div className='flex pb-2 gap-2 items-center'>
                     <img className="h-[30px] w-auto rounded-full" src={user?.photoURL} alt="" />
@@ -28,7 +28,7 @@ export default function Comment({codeId ,comment}) {
                 </div>
             </div>
             {
-                currentUser.uid === comment.userId &&
+                currentUser && currentUser.uid === comment.userId &&
                 <div className={"absolute right-5 top-3"}>
                     <button onClick={() => {
                         deleteCodeComment(codeId, comment.id).then(r => {
@@ -48,7 +48,7 @@ export default function Comment({codeId ,comment}) {
                 </pre>
             </div>
             <div className='text-right text-[12px] flex items-center px-2 justify-end'>
-                {comment.createdAt.seconds}
+                {typeof comment.createdAt !== 'object' && comment.createdAt}
             </div>
         </div>
     )

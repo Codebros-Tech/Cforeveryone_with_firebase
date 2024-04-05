@@ -3,6 +3,7 @@ import { StateContext } from "../../contexts/ContextProvider";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import {Rings, Watch} from 'react-loader-spinner'
+import {Navigate} from "react-router-dom";
 
 const DashboardAI = lazy(() => import("@/src/components/Dashboard/DashboardAI.jsx"));
 
@@ -16,9 +17,9 @@ export default function Dashboard() {
 
     useEffect(() => {
         setLoading(true);
-        getDashboardInformation(currentUser.uid);
+        currentUser && getDashboardInformation(currentUser.uid);
         setLoading(false);
-    }, [currentUser.uid]);
+    }, [currentUser]);
 
 
     const getDashboardInformation = async (id) => {
@@ -38,7 +39,8 @@ export default function Dashboard() {
     }
 
 
-    return (
+    return  !currentUser ? <Navigate to={'/login'}/> :
+    (
         <PageComponent title="Dashboard" buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/mine">

@@ -58,7 +58,7 @@ export default function Code({code, numRows = 1}) {
         <div key={code.id} className="flex rounded w-full mt-3">
             <div className={"px-2 py-3 relative bg-black text-gray-500 w-full"}>
                 {
-                    currentUser.uid === code.userId &&
+                    currentUser && currentUser.uid === code.userId &&
                     <div className={"absolute right-5 top-5"}>
                         <button onClick={removeCode} title={"Delete the code"}
                                 className={"bg-red-800 text-white py-2 px-2 w-fit"}>

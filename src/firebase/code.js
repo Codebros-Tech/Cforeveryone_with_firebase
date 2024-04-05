@@ -1,5 +1,5 @@
 import {auth, db} from '../config/firebase.js';
-import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where} from 'firebase/firestore';
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, where} from 'firebase/firestore';
 
 
 export async function postCode(code, title, description, language = 'C') {
@@ -45,7 +45,7 @@ export async function addCodeComment(user, codeId, commentText) {
     const data = {
         text: commentText,
         userId: auth.currentUser.uid,
-        createdAt: new Date(),
+        createdAt: serverTimestamp(),
     };
     try {
         return await addDoc(commentRef, data);

@@ -24,26 +24,30 @@ export default function MobileNavigation() {
                     </NavLink>
                 ))}
             </div>
-            <div className="border-t border-gray-700 pb-3 pt-4">
-                <div className="flex items-center px-5">
-                    <div className="flex-shrink-0">
-                        <img className="h-10 w-10 rounded-full" src={currentUser.photoURL} alt=""/>
+            {
+                currentUser &&
+                <div className="border-t border-gray-700 pb-3 pt-4">
+                    <div className="flex items-center px-5">
+                        <div className="flex-shrink-0">
+                            <img className="h-10 w-10 rounded-full" src={currentUser.photoURL} alt=""/>
+                        </div>
+                        <div className="ml-3">
+                            <div
+                                className="text-base font-medium leading-none text-white">{currentUser.displayName}</div>
+                            <div className="text-sm font-medium leading-none text-gray-400">{currentUser.email}</div>
+                        </div>
                     </div>
-                    <div className="ml-3">
-                        <div className="text-base font-medium leading-none text-white">{currentUser.displayName }</div>
-                        <div className="text-sm font-medium leading-none text-gray-400">{currentUser.email}</div>
+                    <div className="mt-3 space-y-1 px-2">
+                        <Disclosure.Button
+                            onClick={() => logoutUser()}
+                            as="button"
+                            className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                        >
+                            Sign Out
+                        </Disclosure.Button>
                     </div>
                 </div>
-                <div className="mt-3 space-y-1 px-2">
-                    <Disclosure.Button
-                        onClick={() => logoutUser()}
-                        as="button"
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                    >
-                        Sign Out
-                    </Disclosure.Button>
-                </div>
-            </div>
+            }
         </Disclosure.Panel>
     )
 }
