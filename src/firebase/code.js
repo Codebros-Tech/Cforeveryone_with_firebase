@@ -65,6 +65,17 @@ export async function getCodeComments(codeId) {
     }
 }
 
+export async function getCodeCommentsCount(codeId) {
+    try {
+        const commentCollection = collection(db, 'codes', codeId, 'comments')
+        const q = query(commentCollection);
+        const commentSnapshot = await getDocs(q);
+        return commentSnapshot.size;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async  function getUserCodes(currentUser) {
     let userId = currentUser.uid;
     const snippets = [];

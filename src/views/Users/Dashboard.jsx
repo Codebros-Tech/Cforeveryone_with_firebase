@@ -23,21 +23,17 @@ export default function Dashboard() {
 
     const getDashboardInformation = async (id) => {
         try {
-            const codeRef = collection(db, 'codes');
+            const codeCollection = collection(db, 'codes');
             if (id) {
-                const userCodesQuery = query(codeRef, where('userId', '==', id));
-                const querySnapshot = await getDocs(userCodesQuery)
-                const codes = [];
-                querySnapshot.forEach((doc) => {
-                    codes.push({ ...doc.data(), id: doc.id });
-                });
-
+                const countQuery = query(codeCollection, where("userId", "==", id));
+                const snapshot = await getDocs(countQuery);
+                const size = snapshot.size;
                 setDashboardInfo({
-                    codes: codes.length
+                    codes: size,
                 });
             }
         } catch (error) {
-          //
+          console.error("Error fetching the dashboard information ", error);
         }
     }
 
@@ -58,7 +54,7 @@ export default function Dashboard() {
         )}>
             {
                 !loading &&
-                <div>
+                <div className={"py-10"}>
                     <div className="max-w-6xl grid grid-cols-2 gap-y-5 gap-x-3 sm:grid-cols-3 text-center font-bold">
                         <div className="shadow-sm">
                             <h3>Codes Posted</h3>
@@ -79,15 +75,15 @@ export default function Dashboard() {
                             <div>
                                 <h4 className="text-[25px]">Skill path</h4>
 
-                                <div className="font-bold text-[16px]">
+                                <div className="font-bold mt-4 text-[16px]">
                                     Your current Level
                                 </div>
                             </div>
 
                             <div
-                                className="flex w-full h-4 overflow-hidden font-sans text-xs font-medium rounded-full flex-start bg-blue-gray-50">
+                                className="flex my-3 w-full h-8 overflow-hidden font-sans text-xs font-medium rounded-full flex-start bg-blue-gray-50">
                                 <div
-                                    className="flex items-center justify-center w-[2%] h-full overflow-hidden text-white break-all bg-gray-900 rounded-full ">
+                                    className="flex items-center justify-center w-[10%] h-full overflow-hidden text-white break-all bg-gray-900 rounded-full ">
                                     2% Completed
                                 </div>
                             </div>

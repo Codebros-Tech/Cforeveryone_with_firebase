@@ -5,15 +5,19 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
 import {getUserById} from "@/src/firebase/user.js";
 import {Rings} from "react-loader-spinner";
-import {Link, useParams} from "react-router-dom";
-import {toggleCodeLike} from "@/src/firebase/code.js";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {deleteCode, getCodeCommentsCount, toggleCodeLike} from "@/src/firebase/code.js";
+
+import {TrashIcon} from 'lucide-react'
 
 export default function Code({code, numRows = 1}) {
 
     const {id } = useParams();
+    const navigate = useNavigate();
 
-    const {currentUser ,showToast} = useContext(StateContext);
+    const {currentUser, showToast} = useContext(StateContext);
     const [user, setUser] = useState(null)
+    const [commentCount, setCommentCount] = useState(0)
     const [loadingUser, setLoadingUser] = useState(true)
 
     useEffect(() => {
@@ -24,17 +28,41 @@ export default function Code({code, numRows = 1}) {
                     setUser(user);
                 }
             } catch (error) {
-                console.error(error);
+                console.log(error);
             } finally {
                 setLoadingUser(false);
             }
         }
         userFetcher()
+
+        getCodeCommentsCount(code.id).then((count) => {
+            setCommentCount(count);
+        })
     }, [code]);
+
+    const removeCode = async () => {
+       try {
+           const deletedCode = await deleteCode(code.id);
+           navigate('/codes');
+           showToast("Code has been deleted")
+       } catch (error) {
+           console.log(error);
+       }
+    }
+
 
     return (
         <div key={code.id} className="flex rounded w-full mt-3">
-            <div className={"px-2 py-3 bg-black text-gray-500 w-full"}>
+            <div className={"px-2 py-3 relative bg-black text-gray-500 w-full"}>
+                {
+                    currentUser.uid === code.userId &&
+                    <div className={"absolute right-5 top-5"}>
+                        <button onClick={removeCode} title={"Delete the code"}
+                                className={"bg-red-800 text-white py-2 px-2 w-fit"}>
+                            <TrashIcon/>
+                        </button>
+                    </div>
+                }
                 <Link to={'/codes/' + code.id}>
                     <div className={"flex items-center h-12 gap-2 cursor-pointer"}>
                         {
@@ -73,13 +101,14 @@ export default function Code({code, numRows = 1}) {
                         className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
                         defaultValue={code.text} disabled/>
                     <div className={"grid grid-cols-2 gap-x-2 w-full rounded-md"}>
-                        <button onClick={toggleCodeLike} className={"py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
-                            Like
+                        <button onClick={toggleCodeLike}
+                                className={"py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
+                            Like <span className={"font-bold"}>( 20 )</span>
                         </button>
                         {
-                            !id &&
+                        !id &&
                             <Link to={'/codes/' + code.id} className={"py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
-                                Comment
+                                Comment <span className={"font-bold"}>( {commentCount} )</span>
                             </Link>
                         }
                     </div>

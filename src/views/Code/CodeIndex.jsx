@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 import {useEffect, useState} from "react";
-import { collection, getDocs, query  } from 'firebase/firestore';
+import {collection, getDocs, query, where} from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
 const Code = lazy(() => import("./Code"));
@@ -18,11 +18,13 @@ export default function CodeIndex() {
                 const codeCollection = collection(db, 'codes');
                 const q = query(codeCollection);
                 const querySnapshot = await getDocs(q);
-                const fetchedCodes = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                  }));
-            
+                const fetchedCodes = querySnapshot.docs.map( (doc) => {
+                    return {
+                        id: doc.id,
+                        ...doc.data(),
+                    }
+                });
+
                 setAllCodes(fetchedCodes);
             
             } catch (error) {
