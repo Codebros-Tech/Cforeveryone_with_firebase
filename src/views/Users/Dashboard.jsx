@@ -39,8 +39,7 @@ export default function Dashboard() {
     }
 
 
-    return  !currentUser ? <Navigate to={'/login'}/> :
-    (
+    return (
         <PageComponent title="Dashboard" buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/mine">
@@ -82,12 +81,10 @@ export default function Dashboard() {
                                 </div>
                             </div>
 
-                            <div
-                                className="flex my-3 w-full h-8 overflow-hidden font-sans text-xs font-medium rounded-full flex-start bg-blue-gray-50">
-                                <div
-                                    className="flex items-center justify-center w-[10%] h-full overflow-hidden text-white break-all bg-gray-900 rounded-full ">
-                                    2% Completed
+                            <div className="flex justify-center items-center my-3 w-full tex relative h-8 font-sans text-xs font-medium rounded-full flex-start bg-gray-200">
+                                <div className="flex absolute left-0 bottom-0 top-0  items-center justify-center whitespace-nowrap w-[10%] h-full  text-white bg-gray-900 rounded-md ">
                                 </div>
+                                <div>10% Completed</div>
                             </div>
                         </div>
                     </div>

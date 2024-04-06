@@ -11,7 +11,6 @@ const Comment = lazy(() => import('./Comment.jsx'));
 const NotFound = lazy(() => import("@/src/views/Pages/NotFound.jsx"))
 
 import {addCodeComment, addUserToCodeViewers, getCodeById, getCodeComments} from "../../firebase/code.js";
-import {auth} from "../../config/firebase.js";
 import {StateContext} from "@/src/contexts/ContextProvider.jsx";
 
 export default function CodeView() {

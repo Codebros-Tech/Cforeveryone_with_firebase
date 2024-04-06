@@ -24,6 +24,7 @@ import MyCodes from "./views/Code/MyCodes"
 import CodeView from './views/Code/CodeView.jsx';
 import Contact from "./views/Pages/Contact"
 import ChatPage from "@/src/views/Pages/ChatPage.jsx";
+import Authenticate from "@/src/views/Layouts/Authenticate.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -33,25 +34,28 @@ const router = createBrowserRouter(
             </Route>
 
             <Route path="/" element={<PrivateRoute />}>
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path={'/'} element={<Authenticate />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
 
-                <Route path="/codes" element={<CodeIndex />} />
-                <Route path="/codes/mine" element={<MyCodes />} />
-                <Route path="/codes/create" element={<CodeCreate />} />
+                    <Route path="/codes/mine" element={<MyCodes />} />
+
+                    <Route path="/codes/:id/edit" element={<CodeCreate />} />
+
+                    <Route path="/users" element={<Users />} />
+                    <Route path="/users/:username" element={<AccountInfo />} />
+
+                    <Route path="/myinfo" element={<UserInfo />} />
+                    <Route path="/myinfo/edit" element={<InfoUpdate />} />
+
+                    <Route path="/contact" element={<Contact />} />
+
+                    <Route path="/chats" element={<ChatPage />} />
+
+                    <Route path="/*" element={<NotFound />} />
+                </Route>
+
                 <Route path="/codes/:id" element={<CodeView />} />
-                <Route path="/codes/:id/edit" element={<CodeCreate />} />
-
-                <Route path="/users" element={<Users />} />
-                <Route path="/users/:username" element={<AccountInfo />} />
-
-                <Route path="/myinfo" element={<UserInfo />} />
-                <Route path="/myinfo/edit" element={<InfoUpdate />} />
-
-                <Route path="/contact" element={<Contact />} />
-
-                <Route path="/chats" element={<ChatPage />} />
-
-                <Route path="/*" element={<NotFound />} />
+                <Route path="/codes" element={<CodeIndex />} />
             </Route>
 
             <Route path="/" element={<GuestLayout />}>
