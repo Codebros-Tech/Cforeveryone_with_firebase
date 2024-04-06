@@ -1,8 +1,6 @@
-import {Config} from 'tailwindcss';
 import 'tailwindcss-animate';
 
 module.exports = {
-  darkMode: ["class"],
   content: [
     './pages/**/*.{js,jsx}',
     './components/**/*.{js,jsx}',
@@ -36,5 +34,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+      require("tailwindcss-animate"),
+      require("daisyui"),
+  ],
 }

@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import {useEffect, useState} from "react";
 import {collection, getDocs, query, where} from 'firebase/firestore';
 import { db } from '../../config/firebase';
+import Loading from "@/src/components/elements/Loading.jsx";
 
 const Code = lazy(() => import("./Code"));
 const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
@@ -61,10 +62,7 @@ export default function CodeIndex() {
                 </div>
             }
             {
-                loading &&
-                    <div className="flex items-center justify-center">
-                        Patience is the key to a good life....
-                    </div>
+                loading && <Loading />
             }
         </PageComponent>
     )

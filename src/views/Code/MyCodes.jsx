@@ -7,6 +7,7 @@ const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 import { StateContext } from "../../contexts/ContextProvider";
 import {getUserCodes} from "../../firebase/code.js";
 import { useContext, useEffect } from "react";
+import Loading from "@/src/components/elements/Loading.jsx";
 
 export default function MyCodes() {
     const [loading, setLoading] = useState(false);
@@ -46,10 +47,7 @@ export default function MyCodes() {
         )}>
             <Suspense fallback={<div>Loading Component </div>}>
                 {
-                    loading &&
-                    <div className="flex items-center justify-center">
-                        Patience is the key to a good life...
-                    </div>
+                    loading && <Loading />
                 }
 
                 {

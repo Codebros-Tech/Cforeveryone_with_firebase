@@ -4,6 +4,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import {Rings, Watch} from 'react-loader-spinner'
 import {Navigate} from "react-router-dom";
+import Loading from "@/src/components/elements/Loading.jsx";
 
 const DashboardAI = lazy(() => import("@/src/components/Dashboard/DashboardAI.jsx"));
 
@@ -56,7 +57,7 @@ export default function Dashboard() {
             {
                 !loading &&
                 <div className={"py-10"}>
-                    <div className="max-w-6xl grid grid-cols-2 gap-y-5 gap-x-3 sm:grid-cols-3 text-center font-bold">
+                    <div className="max-w-6xl grid grid-cols-2 text-black gap-y-5 gap-x-3 sm:grid-cols-3 text-center font-bold">
                         <div className="shadow-sm">
                             <h3>Codes Posted</h3>
                             { dashboardInfo.codes &&
@@ -71,7 +72,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="w-full mt-5 flex items-center justify-center">
+                    <div className="w-full mt-5 text-black flex items-center justify-center">
                         <div className="w-11/12 bg-white sm:p-5 py-5">
                             <div>
                                 <h4 className="text-[25px]">Skill path</h4>
@@ -93,10 +94,7 @@ export default function Dashboard() {
                 </div>
             }
             {
-                loading &&
-                <div className="flex flex-col gap-2">
-                    Patients Brother.
-                </div>
+                loading && <Loading />
             }
         </PageComponent>
     )
