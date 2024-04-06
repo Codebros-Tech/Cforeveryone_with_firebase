@@ -39,6 +39,7 @@ const router = createBrowserRouter(
 
                     <Route path="/codes/mine" element={<MyCodes />} />
 
+                    <Route path="/codes/create" element={<CodeCreate />} />
                     <Route path="/codes/:id/edit" element={<CodeCreate />} />
 
                     <Route path="/users" element={<Users />} />

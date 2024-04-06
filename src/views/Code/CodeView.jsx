@@ -65,7 +65,7 @@ export default function CodeView() {
     }
 
     return (
-        <PageComponent title={code.title ?? "Code has no title"} buttons={(
+        <PageComponent title={code?.title ?? "Code has no title"} buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/create">
                     New
@@ -76,7 +76,7 @@ export default function CodeView() {
             </div>
         )
         }
-        small={`${code.description}`}
+        small={`${code?.description}`}
         >
             {
                 !loading  && code &&
