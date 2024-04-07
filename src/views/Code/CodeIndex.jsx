@@ -53,7 +53,7 @@ export default function CodeIndex() {
                 </div>
             )}>
                 <div className={"flex items-center mt-5 justify-center"}>
-                    <Link className={"btn btn-primary text-white"} to={'/codes/create'}>
+                    <Link className={"btn btn-primary text-white rounded-full px-6"} to={'/codes/create'}>
                         Create Code.
                     </Link>
                 </div>

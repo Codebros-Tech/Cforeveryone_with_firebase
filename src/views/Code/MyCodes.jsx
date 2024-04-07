@@ -59,7 +59,7 @@ export default function MyCodes() {
                 }
 
                 <div className={"flex items-center mt-5 justify-center"}>
-                    <Link className={"btn btn-primary text-white"} to={'/codes/create'}>
+                    <Link className={"btn btn-primary px-6 rounded-full text-white"} to={'/codes/create'}>
                         Create Code.
                     </Link>
                 </div>
