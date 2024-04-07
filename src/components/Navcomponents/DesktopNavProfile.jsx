@@ -7,7 +7,7 @@ import {logoutUser} from "@/src/firebase/user.js";
 export default function DesktopNavProfile() {
     const {currentUser} = useContext(StateContext);
 
-    return (
+    return currentUser && (
         <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
 

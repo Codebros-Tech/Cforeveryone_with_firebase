@@ -1,5 +1,6 @@
 import {Disclosure} from "@headlessui/react";
 import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline/index.js";
+import PropTypes from "prop-types";
 
 export default function MobileMenuButton({open}) {
     return (
@@ -16,4 +17,8 @@ export default function MobileMenuButton({open}) {
             </Disclosure.Button>
         </div>
     )
+}
+
+MobileMenuButton.propTypes = {
+    open: PropTypes.bool
 }

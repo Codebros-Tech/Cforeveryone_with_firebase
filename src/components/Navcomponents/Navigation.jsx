@@ -17,8 +17,7 @@ export default function Navigation() {
                         <div className="flex h-16 items-center justify-between">
                             <DesktopNavName />
                             {
-                                currentUser &&
-                                <DesktopNavProfile />
+                                currentUser && <DesktopNavProfile />
                             }
                             <MobileMenuButton open={open} />
                         </div>
