@@ -12,6 +12,7 @@ const NotFound = lazy(() => import("@/src/views/Pages/NotFound.jsx"))
 
 import {addCodeComment, addUserToCodeViewers, getCodeById, getCodeComments} from "../../firebase/code.js";
 import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import Loading from "@/src/components/elements/Loading.jsx";
 
 export default function CodeView() {
     const { id } = useParams();
@@ -128,10 +129,7 @@ export default function CodeView() {
                 <NotFound />
             }
             {
-                loading &&
-                    <div className="flex items-center justify-center">
-                        Patience is the key to a good life....
-                    </div>
+                loading && <Loading />
             }
         </PageComponent>
     )

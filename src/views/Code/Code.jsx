@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import {getUserById} from "@/src/firebase/user.js";
 import {Rings} from "react-loader-spinner";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {deleteCode, getCodeCommentsCount, toggleCodeLike} from "@/src/firebase/code.js";
+import {deleteCode, getCodeCommentsCount, getCodeLikesCount, toggleCodeLike} from "@/src/firebase/code.js";
 
 import {TrashIcon} from 'lucide-react'
 
@@ -17,8 +17,20 @@ export default function Code({code, numRows = 1}) {
 
     const {currentUser, showToast} = useContext(StateContext);
     const [user, setUser] = useState(null)
+    const [likesCount, setLikesCount] = useState(0)
     const [commentCount, setCommentCount] = useState(0)
     const [loadingUser, setLoadingUser] = useState(true)
+    const [like, _setLike] = useState(false)
+
+    const setLike = async (state) => {
+        _setLike(state);
+        if (like === true) {
+            setLikesCount(likesCount - 1);
+        } else {
+            setLikesCount(likesCount + 1);
+        }
+        await toggleCodeLike(code.id, currentUser.uid);
+    }
 
     useEffect(() => {
         const userFetcher = async () => {
@@ -34,13 +46,20 @@ export default function Code({code, numRows = 1}) {
             }
         }
 
+        const fetchLikesCount = async () => {
+            const result = await getCodeLikesCount(code.id, currentUser.uid);
+            setLikesCount(result.size);
+            _setLike(result.userChecked);
+        }
+
         const fetchCommentCount = async () => {
             const count = await getCodeCommentsCount(code.id);
             setCommentCount(count);
         }
 
         userFetcher()
-        fetchCommentCount();
+        fetchCommentCount()
+        fetchLikesCount()
     }, [code]);
 
     const removeCode = async () => {
@@ -104,9 +123,9 @@ export default function Code({code, numRows = 1}) {
                         className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
                         defaultValue={code.text} disabled/>
                     <div className={"grid grid-cols-2 gap-x-2 w-full rounded-md"}>
-                        <button onClick={toggleCodeLike}
-                                className={"py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
-                            Like <span className={"font-bold"}>( 20 )</span>
+                        <button onClick={() => setLike(!like)}
+                                className={`py-2 px-2 ${like ? 'bg-green-600 text-white' : 'text-dark'} rounded-md bg-lime-50 opacity-70`}>
+                            Like <span className={"font-bold"}>( {likesCount} )</span>
                         </button>
                         {
                         !id &&

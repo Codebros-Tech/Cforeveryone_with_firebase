@@ -107,17 +107,25 @@ export async function toggleCodeLike(codeId, userId) {
         likesRef,
         where('userId', '==', userId),
     );
-    const likeQuerySnapshot = await getDoc(likeQuery);
+    const likeQuerySnapshot = await getDocs(likeQuery);
 
-    const data = {
-        userId: userId,
-        likedAt: new Date(),
-    };
+    if (likeQuerySnapshot.size > 0) {
+        // delete the like the user put if it already exist.
+        likeQuerySnapshot.docs.map(async (item) => {
+            await deleteDoc(doc(db, 'codes', codeId, 'likes', item.id));
+        })
+    } else {
+        // what happens if it does not yet exist
+        const data = {
+            userId: userId,
+            likedAt: serverTimestamp(),
+        };
 
-    try {
-        await addDoc(likesRef, data);
-    } catch (error) {
-        console.error('Error adding like:', error);
+        try {
+            await addDoc(likesRef, data);
+        } catch (error) {
+            console.error('Error adding like:', error);
+        }
     }
 }
 
@@ -135,15 +143,29 @@ export async function addSuggestion(snippetId, suggestionText) {
     }
 }
 
-export async function getAllCodeLikesCount(codeId) {
-    const likesRef = collection(db, 'codes', codeId, 'likes');
-    const q = query(likesRef);
-    const querySnapshot = await getDocs(q);
-    const likes = [];
-    querySnapshot.forEach((doc) => {
-        likes.push(doc.data());
-    });
-    return likes.length;
+export async function getCodeLikesCount(codeId, userId) {
+    try {
+       if (codeId) {
+           const likesRef = collection(db, 'codes', codeId, 'likes');
+           const q = query(likesRef);
+           const querySnapshot = await getDocs(q);
+
+           const userLikeRef = collection(db, 'codes', codeId, 'likes');
+           const userLikeQuery = query(
+               userLikeRef,
+               where('userId', '==', userId),
+           );
+           const likeQuerySnapshot = await getDocs(userLikeQuery);
+
+           if (likeQuerySnapshot.size > 0) {
+               return {size: querySnapshot.size, userChecked: true};
+           } else {
+               return {size: querySnapshot.size, userChecked: false};
+           }
+       }
+    } catch (error) {
+        console.error("Failure in fetching the number of comments");
+    }
 }
 
 export async function addUserToCodeViewers(codeId, userId) {
