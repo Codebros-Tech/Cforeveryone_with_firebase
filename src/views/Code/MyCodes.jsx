@@ -7,6 +7,7 @@ const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 import { StateContext } from "../../contexts/ContextProvider";
 import {getUserCodes} from "../../firebase/code.js";
 import { useContext, useEffect } from "react";
+import {Link} from "react-router-dom";
 const  Loading = lazy(() => import("@/src/components/elements/Loading.jsx"));
 
 export default function MyCodes() {
@@ -45,7 +46,7 @@ export default function MyCodes() {
                 </TButton>
             </div>
         )}>
-            <Suspense fallback={<div>Loading Component </div>}>
+            <Suspense fallback={<Loading />}>
                 {
                     loading && <Loading />
                 }
@@ -56,6 +57,13 @@ export default function MyCodes() {
                         Error occurred when fetching the data.
                     </div>
                 }
+
+                <div className={"flex items-center mt-5 justify-center"}>
+                    <Link className={"btn btn-primary text-white"} to={'/codes/create'}>
+                        Create Code.
+                    </Link>
+                </div>
+
                 {
                     !loading &&
                     <div>

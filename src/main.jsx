@@ -25,6 +25,8 @@ import Contact from "./views/Pages/Contact"
 import ChatPage from "@/src/views/Pages/ChatPage.jsx";
 import Authenticate from "@/src/views/Layouts/Authenticate.jsx";
 import ForgotPassword from "@/src/views/Guest/ForgotPassword.jsx";
+import {Suspense} from "react";
+import Loading from "@/src/components/elements/Loading.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -71,6 +73,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <ContextProvider>
-        <RouterProvider router={router} fallbackElement={<div>Loading the component</div>} />
+        <Suspense fallback={<Loading />}>
+            <RouterProvider router={router} />
+        </Suspense>
     </ContextProvider>
 )

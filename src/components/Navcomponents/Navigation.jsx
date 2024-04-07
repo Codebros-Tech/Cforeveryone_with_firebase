@@ -6,6 +6,7 @@ const MobileMenuButton = lazy(() => import("@/src/components/Navcomponents/Mobil
 const MobileNavigation = lazy(() => import("@/src/components/Navcomponents/MobileNavigation.jsx"));
 import {Disclosure} from "@headlessui/react";
 import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {Link} from "react-router-dom";
 
 export default function Navigation() {
     const {currentUser} = useContext(StateContext);
@@ -18,6 +19,13 @@ export default function Navigation() {
                             <DesktopNavName />
                             {
                                 currentUser && <DesktopNavProfile />
+                            }
+                            {
+                                !currentUser &&
+                                <div className={"flex items-center gap-x-5"}>
+                                    <Link className={"hover:text-white"} to={'/login'}>Login</Link>
+                                    <Link className={"hover:text-white"}  to={'/signup'}>Signup</Link>
+                                </div>
                             }
                             <MobileMenuButton open={open} />
                         </div>

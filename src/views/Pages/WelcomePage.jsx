@@ -17,7 +17,7 @@ export default function WelcomePage () {
                             {import.meta.env.VITE_APP_NAME} is everyone is here to remove all of the issues students face in learning the C programming language. Making it easy for students to track their progress, share their work and build together in a community.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
-                            <Link to="/codes    " className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <Link to="/codes" className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 Get started
                             </Link>
                         </div>
