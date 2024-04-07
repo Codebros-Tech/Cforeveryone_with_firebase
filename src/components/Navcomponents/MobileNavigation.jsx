@@ -1,5 +1,5 @@
 import {classNames, navigation} from "@/src/utils/constant.js";
-import {NavLink} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 import {Disclosure} from "@headlessui/react";
 import {logoutUser} from "@/src/firebase/user.js";
 import {useContext} from "react";
@@ -27,16 +27,15 @@ export default function MobileNavigation() {
             {
                 currentUser &&
                 <div className="border-t border-gray-700 pb-3 pt-4">
-                    <div className="flex items-center px-5">
+                    <Link to={'/'} className="flex items-center px-5">
                         <div className="flex-shrink-0">
                             <img className="h-10 w-10 rounded-full" src={currentUser.photoURL} alt=""/>
                         </div>
                         <div className="ml-3">
-                            <div
-                                className="text-base font-medium leading-none text-white">{currentUser.displayName}</div>
+                            <div className="text-base font-medium leading-none text-white">{currentUser.displayName}</div>
                             <div className="text-sm font-medium leading-none text-gray-400">{currentUser.email}</div>
                         </div>
-                    </div>
+                    </Link>
                     <div className="mt-3 space-y-1 px-2">
                         <Disclosure.Button
                             onClick={() => logoutUser()}

@@ -1,9 +1,9 @@
 import { lazy } from 'react';
 import {useEffect, useState} from "react";
-import {collection, getDocs, query, where} from 'firebase/firestore';
+import {collection, getDocs, query} from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import Loading from "@/src/components/elements/Loading.jsx";
 
+const  Loading = lazy(() => import("@/src/components/elements/Loading.jsx"));
 const Code = lazy(() => import("./Code"));
 const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
 const TButton = lazy(() => import("../../components/elements/TButton.jsx"));

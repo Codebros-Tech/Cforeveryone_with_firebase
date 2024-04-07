@@ -5,7 +5,7 @@ export default function DesktopNavName() {
     return (
         <div className="flex items-center">
             <div className="flex-shrink-0 text-white font-bold text-2xl lg:text-3xl">
-                Cforeveryone
+                {import.meta.env.VITE_APP_NAME}
             </div>
             <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">

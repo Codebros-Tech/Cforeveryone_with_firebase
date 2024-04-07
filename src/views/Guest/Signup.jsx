@@ -4,7 +4,7 @@ import { PhotoIcon } from '@heroicons/react/24/outline';
 import {StateContext} from "../../contexts/ContextProvider.jsx";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth, db, storage} from "@/src/config/firebase.js";
-import {doc, serverTimestamp, setDoc} from "firebase/firestore";
+import {doc, setDoc} from "firebase/firestore";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {handleLoginWithGoogle, storeUserInformation} from "@/src/firebase/user.js";
 
@@ -88,15 +88,15 @@ export default function Signup() {
     }
 
     return (
-        <>
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <div className={"dark:text-white"}>
+            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
                 Create your account and start coding
             </h2>
             <div className={"flex items-center"}>
                 <button
                     type="submit"
                     onClick={() => {handleLoginWithGoogle().then(() => navigate('/dashboard'))}}
-                    className="mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white dark:text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                     Continue with Google
                 </button>
@@ -141,7 +141,7 @@ export default function Signup() {
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="email" className="block text-sm font-medium leading-6">
                         Name
                         </label>
                         <div className="mt-2">
@@ -151,13 +151,13 @@ export default function Signup() {
                             ref={nameRef}
                             autoComplete="name"
                             required
-                            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="input input-bordered w-full "
                         />
                         </div>
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="email" className="block text-sm font-medium leading-6">
                         Email address
                         </label>
                         <div className="mt-2">
@@ -167,14 +167,14 @@ export default function Signup() {
                             autoComplete="email"
                             ref={emailRef}
                             required
-                            className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="input input-bordered w-full "
                         />
                         </div>
                     </div>
 
                     <div>
                         <div className="flex items-center justify-between">
-                        <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                        <label htmlFor="password" className="block text-sm font-medium leading-6">
                             Password
                         </label>
                         </div>
@@ -185,14 +185,14 @@ export default function Signup() {
                                 type="password"
                                 autoComplete="new-password"
                                 required
-                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="input input-bordered w-full "
                             />
                         </div>
                     </div>
 
                     <div>
                         <div className="flex items-center justify-between">
-                            <label htmlFor="#password_confirmation" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="#password_confirmation" className="block text-sm font-medium leading-6">
                                 Password Confirmation
                             </label>
                         </div>
@@ -203,7 +203,7 @@ export default function Signup() {
                                 ref={passwordConfirmationRef}
                                 autoComplete={"password"}
                                 required
-                                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                className="input input-bordered w-full "
                             />
                         </div>
                     </div>
@@ -218,13 +218,13 @@ export default function Signup() {
                     </div>
                 </form>
 
-                <p className="mt-10 text-center text-sm text-gray-500">
+                <p className="mt-10 text-center text-sm">
                 Already have an account?{' '}
                 <Link to="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                     Login Here.
                 </Link>
                 </p>
             </div>
-        </>
+        </div>
     )
   }

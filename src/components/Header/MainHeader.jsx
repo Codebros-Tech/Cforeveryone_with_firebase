@@ -16,7 +16,7 @@ export default function MainHeader() {
             <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                 <div className="flex lg:flex-1">
                     <Link to="/" className="-m-1.5 p-1.5 font-bold text-3xl">
-                        Cforeveryone
+                        {import.meta.env.VITE_APP_NAME}
                     </Link>
                 </div>
                 <div className="flex lg:hidden">

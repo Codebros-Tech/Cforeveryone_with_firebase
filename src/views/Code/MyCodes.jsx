@@ -7,7 +7,7 @@ const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 import { StateContext } from "../../contexts/ContextProvider";
 import {getUserCodes} from "../../firebase/code.js";
 import { useContext, useEffect } from "react";
-import Loading from "@/src/components/elements/Loading.jsx";
+const  Loading = lazy(() => import("@/src/components/elements/Loading.jsx"));
 
 export default function MyCodes() {
     const [loading, setLoading] = useState(false);

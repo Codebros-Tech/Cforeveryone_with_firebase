@@ -11,10 +11,10 @@ export default function WelcomePage () {
                     <div className="text-center">
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                             Connect, Build & Thrive <br />
-                            with people on Cforeveryone
+                            with people on {import.meta.env.VITE_APP_NAME}
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
-                            Cforeveryone is everyone is here to remove all of the issues students face in learning the C programming language. Making it easy for students to track their progress, share their work and build together in a community.
+                            {import.meta.env.VITE_APP_NAME} is everyone is here to remove all of the issues students face in learning the C programming language. Making it easy for students to track their progress, share their work and build together in a community.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <Link to="/codes    " className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">

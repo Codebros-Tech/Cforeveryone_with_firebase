@@ -1,6 +1,7 @@
 import {lazy, useEffect, useState} from "react"
 import {getAllUsers} from "../../firebase/user.js";
 
+const Loading = lazy(() => import("@/src/components/elements/Loading.jsx"));
 const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
 const User = lazy(() => import("./User"))
 
@@ -11,17 +12,17 @@ export default function People() {
 
     const getAllUserInstance = async () => {
         try {
+            setLoading(true);
             const users = await getAllUsers();
             setUsers(users);
+            setLoading(false);
         } catch (error) {
             setError(true);
         }
     }
 
     useEffect(() => {
-        setLoading(true);
         getAllUserInstance()
-        setLoading(false);
     }, [])
 
     return (
@@ -43,10 +44,7 @@ export default function People() {
             }
 
             {
-                loading &&
-                <div className="flex items-center justify-center">
-                    Patience is the key to a good life....
-                </div>
+                loading && <Loading />
             }
         </PageComponent>
     )

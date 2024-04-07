@@ -16,7 +16,6 @@ import WelcomePage from "./views/Pages/WelcomePage.jsx"
 import NotFound from './views/Pages/NotFound.jsx'
 import UserInfo from "./views/Users/UserInfo"
 import InfoUpdate from "./views/Users/InfoUpdate"
-import AccountInfo from "./views/Users/AccountInfo"
 import Main from './views/Layouts/Main'
 import CodeCreate from "./views/Code/CodeCreate"
 import CodeIndex from "./views/Code/CodeIndex"
@@ -25,6 +24,7 @@ import CodeView from './views/Code/CodeView.jsx';
 import Contact from "./views/Pages/Contact"
 import ChatPage from "@/src/views/Pages/ChatPage.jsx";
 import Authenticate from "@/src/views/Layouts/Authenticate.jsx";
+import ForgotPassword from "@/src/views/Guest/ForgotPassword.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -37,20 +37,20 @@ const router = createBrowserRouter(
                 <Route path={'/'} element={<Authenticate />}>
                     <Route path="/dashboard" element={<Dashboard />} />
 
-                    <Route path="/codes/mine" element={<MyCodes />} />
+                    <Route path="/mycodes" element={<MyCodes />} />
 
                     <Route path="/codes/create" element={<CodeCreate />} />
                     <Route path="/codes/:id/edit" element={<CodeCreate />} />
 
                     <Route path="/users" element={<Users />} />
-                    <Route path="/users/:username" element={<AccountInfo />} />
 
+                    <Route path="/users/:id" element={<UserInfo />} />
                     <Route path="/myinfo" element={<UserInfo />} />
                     <Route path="/myinfo/edit" element={<InfoUpdate />} />
 
                     <Route path="/contact" element={<Contact />} />
 
-                    <Route path="/chats" element={<ChatPage />} />
+                    {/*<Route path="/chats" element={<ChatPage />} />*/}
 
                     <Route path="/*" element={<NotFound />} />
                 </Route>
@@ -62,6 +62,7 @@ const router = createBrowserRouter(
             <Route path="/" element={<GuestLayout />}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
             </Route>
         </Route>
     )
