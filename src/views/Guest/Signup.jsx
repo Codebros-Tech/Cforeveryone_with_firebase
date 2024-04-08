@@ -21,7 +21,7 @@ export default function Signup() {
     const [error, setError] = useState({
         message: null,
     });
-    let file;
+    const [file, setFile] = useState(null);
 
 
     const submitForm = async  (ev) => {
@@ -57,16 +57,14 @@ export default function Signup() {
                     },
                     () => {
                         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadUrl) => {
-                            console.log(downloadUrl);
                             await updateProfile(user,{
                                 photoURL: downloadUrl
                             })
+                            await storeUserInformation(user, downloadUrl);
                         })
                     }
                 )
             }
-
-            await storeUserInformation(user);
 
             await setDoc(doc(db, 'userChat', user.uid),  {});
 
@@ -77,13 +75,13 @@ export default function Signup() {
         }
     }
 
-    const onImageChoose = (ev) => {
-        file = ev.target.files[0];
+    const onImageChoose = (event) => {
+        setFile(event.target.files[0]);
         const reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(event.target.files[0]);
         reader.onload = () => {
             setImageData(reader.result);
-            ev.target.value = "";
+            event.target.value = "";
         }
     }
 
@@ -134,7 +132,9 @@ export default function Signup() {
                             <input
                                 type="file"
                                 className='absolute left-0 top-0 right-0 bottom-0 opacity-0'
-                                onChange={onImageChoose}
+                                onChange={(event) => {
+                                    onImageChoose(event)
+                                }}
                             />
                             Change
                         </button>

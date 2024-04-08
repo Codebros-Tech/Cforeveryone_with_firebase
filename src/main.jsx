@@ -52,7 +52,7 @@ const router = createBrowserRouter(
 
                     <Route path="/contact" element={<Contact />} />
 
-                    {/*<Route path="/chats" element={<ChatPage />} />*/}
+                    <Route path="/chats" element={<ChatPage />} />
 
                     <Route path="/*" element={<NotFound />} />
                 </Route>

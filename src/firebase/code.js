@@ -1,9 +1,13 @@
-import {auth, db} from '../config/firebase.js';
-import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, where} from 'firebase/firestore';
+import {auth, db, storage} from '../config/firebase.js';
+import {addDoc, collection, doc, deleteDoc, getDoc, getDocs, query, serverTimestamp, updateDoc, where} from 'firebase/firestore';
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import {generateKey, randomUUID} from "node:crypto";
+
+export async function postCode(code, title, description, imageFile = null,  language = 'C') {
 
 
-export async function postCode(code, title, description, language = 'C') {
     const codeRef = collection(db, 'codes');
+
     const data = {
         text: code,
         title: title,
@@ -14,7 +18,28 @@ export async function postCode(code, title, description, language = 'C') {
     };
     try {
         const docRef = await addDoc(codeRef, data);
-        console.log('Document written with ID:', docRef.id);
+
+
+        const unique = randomUUID();
+        const storageRef = ref(storage,  'codes/'+unique);
+        const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+        if (imageFile) {
+            uploadTask.on(
+                (error) => {
+                    console.log(error);
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
+                        await updateDoc(
+                            doc(db,'codes', docRef.id),
+                            { image: downloadURL }
+                        );
+                    });
+                }
+            )
+        }
+
     } catch (error) {
         console.error('Error adding document:', error);
     }

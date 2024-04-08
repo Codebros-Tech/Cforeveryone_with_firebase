@@ -87,7 +87,7 @@ export async function handleLoginWithGoogle() {
     }
 }
 
-export async function storeUserInformation(user) {
+export async function storeUserInformation(user, downloadUrl) {
     try {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         if (!userDoc.exists()) {
@@ -95,7 +95,7 @@ export async function storeUserInformation(user) {
                 displayName: user.displayName,
                 email: user.email,
                 createdAt: user.createdAt || serverTimestamp(),
-                photoURL: user.photoURL,
+                photoURL: downloadUrl || user.photoURL,
                 lastLogin: user.lastLoginAt || serverTimestamp(),
                 emailVerified: user.emailVerified,
             });

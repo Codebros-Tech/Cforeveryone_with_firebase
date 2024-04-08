@@ -11,34 +11,36 @@ export default function CodeCreate() {
     const [error] = useState();
     const [loading, setLoading] = useState(false);
     const { showToast } = useContext(StateContext);
+    const [imageFile, setImageFile] = useState(null);
 
     const [code, setCode] = useState({
         title: "",
         text: "",
         description: "",
+        imageFile: imageFile
     });
 
 
     const onSubmit = async (e) => {
         e.preventDefault()
         setLoading(true);
-        await postCode(code.text, code.title, code.description);
+        await postCode(code.text, code.title, code.description, code.imageFile);
         showToast("Code has been created");
         setLoading(false);
     }
 
     const onImageChoose = (ev) => {
-        const file = ev.target.files[0];
+        setImageFile(ev.target.files[0]);
         const reader = new FileReader();
         reader.onload = () => {
             setCode({
                 ...code,
-                errorImage: reader.result,
+                imageFile: reader.result,
             });
             ev.target.value = "";
         }
 
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(ev.target.files[0]);
     }
 
 
@@ -124,7 +126,7 @@ export default function CodeCreate() {
                             {/* Image */}
                             <div className='block'>
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Error image
+                                    Output Image
                                 </label>
                                 <div className="mt-1">
                                     <button
@@ -135,14 +137,14 @@ export default function CodeCreate() {
                                             <input
                                                 type="file"
                                                 className='absolute left-0 top-0 right-0 bottom-0 opacity-0'
-                                                onChange={onImageChoose}
+                                                onChange={(event) => onImageChoose(event) }
                                             />
-                                            Input Screenshot  of error message
+                                            Code Output Image.
                                         </button>
                                     {
-                                        code.errorImage &&
+                                        code.imageFile &&
                                             <img
-                                                src={code.errorImage}
+                                                src={code.imageFile}
                                                 alt=""
                                                 className="w-full h-auto object-cover"
                                             />

@@ -2,7 +2,7 @@ import {logoutUser} from "@/src/firebase/user.js";
 
 export default function ChatNavbar() {
     return (
-        <div className={"flex items-center  justify-between bg-[#2f2d52] h-[50px] px-[10px]"}>
+        <div className={"flex items-center  justify-between bg-gray-800 h-[50px] px-[10px]"}>
             <span className={"font-bold "}>Chat</span>
             <div className={"flex gap-5 items-center text-[#ddddf7]"}>
                 <img alt={"Logo"} className={"bg-[#ddddf7] h-[24px] w-[24px] rounded-[50%] object-cover"} src={"d"} />

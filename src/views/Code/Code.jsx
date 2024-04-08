@@ -22,6 +22,10 @@ export default function Code({code, numRows = 1}) {
     const [loadingUser, setLoadingUser] = useState(true)
     const [like, _setLike] = useState(false)
 
+    const CODE = 'code';
+    const OUTPUT = 'output';
+    const [viewState, setViewState] = useState(CODE);
+
     const setLike = async (state) => {
         _setLike(state);
         if (like === true) {
@@ -107,21 +111,39 @@ export default function Code({code, numRows = 1}) {
                         </div>
                     </div>
                 </Link>
-                <CopyToClipboard text={code.text} onCopy={() => {
-                    showToast("Code has been copied to clipboard");
-                }}>
-                    <button className="text-[13px] bg-gray-800 text-white px-9 py-2 my-2"
-                            title='Copy code to clipboard text-center '>
-                        Copy to clipboard
-                    </button>
-                </CopyToClipboard>
+               <div className={"flex items-center gap-x-5"}>
+                   <CopyToClipboard text={code.text} onCopy={() => {
+                       showToast("Code has been copied to clipboard");
+                   }}>
+                       <button className="text-[13px] bg-gray-800 text-white px-9 py-2 my-2"
+                               title='Copy code to clipboard text-center '>
+                           Copy to clipboard
+                       </button>
+                   </CopyToClipboard>
+                   <div>
+                       <button onClick={() => {
+                           if (viewState === CODE) {
+                               setViewState(OUTPUT);
+                           } else {
+                               setViewState(CODE);
+                           }
+                       }} className="text-[13px] bg-gray-800 text-white px-9 py-2 my-2">
+                           Switch to Code
+                       </button>
+                   </div>
+               </div>
                 <motion.div className="mt-2 relative">
-                    <motion.textarea
-                        rows={numRows}
-                        initial={{opacity: 1, scale: 1}} transition={{duration: 2}}
-                        exit={{opacity: 0, scale: 0}}
-                        className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
-                        defaultValue={code.text} disabled/>
+                    {
+                        viewState === CODE && <motion.textarea
+                            rows={numRows}
+                            initial={{opacity: 1, scale: 1}} transition={{duration: 2}}
+                            exit={{opacity: 0, scale: 0}}
+                            className={`w-full bg-gray-800 text-white min-h-[200px] relative px-2 py-3 overflow-auto`}
+                            defaultValue={code.text} disabled/>
+                    }
+                    {
+                        viewState === OUTPUT && ( code.image ?  <img alt={"Code Image"} src={code.image}  /> : <div className={"py-10"}>No Image</div>)
+                    }
                     <div className={"grid grid-cols-2 gap-x-2 w-full rounded-md"}>
                         <button onClick={() => setLike(!like)}
                                 className={`py-2 px-2 ${like ? 'bg-green-600 text-white' : 'text-dark'} rounded-md bg-lime-50 opacity-70`}>

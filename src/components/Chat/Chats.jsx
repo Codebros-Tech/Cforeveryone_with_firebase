@@ -25,6 +25,7 @@ export default function Chats() {
         <div>
             <div>
                 {
+                    chats &&
                     Object.entries(chats).map((chat) => (
                         <div key={chat[0]}
                              className={"flex p-3 gap-3 text-white hover:bg-[#2f2d52] cursor-pointer items-center"}>

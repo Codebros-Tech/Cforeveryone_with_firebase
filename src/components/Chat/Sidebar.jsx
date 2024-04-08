@@ -5,7 +5,7 @@ const Search = lazy(() => import("@/src/components/Chat/Search.jsx"));
 
 export default function Sidebar() {
     return (
-        <div className={"bg-[#3e3c61] text-white h-full flex-[1]"}>
+        <div className={"bg-gray-800 text-white h-full flex-[1]"}>
             <Suspense fallback={<div>Loading</div>}>
                 <ChatNavbar />
                 <Search />
