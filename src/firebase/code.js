@@ -20,8 +20,7 @@ export async function postCode(code, title, description, imageFile = null,  lang
         const docRef = await addDoc(codeRef, data);
 
 
-        const unique = randomUUID();
-        const storageRef = ref(storage,  'codes/'+unique);
+        const storageRef = ref(storage,  'codes/'+docRef.id);
         const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
         if (imageFile) {
