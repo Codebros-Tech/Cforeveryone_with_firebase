@@ -4,10 +4,10 @@ const TButton = lazy(() => import('../../components/elements/TButton.jsx'));
 
 export default function User({ user }) {
     return (
-        <div className='flex flex-col border-gray-200 border-2 mt-2 py-3 px-2 shadow w-11/12 mx-auto gap-2'>
-            <div>
+        <div className='flex justify-between border-gray-200 border-2 mt-2 py-3 px-2 shadow w-11/12 mx-auto gap-2'>
+            <div className={"flex items-center justify-between gap-x-10"}>
                 <div className='flex items-center justify-center sm:justify-start rounded-full sm:rounded-none'>
-                    <img src={user.profile} className="rounded-lg  w-[100px] h-auto" alt="" />
+                    <img src={user.photoURL} className="rounded-lg  w-[100px] h-auto" alt="" />
                 </div>
 
                 <div>
