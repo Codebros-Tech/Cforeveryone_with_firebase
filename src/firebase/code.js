@@ -1,7 +1,6 @@
 import {auth, db, storage} from '../config/firebase.js';
 import {addDoc, collection, doc, deleteDoc, getDoc, getDocs, query, serverTimestamp, updateDoc, where} from 'firebase/firestore';
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {generateKey, randomUUID} from "node:crypto";
 
 export async function postCode(code, title, description, imageFile = null,  language = 'C') {
 
