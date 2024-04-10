@@ -63,8 +63,8 @@ export default function Dashboard() {
                             <div className="max-w-6xl grid grid-cols-2 text-black gap-y-5 gap-x-3 sm:grid-cols-3 text-center font-bold">
                                 <div className="shadow-sm">
                                     <h3>Codes Posted</h3>
-                                    { dashboardInfo.codes &&
-                                        <h1 className="text-[40px]">{dashboardInfo.codes}</h1>
+                                    {
+                                        dashboardInfo.codes && <h1 className="text-[40px]">{dashboardInfo.codes}</h1>
                                     }
                                     {
                                         !dashboardInfo.codes && dashboardInfo.codes !== 0 &&

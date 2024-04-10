@@ -1,36 +1,46 @@
-import {Suspense, useContext, useState} from "react"
+import {Suspense, useContext, useRef, useState} from "react"
 import {collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore"
 import {db} from "@/src/config/firebase.js"
 import {StateContext} from "@/src/contexts/UserProvider.jsx";
 
 export default function Search() {
-    const [username, setUsername] = useState("");
     const [user, setUser] = useState(null);
     const [error, setError] = useState(false)
+    const searchRef = useRef(null)
+    const [loading, setLoading] = useState(false)
+    const [notFound, setNotFound] = useState(false);
 
     const { currentUser } = useContext(StateContext);
 
     const handleSearch = async () => {
+        const searchText = searchRef.current.value.toLowerCase();
+        setNotFound(false);
+
         setUser(null);
         const usersRef = collection(db, 'users');
-        console.log(username.toLowerCase());
         const q = query(
             usersRef,
-            where("displayName", "array-contains", username.toLowerCase())
+            where("displayName", "==", searchText)
         )
 
         try {
+            setLoading(true);
             const querySnapshot = await getDocs(q)
             querySnapshot.forEach((doc) => {
                 console.log("item is ", doc.data());
                 setUser(doc.data())
             })
+
+            if (querySnapshot.size === 0 ) {
+                setNotFound(true);
+            } else {
+                setNotFound(false);
+            }
         } catch (error) {
             setError(true);
             console.log("An error occurred ", error);
         }
-
-
+        setLoading(false);
     }
 
     const handleSelect = async () => {
@@ -64,7 +74,7 @@ export default function Search() {
                 [combinedId+".lastMessage"]: "",
             })
 
-            setUsername("")
+            searchRef.current.value = "";
             setUser(null)
 
         } catch (error) {
@@ -72,9 +82,6 @@ export default function Search() {
         }
     }
 
-    const handleKey = (event) => {
-        event.code === "Enter" && handleSearch()
-    }
     
     return (
         <Suspense fallback={<div>Loading Search....</div>}>
@@ -84,11 +91,25 @@ export default function Search() {
             <div className={"border-b-[1px] border-b-white"}>
                 <div className={"p-3"}>
 
-                    <input value={username}
-                           onChange={(ev) => setUsername(ev.target.value)}
-                           onKeyDown={handleKey} placeholder={"Find A User."} type="text"
+                    <input ref={searchRef}
+                           onChange={() => handleSearch()}
+                           placeholder={"Find A User."} type="text"
                            className={"bg-transparent border-none text-white w-full px-3 py-2"}
                     />
+
+                    {
+                        notFound && searchRef.current.value &&
+                        <div className={"pt-3"}>
+                            No name with {searchRef.current.value}
+                        </div>
+                    }
+
+                    {
+                        loading &&
+                        <div className={"pt-3"}>
+                            Loading ....
+                        </div>
+                    }
 
                 </div>
                 {
