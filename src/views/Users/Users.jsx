@@ -1,5 +1,6 @@
 import {lazy, useEffect, useState} from "react"
-import {getAllUsers} from "../../firebase/user.js";
+import {collection, onSnapshot} from "firebase/firestore";
+import {db} from "@/src/config/firebase.js";
 
 const Loading = lazy(() => import("@/src/components/elements/Loading.jsx"));
 const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
@@ -10,19 +11,22 @@ export default function People() {
     const [loading , setLoading] = useState(false);
     const [error, setError] = useState(false)
 
-    const getAllUserInstance = async () => {
-        try {
-            setLoading(true);
-            const users = await getAllUsers();
-            setUsers(users);
-            setLoading(false);
-        } catch (error) {
-            setError(true);
-        }
-    }
-
     useEffect(() => {
-        getAllUserInstance()
+        const unsubscribe = onSnapshot(
+            collection(db, 'users'),
+            (snapshot) => {
+                const users = [];
+                snapshot.forEach((doc) => {
+                    users.push({uid: doc.id, ...doc.data()})
+                })
+                setUsers(users);
+            },
+            (error) => {
+                setError(true);
+            }
+        )
+
+        return () => {unsubscribe()}
     }, [])
 
     return (

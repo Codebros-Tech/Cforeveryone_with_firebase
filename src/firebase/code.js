@@ -110,20 +110,6 @@ export async function getCodeCommentsCount(codeId) {
     }
 }
 
-export async  function getUserCodes(currentUser) {
-    let userId = currentUser.uid;
-    const snippets = [];
-    if (userId) {
-        const codeRef  = collection(db, 'codes');
-        const q = query(codeRef, where('userId', '==', userId));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            snippets.push({...doc.data(), id: doc.id});
-        });
-    }
-    return snippets;
-}
-
 export async function toggleCodeLike(codeId, userId) {
     const likesRef = collection(db, 'codes', codeId, 'likes');
     const likeQuery = query(

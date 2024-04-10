@@ -5,9 +5,10 @@ const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
 const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
 import { StateContext } from "../../contexts/UserProvider.jsx";
-import {getUserCodes} from "../../firebase/code.js";
 import { useContext, useEffect } from "react";
 import {Link} from "react-router-dom";
+import {collection, onSnapshot, query, where} from "firebase/firestore";
+import {db} from "@/src/config/firebase.js";
 const  Loading = lazy(() => import("@/src/components/elements/Loading.jsx"));
 
 export default function MyCodes() {
@@ -17,22 +18,27 @@ export default function MyCodes() {
     const { currentUser } = useContext(StateContext);
 
     useEffect(() => {
-        const fetcher = async () => {
-            try {
-                setLoading(true);
-                const codes = await getUserCodes(currentUser);
+        setLoading(true);
+        const unsubscribe = onSnapshot(
+            query(
+                collection(db, 'codes'),
+                where("userId", "==", currentUser.uid || '')
+            ),
+            (snapshot) => {
+                const codes = []
+                snapshot.forEach((doc) => {
+                    codes.push({id: doc.id, ...doc.data()});
+                })
                 setMyCodes(codes);
                 setLoading(false);
-                setError(false);
-            } catch (error) {
-                console.log(error);
+            },
+            (error) => {
                 setError(true);
-            } finally {
-                setLoading(false);
+                console.error(error);
             }
-        }
+        )
 
-        fetcher();
+        return () => unsubscribe()
     }, [currentUser.uid]);
 
     return (

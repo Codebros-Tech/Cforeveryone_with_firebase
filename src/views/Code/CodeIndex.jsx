@@ -1,6 +1,6 @@
 import {lazy, Suspense} from 'react';
 import {useEffect, useState} from "react";
-import {collection, getDocs, query} from 'firebase/firestore';
+import {collection, getDocs, onSnapshot, query} from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import {Link} from "react-router-dom";
 
@@ -10,33 +10,28 @@ const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
 const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
 export default function CodeIndex() {
-    const [loading, setLoading ] = useState(true);
+    const [loading, setLoading ] = useState(false);
     const [allCodes, setAllCodes] = useState([]);
 
     useEffect(() => {
-        const getAllCodes = async () => {
-            try {
-                setLoading(true);
-                const codeCollection = collection(db, 'codes');
-                const q = query(codeCollection);
-                const querySnapshot = await getDocs(q);
-                const fetchedCodes = querySnapshot.docs.map( (doc) => {
-                    return {
-                        id: doc.id,
-                        ...doc.data(),
-                    }
-                });
+        setLoading(true);
+       const unsubscribe = onSnapshot(
+           collection(db, 'codes'),
+           (snapshot) => {
+                const codes = []
+                snapshot.forEach((doc) => {
+                    codes.push({id: doc.id, ...doc.data()});
+                })
 
-                setAllCodes(fetchedCodes);
-            
-            } catch (error) {
-                console.error(error);
-            } finally{
+               setAllCodes(codes);
                 setLoading(false);
-            }
-        }
+           },
+           (error) => {
+               console.error(error);
+           }
+       )
 
-        getAllCodes();
+        return () => unsubscribe();
     }, []);
 
 

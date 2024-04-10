@@ -44,15 +44,6 @@ export async function getUserById(id) {
     }
 }
 
-export  async function getAllUsers() {
-    const usersRef = collection(db, 'users');
-    const querySnapshot = await getDocs(usersRef);
-    const users = [];
-    querySnapshot.forEach((doc) => {
-        users.push({ ...doc.data(), uid: doc.id });
-    });
-    return users;
-}
 
 export async function logoutUser() {
     try {
