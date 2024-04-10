@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
-import {lazy} from "react";
+import {lazy, useEffect} from "react";
+import {doc, setDoc} from "firebase/firestore";
+import {db} from "@/src/config/firebase.js";
 const TButton = lazy(() => import('../../components/elements/TButton.jsx'));
 
 export default function User({ user }) {

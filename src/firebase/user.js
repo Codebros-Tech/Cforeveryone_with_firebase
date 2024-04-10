@@ -49,7 +49,7 @@ export  async function getAllUsers() {
     const querySnapshot = await getDocs(usersRef);
     const users = [];
     querySnapshot.forEach((doc) => {
-        users.push({ ...doc.data(), id: doc.id });
+        users.push({ ...doc.data(), uid: doc.id });
     });
     return users;
 }
@@ -90,6 +90,7 @@ export async function handleLoginWithGoogle() {
 export async function storeUserInformation(user, downloadUrl) {
     try {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
+
         if (!userDoc.exists()) {
             await setDoc(doc(db, 'users', user.uid), {
                 displayName: user.displayName.toLowerCase(),
@@ -101,6 +102,8 @@ export async function storeUserInformation(user, downloadUrl) {
                 uid: user.uid,
             });
         }
+
+        await setDoc(doc(db, 'userChats', user.uid),  {});
     } catch (error) {
         console.error(" Error Storing user information ", error);
     }

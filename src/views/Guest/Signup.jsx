@@ -3,8 +3,7 @@ import {Link, useNavigate} from "react-router-dom"
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import {StateContext} from "../../contexts/UserProvider.jsx";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
-import {auth, db, storage} from "@/src/config/firebase.js";
-import {doc, setDoc} from "firebase/firestore";
+import {auth, storage} from "@/src/config/firebase.js";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
 import {handleLoginWithGoogle, storeUserInformation} from "@/src/firebase/user.js";
 
@@ -68,8 +67,6 @@ export default function Signup() {
                     }
                 )
             }
-
-            await setDoc(doc(db, 'userChat', user.uid),  {});
 
             showToast("Account Created Successfully");
             navigate('/dashboard');

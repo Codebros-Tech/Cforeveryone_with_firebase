@@ -12,12 +12,14 @@ export default function Search() {
 
     const { currentUser } = useContext(StateContext);
 
+    const usersRef = collection(db, 'users');
+
+
     const handleSearch = async () => {
         const searchText = searchRef.current.value.toLowerCase();
         setNotFound(false);
 
         setUser(null);
-        const usersRef = collection(db, 'users');
         const q = query(
             usersRef,
             where("displayName", "==", searchText)
@@ -28,7 +30,7 @@ export default function Search() {
             const querySnapshot = await getDocs(q)
             querySnapshot.forEach((doc) => {
                 console.log("item is ", doc.data());
-                setUser(doc.data())
+                setUser({uid: doc.id,  ...doc.data()})
             })
 
             if (querySnapshot.size === 0 ) {
@@ -46,39 +48,50 @@ export default function Search() {
     const handleSelect = async () => {
         const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid
 
+        const chatRef = doc(db, "chats", combinedId)
+        const userChatsCurrentRef = doc(db, "userChats", currentUser.uid);
+        const userChatsUserRef = doc(db, "userChats", user.uid);
+
         try {
-            const res = await getDoc(doc(db, "chats", combinedId));
-            const chatRef = doc(db, "chats", combinedId)
+            const res = await getDoc(chatRef);
 
+            // this users have never chatted with each other (they have no chat history.
             if (!res.exists()) {
+                console.log('no chat existed')
+                // doing all of these if these 2 users don't have any chat history
+                // we are going to do these actions if there was no chat between that user and the current user.
+
+                // we are going to add a chat doc which is going to contain an array of messages
                 await setDoc(chatRef, { messages: []})
+
+                // We are going to add the link the other user in the current user information
+                await updateDoc(userChatsCurrentRef, {
+                    [combinedId+".userInfo"]: {
+                        uid: user.uid,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL,
+                    },
+                    [combinedId+".date"]: serverTimestamp(),
+                })
+
+
+                // then we are going to link the current user in the other user chat information
+                await updateDoc(userChatsUserRef, {
+                    // update the chat history of both users when one clicks on the other.
+                    [combinedId+".userInfo"]: {
+                        uid: currentUser.uid,
+                        displayName: currentUser.displayName,
+                        photoURL: currentUser.photoURL,
+                    },
+                    [combinedId+".date"]: serverTimestamp(),
+                })
             }
-
-            await updateDoc(doc(db, "userChats", currentUser.uid), {
-                [combinedId+".userInfo"]: {
-                    uid: user.uid,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                },
-                [combinedId+".date"]: serverTimestamp(),
-                [combinedId+".lastMessage"]: "",
-            })
-
-            await updateDoc(doc(db, "userChats", user.uid), {
-                [combinedId+".userInfo"]: {
-                    uid: currentUser.uid,
-                    displayName: currentUser.displayName,
-                    photoURL: currentUser.photoURL,
-                },
-                [combinedId+".date"]: serverTimestamp(),
-                [combinedId+".lastMessage"]: "",
-            })
 
             searchRef.current.value = "";
             setUser(null)
 
         } catch (error) {
-            console.error("error occurred");
+            console.error("error occurred" , error);
         }
     }
 
