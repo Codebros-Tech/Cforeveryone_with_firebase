@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import {useContext, useEffect, useState} from 'react';
-import { StateContext } from '../../contexts/ContextProvider';
+import { StateContext } from '../../contexts/UserProvider.jsx';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { motion } from 'framer-motion'
 import {getUserById} from "@/src/firebase/user.js";

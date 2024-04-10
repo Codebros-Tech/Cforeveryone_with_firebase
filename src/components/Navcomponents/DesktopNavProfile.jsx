@@ -1,7 +1,7 @@
 import {Menu, Transition} from "@headlessui/react";
 import {Fragment, useContext} from "react";
 import {Link} from "react-router-dom";
-import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {StateContext} from "@/src/contexts/UserProvider.jsx";
 import {logoutUser} from "@/src/firebase/user.js";
 
 export default function DesktopNavProfile() {

@@ -5,7 +5,7 @@ const DesktopNavProfile = lazy(() => import("@/src/components/Navcomponents/Desk
 const MobileMenuButton = lazy(() => import("@/src/components/Navcomponents/MobileMenuButton.jsx"));
 const MobileNavigation = lazy(() => import("@/src/components/Navcomponents/MobileNavigation.jsx"));
 import {Disclosure} from "@headlessui/react";
-import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {StateContext} from "@/src/contexts/UserProvider.jsx";
 import {Link} from "react-router-dom";
 
 export default function Navigation() {

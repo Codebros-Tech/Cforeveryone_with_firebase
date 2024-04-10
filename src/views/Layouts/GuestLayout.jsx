@@ -1,6 +1,6 @@
 import {Navigate, Outlet} from "react-router-dom"
 import { useContext} from "react";
-import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {StateContext} from "@/src/contexts/UserProvider.jsx";
 
 
 export default function GuestLayout() {

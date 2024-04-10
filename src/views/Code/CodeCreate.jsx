@@ -1,6 +1,6 @@
 import {lazy, useContext, useState} from 'react'
 import { useParams } from 'react-router-dom';
-import { StateContext } from '../../contexts/ContextProvider.jsx';
+import { StateContext } from '../../contexts/UserProvider.jsx';
 import {postCode} from "../../firebase/code.js";
 
 const TButton = lazy(() => import('../../components/elements/TButton.jsx'));

@@ -1,6 +1,6 @@
 import {useContext, useState} from "react";
 import OpenAI from "openai";
-import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {StateContext} from "@/src/contexts/UserProvider.jsx";
 import { GenerativeModel} from "@google/generative-ai";
 
 export default function DashboardAI() {

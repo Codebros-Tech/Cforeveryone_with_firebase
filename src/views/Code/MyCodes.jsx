@@ -4,7 +4,7 @@ const Code = lazy(() => import("./Code"));
 const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
 const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
-import { StateContext } from "../../contexts/ContextProvider";
+import { StateContext } from "../../contexts/UserProvider.jsx";
 import {getUserCodes} from "../../firebase/code.js";
 import { useContext, useEffect } from "react";
 import {Link} from "react-router-dom";

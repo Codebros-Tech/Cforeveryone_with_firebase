@@ -1,6 +1,6 @@
 import {useContext, useRef} from "react";
 import {addFeedback} from "../../firebase/user.js";
-import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {StateContext} from "@/src/contexts/UserProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import Footer from "@/src/components/Footer.jsx";
 

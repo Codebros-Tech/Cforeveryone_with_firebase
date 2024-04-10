@@ -1,7 +1,7 @@
 import {useContext, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom"
 import { PhotoIcon } from '@heroicons/react/24/outline';
-import {StateContext} from "../../contexts/ContextProvider.jsx";
+import {StateContext} from "../../contexts/UserProvider.jsx";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth, db, storage} from "@/src/config/firebase.js";
 import {doc, setDoc} from "firebase/firestore";
@@ -23,7 +23,6 @@ export default function Signup() {
     });
     const [file, setFile] = useState(null);
 
-
     const submitForm = async  (ev) => {
         ev.preventDefault();
         const name = nameRef.current.value;
@@ -44,7 +43,7 @@ export default function Signup() {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             const user = result.user;
 
-            const profileUpdates = {displayName: name};
+            const profileUpdates = {displayName: name.toLowerCase()};
             await updateProfile(auth.currentUser, profileUpdates);
 
             const storageRef = ref(storage, user.uid);
@@ -57,10 +56,14 @@ export default function Signup() {
                     },
                     () => {
                         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadUrl) => {
-                            await updateProfile(user,{
-                                photoURL: downloadUrl
-                            })
-                            await storeUserInformation(user, downloadUrl);
+                            try {
+                                await updateProfile(user,{
+                                    photoURL: downloadUrl
+                                })
+                                await storeUserInformation(user, downloadUrl);
+                            } catch (error) {
+                                console.error(error);
+                            }
                         })
                     }
                 )

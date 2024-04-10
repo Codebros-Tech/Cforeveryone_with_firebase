@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import './App.css'
 import { RouterProvider } from 'react-router-dom'
-import { ContextProvider } from './contexts/ContextProvider.jsx'
+import { UserProvider } from './contexts/UserProvider.jsx'
 
 import {Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom"
 
@@ -72,9 +72,9 @@ const router = createBrowserRouter(
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <ContextProvider>
+    <UserProvider>
         <Suspense fallback={<Loading />}>
             <RouterProvider router={router} />
         </Suspense>
-    </ContextProvider>
+    </UserProvider>
 )

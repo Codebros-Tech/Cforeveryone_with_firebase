@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import {StateContext} from "../../contexts/ContextProvider.jsx";
+import {StateContext} from "../../contexts/UserProvider.jsx";
 import {useContext, useEffect, useState} from "react";
 import {getUserById} from "@/src/firebase/user.js";
 import {TrashIcon} from "lucide-react";

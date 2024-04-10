@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState} from "react";
-import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {StateContext} from "@/src/contexts/UserProvider.jsx";
 import {doc, onSnapshot} from 'firebase/firestore'
 import {db} from "@/src/config/firebase.js";
 

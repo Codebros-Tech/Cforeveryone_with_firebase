@@ -1,7 +1,7 @@
 import {Suspense, useContext, useState} from "react"
 import {collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where} from "firebase/firestore"
 import {db} from "@/src/config/firebase.js"
-import {StateContext} from "@/src/contexts/ContextProvider.jsx";
+import {StateContext} from "@/src/contexts/UserProvider.jsx";
 
 export default function Search() {
     const [username, setUsername] = useState("");
@@ -11,19 +11,26 @@ export default function Search() {
     const { currentUser } = useContext(StateContext);
 
     const handleSearch = async () => {
+        setUser(null);
+        const usersRef = collection(db, 'users');
+        console.log(username.toLowerCase());
         const q = query(
-            collection(db, 'users'),
-            where('displayName', '==', username)
+            usersRef,
+            where("displayName", "array-contains", username.toLowerCase())
         )
 
         try {
             const querySnapshot = await getDocs(q)
             querySnapshot.forEach((doc) => {
+                console.log("item is ", doc.data());
                 setUser(doc.data())
             })
         } catch (error) {
             setError(true);
+            console.log("An error occurred ", error);
         }
+
+
     }
 
     const handleSelect = async () => {
@@ -31,9 +38,10 @@ export default function Search() {
 
         try {
             const res = await getDoc(doc(db, "chats", combinedId));
+            const chatRef = doc(db, "chats", combinedId)
 
             if (!res.exists()) {
-                await setDoc(doc(db, "chats", combinedId), { messages: []})
+                await setDoc(chatRef, { messages: []})
             }
 
             await updateDoc(doc(db, "userChats", currentUser.uid), {
@@ -42,7 +50,8 @@ export default function Search() {
                     displayName: user.displayName,
                     photoURL: user.photoURL,
                 },
-                [combinedId+".date"]: serverTimestamp()
+                [combinedId+".date"]: serverTimestamp(),
+                [combinedId+".lastMessage"]: "",
             })
 
             await updateDoc(doc(db, "userChats", user.uid), {
@@ -51,14 +60,15 @@ export default function Search() {
                     displayName: currentUser.displayName,
                     photoURL: currentUser.photoURL,
                 },
-                [combinedId+".date"]: serverTimestamp()
+                [combinedId+".date"]: serverTimestamp(),
+                [combinedId+".lastMessage"]: "",
             })
 
             setUsername("")
             setUser(null)
 
         } catch (error) {
-            //
+            console.error("error occurred");
         }
     }
 

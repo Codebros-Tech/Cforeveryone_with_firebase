@@ -1,5 +1,5 @@
 import {lazy, Suspense, useContext, useEffect, useState} from "react";
-import { StateContext } from "../../contexts/ContextProvider";
+import { StateContext } from "../../contexts/UserProvider.jsx";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import {Rings, Watch} from 'react-loader-spinner'
@@ -67,7 +67,7 @@ export default function Dashboard() {
                                         <h1 className="text-[40px]">{dashboardInfo.codes}</h1>
                                     }
                                     {
-                                        !dashboardInfo.codes &&
+                                        !dashboardInfo.codes && dashboardInfo.codes !== 0 &&
                                         <div className={"flex items-center justify-center"}>
                                             <Rings height={80} width={80}  />
                                         </div>

@@ -5,7 +5,7 @@ import { auth } from '../config/firebase.js';
 
 export const StateContext = createContext({});
 
-export const ContextProvider = ({ children }) => {
+export const UserProvider = ({ children }) => {
     
     const [currentUser, setCurrentUser] = useState({});
     const [toast, setToast] = useState({ message: "", show: false});
@@ -32,6 +32,6 @@ export const ContextProvider = ({ children }) => {
     )
 }
 
-ContextProvider.propTypes  = {
+UserProvider.propTypes  = {
     children: PropTypes.node,
 }

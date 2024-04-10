@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { StateContext } from "../../contexts/ContextProvider.jsx"
+import { StateContext } from "../../contexts/UserProvider.jsx"
 
 export default function Toast() {
     const {toast, setToast} =  useContext(StateContext);

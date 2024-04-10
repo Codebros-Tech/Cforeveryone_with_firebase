@@ -92,12 +92,13 @@ export async function storeUserInformation(user, downloadUrl) {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         if (!userDoc.exists()) {
             await setDoc(doc(db, 'users', user.uid), {
-                displayName: user.displayName,
+                displayName: user.displayName.toLowerCase(),
                 email: user.email,
                 createdAt: user.createdAt || serverTimestamp(),
                 photoURL: downloadUrl || user.photoURL,
                 lastLogin: user.lastLoginAt || serverTimestamp(),
                 emailVerified: user.emailVerified,
+                uid: user.uid,
             });
         }
     } catch (error) {
