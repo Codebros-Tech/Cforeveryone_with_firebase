@@ -35,10 +35,8 @@ export async function deleteUserAccount(userId) {
 
 export async function getUserById(id) {
     try {
-        if (id) {
-            const userDoc = await getDoc(doc(db, 'users', id))
-            return userDoc.data();
-        }
+        const userDoc = await getDoc(doc(db, 'users', id))
+        return userDoc.data();
     } catch (error) {
         console.log(error);
     }

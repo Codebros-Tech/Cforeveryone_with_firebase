@@ -1,5 +1,4 @@
-import {useContext, useEffect, useState} from 'react'
-import { StateContext } from '../../contexts/UserProvider.jsx';
+import { useEffect, useState} from 'react'
 import {useParams} from "react-router-dom";
 import Loading from "@/src/components/elements/Loading.jsx";
 import {getUserById} from "@/src/firebase/user.js";
@@ -19,7 +18,7 @@ export default function UserInfo() {
             setLoading(false);
         }
 
-        fetcher()
+        id && fetcher()
     }, [id]);
 
 

@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types'
 import {lazy, useEffect} from "react";
-import {doc, setDoc} from "firebase/firestore";
-import {db} from "@/src/config/firebase.js";
 const TButton = lazy(() => import('../../components/elements/TButton.jsx'));
 
 export default function User({ user }) {
@@ -15,7 +13,7 @@ export default function User({ user }) {
                 <div>
                     <h5 className='font-semibold uppercase'>{user.displayName}</h5>
                     <div className='flex items-center mt-2 justify-between'>
-                        <TButton color='green' to={"/users/"+user.id}>
+                        <TButton color='green' to={"/users/"+user.uid}>
                             View Profile
                         </TButton>
                     </div>
