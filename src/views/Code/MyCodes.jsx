@@ -19,26 +19,29 @@ export default function MyCodes() {
 
     useEffect(() => {
         setLoading(true);
-        const unsubscribe = onSnapshot(
-            query(
-                collection(db, 'codes'),
-                where("userId", "==", currentUser.uid || '')
-            ),
-            (snapshot) => {
-                const codes = []
-                snapshot.forEach((doc) => {
-                    codes.push({id: doc.id, ...doc.data()});
-                })
-                setMyCodes(codes);
-                setLoading(false);
-            },
-            (error) => {
-                setError(true);
-                console.error(error);
-            }
-        )
+        const getChats = () => {
+            const unsubscribe = onSnapshot(
+                query(
+                    collection(db, 'codes'),
+                    where("userId", "==", currentUser.uid)
+                ),
+                (snapshot) => {
+                    const codes = []
+                    snapshot.forEach((doc) => {
+                        codes.push({id: doc.id, ...doc.data()});
+                    })
+                    setMyCodes(codes);
+                    setLoading(false);
+                },
+                (error) => {
+                    setError(true);
+                    console.error(error);
+                }
+            )
+            return () => unsubscribe()
+        }
 
-        return () => unsubscribe()
+        currentUser.uid && getChats();
     }, [currentUser.uid]);
 
     return (

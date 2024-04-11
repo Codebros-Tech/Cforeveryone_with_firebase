@@ -27,6 +27,7 @@ import Authenticate from "@/src/views/Layouts/Authenticate.jsx";
 import ForgotPassword from "@/src/views/Guest/ForgotPassword.jsx";
 import {Suspense} from "react";
 import Loading from "@/src/components/elements/Loading.jsx";
+import {ChatProvider} from "@/src/contexts/ChatProvider.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -73,8 +74,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <UserProvider>
-        <Suspense fallback={<Loading />}>
+        <ChatProvider>
             <RouterProvider router={router} />
-        </Suspense>
+        </ChatProvider>
     </UserProvider>
 )

@@ -22,7 +22,8 @@ export default function Search() {
         setUser(null);
         const q = query(
             usersRef,
-            where("displayName", "==", searchText)
+            where("displayName", ">=", searchText),
+            where("displayName", "<=", searchText),
         )
 
         try {
