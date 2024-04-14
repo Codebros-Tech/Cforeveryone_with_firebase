@@ -16,7 +16,7 @@ export default function Comment({codeId ,comment}) {
             setUser(user);
         }
 
-        fetcher()
+        comment.userId && fetcher()
     }, [comment]);
 
     return (

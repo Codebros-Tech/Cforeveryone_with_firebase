@@ -1,5 +1,5 @@
-import {lazy, useContext} from 'react';
-import {useEffect, useState} from "react";
+import {lazy, useContext, useEffect} from 'react';
+import {useState} from "react";
 import {Link, useParams} from "react-router-dom";
 
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
@@ -10,9 +10,11 @@ const Code = lazy(() => import( './Code.jsx'));
 const Comment = lazy(() => import('./Comment.jsx'));
 const NotFound = lazy(() => import("@/src/views/Pages/NotFound.jsx"))
 
-import {addCodeComment, addUserToCodeViewers, getCodeById, getCodeComments} from "../../firebase/code.js";
+import {addCodeComment, addUserToCodeViewers} from "../../firebase/code.js";
 import {StateContext} from "@/src/contexts/UserProvider.jsx";
 import Loading from "@/src/components/elements/Loading.jsx";
+import {collection, doc, onSnapshot, query} from "firebase/firestore";
+import {db} from "@/src/config/firebase.js";
 
 export default function CodeView() {
     const { id } = useParams();
@@ -25,38 +27,50 @@ export default function CodeView() {
     const { currentUser, showToast  } = useContext(StateContext);
 
     useEffect(() => {
-        setLoading(true);
-        const codeFetcher = async () =>  {
-            const code = await getCodeById(id);
-            setCode(code);
-            setLoading(false);
+        const commentsArray = [];
+        const commentUnsubscribe = onSnapshot(
+            query(
+                collection(db, 'codes', id, 'comments'),
+            ),
+            (snapshot) => {
+                snapshot.forEach((doc) => {
+                    commentsArray.push({id: doc.id, ...doc.data()});
+                })
+                setComments(commentsArray);
+            }
+        )
+
+        const docRef = doc(db, 'codes', id);
+        const unsubscribe = onSnapshot(
+            docRef,
+            (docSnap) => {
+                if (docSnap.exists()) {
+                    setCode({id: docSnap.id, ...docSnap.data()});
+                } else {
+                    console.error('No such document!');
+                    return null;
+                }
+            }
+        )
+
+        const sendRequest = async () => {
+            const endTime = performance.now();
+            const durationFloat = (endTime - startTime) / 1000;
+            const duration =  durationFloat.toFixed(0);
+
+            addUserToCodeViewers(id, currentUser.uid, duration).then(r => console.log("user has been added to viewed users ", r));
         }
-
-        const commentFetcher = async () => {
-            const commentsArray = await getCodeComments(id);
-            setComments(commentsArray)
-        }
-
-        codeFetcher();
-
-        commentFetcher();
-
 
         const initialTime = performance.now();
         setStartTime(initialTime);
 
         return () => {
             sendRequest()
+            unsubscribe();
+            commentUnsubscribe()
         }
     }, [id]);
 
-    const sendRequest = async () => {
-        const endTime = performance.now();
-        const durationFloat = (endTime - startTime) / 1000;
-        const duration =  durationFloat.toFixed(0);
-
-        addUserToCodeViewers(id, currentUser.uid, duration).then(r => console.log("user has been added to viewed users ", r));
-    }
 
     const submitComment = async (ev) => {
         ev.preventDefault()

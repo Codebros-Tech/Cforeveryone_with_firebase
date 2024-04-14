@@ -61,9 +61,9 @@ export default function Code({code, numRows = 1}) {
             setCommentCount(count);
         }
 
-        userFetcher()
-        fetchCommentCount()
-        fetchLikesCount()
+        code.userId && userFetcher()
+        code.id && fetchCommentCount()
+        code.id && currentUser.uid && fetchLikesCount()
     }, [code]);
 
     const removeCode = async () => {

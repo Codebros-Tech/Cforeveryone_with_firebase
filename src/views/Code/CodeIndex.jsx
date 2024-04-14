@@ -23,7 +23,7 @@ export default function CodeIndex() {
                     codes.push({id: doc.id, ...doc.data()});
                 })
 
-               setAllCodes(codes);
+                setAllCodes(codes);
                 setLoading(false);
            },
            (error) => {

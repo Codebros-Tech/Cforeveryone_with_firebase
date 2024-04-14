@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import {lazy, useEffect} from "react";
+import {lazy} from "react";
 const TButton = lazy(() => import('../../components/elements/TButton.jsx'));
 
 export default function User({ user }) {
