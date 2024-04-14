@@ -28,6 +28,7 @@ import ForgotPassword from "@/src/views/Guest/ForgotPassword.jsx";
 import {Suspense} from "react";
 import Loading from "@/src/components/elements/Loading.jsx";
 import {ChatProvider} from "@/src/contexts/ChatProvider.jsx";
+import AdminLayout from "@/src/views/Layouts/AdminLayout.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -63,6 +64,12 @@ const router = createBrowserRouter(
             </Route>
 
             <Route path="/" element={<GuestLayout />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+            </Route>
+
+            <Route path="/" element={<AdminLayout />}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />

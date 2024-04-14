@@ -93,7 +93,7 @@ export default function Dashboard() {
                                 </div>
                             </div>
 
-                            {/*<DashboardAI />*/}
+                            <DashboardAI />
                         </div>
                     }
                     {

@@ -128,7 +128,7 @@ export default function Code({code, numRows = 1}) {
                                setViewState(CODE);
                            }
                        }} className="text-[13px] bg-gray-800 text-white px-9 py-2 my-2">
-                           Switch to Code
+                           AI explanation
                        </button>
                    </div>
                </div>
@@ -142,19 +142,26 @@ export default function Code({code, numRows = 1}) {
                             defaultValue={code.text} disabled/>
                     }
                     {
-                        viewState === OUTPUT && ( code.image ?  <img alt={"Code Image"} src={code.image}  /> : <div className={"py-10"}>No Image</div>)
+                        viewState === OUTPUT && (
+                            <div className={"py-10"}>
+                                No Image
+                            </div>
+                        )
                     }
-                    <div className={"grid grid-cols-2 gap-x-2 w-full rounded-md"}>
+                    <div className={"grid grid-cols-3 gap-x-2 w-full rounded-md"}>
                         <button onClick={() => setLike(!like)}
-                                className={`py-2 px-2 ${like ? 'bg-green-600 text-white' : 'text-dark'} rounded-md bg-lime-50 opacity-70`}>
+                                className={`py-2 px-2 ${like ? 'bg-gray-600 text-white' : 'text-dark'} rounded-md bg-lime-50 opacity-70`}>
                             Like <span className={"font-bold"}>( {likesCount} )</span>
                         </button>
                         {
                         !id &&
-                            <Link to={'/codes/' + code.id} className={"py-2 px-2 rounded-md bg-lime-50 text-dark hover:bg-blue-500 opacity-70"}>
+                            <Link to={'/codes/' + code.id} className={"py-2 px-2 text-center rounded-md bg-gray-600 text-white hover:bg-blue-500 opacity-70"}>
                                 Comment <span className={"font-bold"}>( {commentCount} )</span>
                             </Link>
                         }
+                        <button className={"bg-gray-600 text-white"}>
+                            Ask AI
+                        </button>
                     </div>
                 </motion.div>
             </div>
