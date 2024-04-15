@@ -131,25 +131,14 @@ export async function addSuggestion(snippetId, suggestionText) {
     }
 }
 
-export async function getCodeLikesCount(codeId, userId) {
+export async function getCodeLikesCount(codeId) {
     try {
        if (codeId) {
            const likesRef = collection(db, 'codes', codeId, 'likes');
            const q = query(likesRef);
            const querySnapshot = await getDocs(q);
 
-           const userLikeRef = collection(db, 'codes', codeId, 'likes');
-           const userLikeQuery = query(
-               userLikeRef,
-               where('userId', '==', userId),
-           );
-           const likeQuerySnapshot = await getDocs(userLikeQuery);
-
-           if (likeQuerySnapshot.size > 0) {
-               return {size: querySnapshot.size, userChecked: true};
-           } else {
-               return {size: querySnapshot.size, userChecked: false};
-           }
+           return querySnapshot.size;
        }
     } catch (error) {
         console.error("Failure in fetching the number of comments");

@@ -20,21 +20,12 @@ export default function Code({code, numRows = 1}) {
     const [likesCount, setLikesCount] = useState(0)
     const [commentCount, setCommentCount] = useState(0)
     const [loadingUser, setLoadingUser] = useState(true)
-    const [like, _setLike] = useState(false)
+    const [like, setLike] = useState(false);
 
     const CODE = 'code';
     const OUTPUT = 'output';
     const [viewState, setViewState] = useState(CODE);
 
-    const setLike = async (state) => {
-        _setLike(state);
-        if (like === true) {
-            setLikesCount(likesCount - 1);
-        } else {
-            setLikesCount(likesCount + 1);
-        }
-        await toggleCodeLike(code.id, currentUser.uid);
-    }
 
     useEffect(() => {
         const userFetcher = async () => {
@@ -51,9 +42,8 @@ export default function Code({code, numRows = 1}) {
         }
 
         const fetchLikesCount = async () => {
-            const result = await getCodeLikesCount(code.id, currentUser.uid);
-            setLikesCount(result.size);
-            _setLike(result.userChecked);
+            const result = await getCodeLikesCount(code.id);
+            setLikesCount(result);
         }
 
         const fetchCommentCount = async () => {
@@ -63,7 +53,7 @@ export default function Code({code, numRows = 1}) {
 
         code.userId && userFetcher()
         code.id && fetchCommentCount()
-        code.id && currentUser.uid && fetchLikesCount()
+        code.id && fetchLikesCount()
     }, [code]);
 
     const removeCode = async () => {
@@ -81,7 +71,7 @@ export default function Code({code, numRows = 1}) {
         <div key={code.id} className="flex rounded w-full mt-3">
             <div className={"px-2 py-3 relative bg-black text-gray-500 w-full"}>
                 {
-                    currentUser && currentUser.uid === code.userId &&
+                    currentUser && currentUser.uid && currentUser.uid === code.userId &&
                     <div className={"absolute right-5 top-5"}>
                         <button onClick={removeCode} title={"Delete the code"}
                                 className={"bg-red-800 text-white py-2 px-2 w-fit"}>
@@ -149,7 +139,7 @@ export default function Code({code, numRows = 1}) {
                         )
                     }
                     <div className={"grid grid-cols-3 gap-x-2 w-full rounded-md"}>
-                        <button onClick={() => setLike(!like)}
+                        <button
                                 className={`py-2 px-2 ${like ? 'bg-gray-600 text-white' : 'text-dark'} rounded-md bg-lime-50 opacity-70`}>
                             Like <span className={"font-bold"}>( {likesCount} )</span>
                         </button>

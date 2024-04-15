@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import {motion} from 'framer-motion';
 
 export default function WelcomePage () {
     return (
@@ -8,11 +9,24 @@ export default function WelcomePage () {
                     style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',}}/>
                 </div>
                 <div className="mx-auto max-w-2xl py-32 sm:pt-36 lg:pt-40  ">
-                    <div className="text-center">
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                    <div
+                        className="text-center">
+                        <motion.h1
+                            initial={{
+                                top: 100,
+                                scale: 0.4,
+                            }}
+                            animate={{
+                                top: 0,
+                                scale: 1,
+                            }}
+                            transition={{
+                                duration: 0.2
+                            }}
+                            className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                             Connect, Build & Thrive <br />
                             with people on {import.meta.env.VITE_APP_NAME}
-                        </h1>
+                        </motion.h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
                             {import.meta.env.VITE_APP_NAME} is everyone is here to remove all of the issues students face in learning the C programming language. Making it easy for students to track their progress, share their work and build together in a community.
                         </p>

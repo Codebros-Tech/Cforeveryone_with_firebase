@@ -5,7 +5,7 @@ import { db } from '../../config/firebase';
 import {Link} from "react-router-dom";
 
 const  Loading = lazy(() => import("@/src/components/elements/Loading.jsx"));
-const Code = lazy(() => import("./Code"));
+const Code = lazy(() => import("./Code.jsx"));
 const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
 const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
@@ -23,6 +23,7 @@ export default function CodeIndex() {
                     codes.push({id: doc.id, ...doc.data()});
                 })
 
+                console.log(codes);
                 setAllCodes(codes);
                 setLoading(false);
            },

@@ -27,12 +27,13 @@ export default function CodeView() {
     const { currentUser, showToast  } = useContext(StateContext);
 
     useEffect(() => {
-        const commentsArray = [];
+        let commentsArray = [];
         const commentUnsubscribe = onSnapshot(
             query(
                 collection(db, 'codes', id, 'comments'),
             ),
             (snapshot) => {
+                commentsArray = [];
                 snapshot.forEach((doc) => {
                     commentsArray.push({id: doc.id, ...doc.data()});
                 })
