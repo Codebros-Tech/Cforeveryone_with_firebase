@@ -13,7 +13,7 @@ export default function Navigation() {
     return (
         <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
-                <Suspense fallback={<div>Loading from Navigation</div>}>
+                <Suspense fallback={<div>Loading Navigation</div>}>
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-16 items-center justify-between">
                             <DesktopNavName />

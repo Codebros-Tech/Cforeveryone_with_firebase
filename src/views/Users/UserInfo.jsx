@@ -13,7 +13,6 @@ export default function UserInfo() {
         const fetcher = async () => {
             setLoading(true)
             const gottenUser = await getUserById(id);
-
             setUser(gottenUser);
             setLoading(false);
         }

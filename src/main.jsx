@@ -29,6 +29,7 @@ import {Suspense} from "react";
 import Loading from "@/src/components/elements/Loading.jsx";
 import {ChatProvider} from "@/src/contexts/ChatProvider.jsx";
 import AdminLayout from "@/src/views/Layouts/AdminLayout.jsx";
+import AddUser from "@/src/views/Pages/AddUser.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -36,6 +37,9 @@ const router = createBrowserRouter(
             <Route element={<Main />}>
                 <Route path="/" element={<WelcomePage />} />
             </Route>
+
+            <Route path={'/adduser/:id'} element={<AddUser />} />
+
 
             <Route path="/" element={<PrivateRoute />}>
                 <Route path={'/'} element={<Authenticate />}>
@@ -62,6 +66,7 @@ const router = createBrowserRouter(
                 <Route path="/codes/:id" element={<CodeView />} />
                 <Route path="/codes" element={<CodeIndex />} />
             </Route>
+
 
             <Route path="/" element={<GuestLayout />}>
                 <Route path="/login" element={<Login />} />
