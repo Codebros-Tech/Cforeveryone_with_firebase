@@ -59,6 +59,7 @@ export default function Signup() {
                                 await updateProfile(user,{
                                     photoURL: downloadUrl
                                 })
+                                console.log('userr is ', user);
                                 await storeUserInformation(user, downloadUrl);
                             } catch (error) {
                                 console.error(error);
@@ -67,6 +68,8 @@ export default function Signup() {
                     }
                 )
             }
+
+            await storeUserInformation(user);
 
             showToast("Account Created Successfully");
             navigate('/dashboard');
