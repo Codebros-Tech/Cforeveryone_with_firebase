@@ -1,8 +1,9 @@
 import {render, screen} from "@testing-library/react";
-import WelcomePage from "./WelcomePage.jsx";
+import NotFound from "@/src/views/Pages/NotFound.jsx";
+
 
 test("Renders Private layout", () => {
-    render(<WelcomePage />)
+    render(<NotFound />)
 
     expect(screen.getByText("Get Started").toBeInTheDocument());
 });

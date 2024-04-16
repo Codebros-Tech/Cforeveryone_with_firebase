@@ -1,8 +1,6 @@
-import {useContext, useState} from "react";
-import OpenAI from "openai";
-import {StateContext} from "@/src/contexts/UserProvider.jsx";
+import { useState} from "react";
 import { GoogleGenerativeAI} from "@google/generative-ai";
-import {FidgetSpinner, InfinitySpin} from "react-loader-spinner";
+import { InfinitySpin} from "react-loader-spinner";
 
 export default function DashboardAI() {
     const [result, setResult] = useState("");
@@ -41,7 +39,7 @@ export default function DashboardAI() {
                     }
                 </button>
             </div>
-            <textarea className="border-0 dark:text-white w-full mt-5 min-h-[400px] px-3" value={loadingCode &&  result.length ===0 ? "Code is Loading....": result} ></textarea>
+            <textarea className="border-0 dark:text-white w-full mt-5 min-h-[400px] px-3" defaultValue={loadingCode &&  result.length ===0 ? "Code is Loading....": result} ></textarea>
         </div>
     )
 }
