@@ -13,7 +13,7 @@ export async function postCode(code, title, description, imageFile = null,  lang
         description: description,
         language: language,
         userId: auth.currentUser.uid,
-        createdAt: new Date(),
+        createdAt: serverTimestamp(),
     };
     try {
         const docRef = await addDoc(codeRef, data);

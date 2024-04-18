@@ -1,8 +1,11 @@
-import {lazy, Suspense} from 'react';
-import {useEffect, useState} from "react";
-import {collection, getDocs, onSnapshot, query} from 'firebase/firestore';
+import {lazy, Suspense, useEffect} from 'react';
+import {useState} from "react";
+import {collection, onSnapshot} from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+
+import {addCode} from "@/src/reducers/CodeReducer.js";
 
 const  Loading = lazy(() => import("@/src/components/elements/Loading.jsx"));
 const Code = lazy(() => import("./Code.jsx"));
@@ -10,21 +13,20 @@ const PageComponent = lazy(() => import("../Layouts/PageComponent.jsx"));
 const TButton = lazy(() => import("../../components/elements/TButton.jsx"));
 
 export default function CodeIndex() {
+    const dispatch = useDispatch();
     const [loading, setLoading ] = useState(false);
-    const [allCodes, setAllCodes] = useState([]);
+    const codes = useSelector((state) => state.codes);
+
 
     useEffect(() => {
         setLoading(true);
        const unsubscribe = onSnapshot(
            collection(db, 'codes'),
            (snapshot) => {
-                const codes = []
                 snapshot.forEach((doc) => {
-                    codes.push({id: doc.id, ...doc.data()});
+                    dispatch(addCode({id: doc.id, ...doc.data()}));
                 })
 
-                console.log(codes);
-                setAllCodes(codes);
                 setLoading(false);
            },
            (error) => {
@@ -34,6 +36,11 @@ export default function CodeIndex() {
 
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+
+        console.log("The values of the code is ", codes);
+    }, [codes]);
 
 
     return (
@@ -58,7 +65,7 @@ export default function CodeIndex() {
                     !loading &&
                     <div className={"grid lg:grid-cols-2 gap-x-2.5 items-center"}>
                         {
-                            allCodes.map((code, index) => (
+                            codes.map((code, index) => (
                                 <Code key={index} code={code}/>
                             ))
                         }

@@ -13,7 +13,7 @@ export default function Contact() {
         ev.preventDefault();
 
         try {
-            const feedback = await addFeedback(currentUser ,descriptionRef.current.value);
+            const feedback = await addFeedback(descriptionRef.current.value, currentUser);
             descriptionRef.current.value = "";
             showToast("Well Received, Thank you " +  currentUser.displayName);
             setTimeout(() => {

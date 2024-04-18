@@ -1,25 +1,47 @@
-import { useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "@/src/config/firebase.js";
-import {handleLoginWithGoogle} from "@/src/firebase/user.js";
+import {addFeedback, handleLoginWithGoogle} from "@/src/firebase/user.js";
+import {motion} from 'framer-motion'
+
 
 export default function Login() {
-    const emailRef= useRef(null);
-    const passwordRef = useRef(null);
-    const [error, setError] = useState(false);
-    const navigate = useNavigate();
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState(null)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        setError(null);
+    }, [email, password]);
 
     async function handleLoginWithEmailAndPassword(event) {
         event.preventDefault();
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            navigate('/dashboard');
+           if (email && password) {
+               const result = await signInWithEmailAndPassword(auth, email, password);
+               const user = result.user;
+               navigate('/dashboard');
+           }
         } catch (error) {
-            setError(true);
+
+            switch (error.code) {
+                case 'auth/invalid-credential':
+                    setError("Wrong Credentials ");
+                    break;
+                case 'auth/too-many-requests':
+                    setError("Too many Request, Try again later")
+                    break;
+                case 'auth/network-request-failed':
+                    setError("Poor Network Issues");
+                    break;
+                default:
+                    await addFeedback(error.code.toString() + "Occurred ");
+                    break;
+            }
         }
+
     }
 
     return (
@@ -30,9 +52,16 @@ export default function Login() {
 
             {
                 error &&
-                <div className={"mx-auto bg-red-800 py-2 rounded-md text-white w-5/12 px-6 mt-5"}>
-                   Something went wrong.
-                </div>
+                <motion.div
+                    initial={{
+                        y: -20,
+                    }}
+                    animate={{
+                        y: 0,
+                    }}
+                    className={"bg-red-800 py-2 rounded-md text-white w-12/12 min-h-[30px] px-6 mt-5"}>
+                    {error}
+                </motion.div>
             }
 
             <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -46,7 +75,8 @@ export default function Login() {
                             <input
                                 className="input input-bordered w-full "
                                 id={'email'}
-                                ref={emailRef}
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
                                 type="email"
                                 autoComplete="email"
                                 required
@@ -70,7 +100,8 @@ export default function Login() {
                             <input
                                 id="password"
                                 type="password"
-                                ref={passwordRef}
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value) }
                                 autoComplete={'current-password'}
                                 className="input input-bordered w-full "
                                 required

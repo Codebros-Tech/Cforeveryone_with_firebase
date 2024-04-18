@@ -1,39 +1,39 @@
-import {useContext, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom"
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import {StateContext} from "../../contexts/UserProvider.jsx";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth, storage} from "@/src/config/firebase.js";
 import {ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
-import {handleLoginWithGoogle, storeUserInformation} from "@/src/firebase/user.js";
+import {addFeedback, handleLoginWithGoogle, storeUserInformation} from "@/src/firebase/user.js";
+import {motion} from "framer-motion";
 
 
 export default function Signup() {
     const { showToast } = useContext(StateContext);
     const navigate = useNavigate();
 
-    const nameRef = useRef(null);
-    const emailRef= useRef(null);
-    const passwordRef = useRef(null);
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [passwordConfirmation, setPasswordConfirmation] = useState("")
+
     const passwordConfirmationRef = useRef(null);
-    const [imageData, setImageData] = useState(null);
-    const [error, setError] = useState({
-        message: null,
-    });
+
+    const [imageData, setImageData] = useState("");
+    const [error, setError] = useState("");
     const [file, setFile] = useState(null);
+
+    useEffect(() => {
+        setError("");
+    }, [name, email, password, passwordConfirmation]);
 
     const submitForm = async  (ev) => {
         ev.preventDefault();
-        const name = nameRef.current.value;
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
-        const passwordConfirmation = passwordConfirmationRef.current.value;
 
         if (password !== passwordConfirmation) {
             passwordConfirmationRef.current.focus = true;
-            setError({
-                message: "Passwords do not match",
-            });
+            setError("Passwords do not match");
 
             return;
         }
@@ -71,12 +71,28 @@ export default function Signup() {
                 await storeUserInformation(user);
             }
 
-
-
             showToast("Account Created Successfully");
             navigate('/dashboard');
         } catch(error) {
-            console.error(error);
+
+            switch (error.code) {
+                case 'auth/weak-password':
+                    setError("Password must be above 6 characters and not weak")
+                    break;
+                case 'auth/invalid-credential':
+                    setError("Wrong Credentials ");
+                    break;
+                case 'auth/network-request-failed':
+                    setError("Poor Network Issues");
+                    break;
+                case 'auth/email-already-in-use':
+                    setError("Email Already exist. Move to Login")
+                    break;
+                default:
+                    console.error(error);
+                    break;
+            }
+
         }
     }
 
@@ -95,6 +111,7 @@ export default function Signup() {
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
                 Create your account and start coding
             </h2>
+
             <div className={"flex items-center"}>
                 <button
                     type="submit"
@@ -105,11 +122,19 @@ export default function Signup() {
                 </button>
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
                 {
-                    error.label &&
-                    <div className="bg-red-500 rounded py-2 px-3 text-white">
-                        {error.message}
-                    </div>
+                    error &&
+                    <motion.div
+                        initial={{
+                            y: -20,
+                        }}
+                        animate={{
+                            y: 0,
+                        }}
+                        className={"bg-red-800 py-2 rounded-md text-white w-12/12 min-h-[30px] px-6 my-5"}>
+                        {error}
+                    </motion.div>
                 }
 
                 <form className="space-y-6" onSubmit={submitForm}>
@@ -146,18 +171,17 @@ export default function Signup() {
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium leading-6">
-                        Name
-                        </label>
+                        <label htmlFor="email" className="block text-sm font-medium leading-6">Name</label>
                         <div className="mt-2">
-                        <input
-                            id="name"
-                            type="text"
-                            ref={nameRef}
-                            autoComplete="name"
-                            required
-                            className="input input-bordered w-full "
-                        />
+                            <input
+                                id="name"
+                                type="text"
+                                value={name}
+                                onChange={(event) => setName(event.target.value)}
+                                autoComplete="name"
+                                required
+                                className="input input-bordered w-full "
+                            />
                         </div>
                     </div>
 
@@ -166,29 +190,31 @@ export default function Signup() {
                         Email address
                         </label>
                         <div className="mt-2">
-                        <input
-                            id="email"
-                            type="email"
-                            autoComplete="email"
-                            ref={emailRef}
-                            required
-                            className="input input-bordered w-full "
-                        />
+                            <input
+                                id="email"
+                                type="email"
+                                autoComplete="email"
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                                required
+                                className="input input-bordered w-full "
+                            />
                         </div>
                     </div>
 
                     <div>
                         <div className="flex items-center justify-between">
-                        <label htmlFor="password" className="block text-sm font-medium leading-6">
-                            Password
-                        </label>
+                            <label htmlFor="password" className="block text-sm font-medium leading-6">
+                                Password
+                            </label>
                         </div>
                         <div className="mt-2">
                             <input
                                 id="password"
-                                ref={passwordRef}
                                 type="password"
                                 autoComplete="new-password"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
                                 required
                                 className="input input-bordered w-full "
                             />
@@ -206,6 +232,8 @@ export default function Signup() {
                                 id="password_confirmation"
                                 type="password"
                                 ref={passwordConfirmationRef}
+                                value={passwordConfirmation}
+                                onChange={(event) => setPasswordConfirmation(event.target.value)}
                                 autoComplete={"password"}
                                 required
                                 className="input input-bordered w-full "

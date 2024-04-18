@@ -51,11 +51,11 @@ export async function logoutUser() {
     }
 }
 
-export async function addFeedback(user, feedbackText) {
+export async function addFeedback(feedbackText, user = { id: null}) {
     const feedbackRef = collection(db, 'feedback');
     const data = {
         text: feedbackText,
-        userId: user.uid,
+        userId: user.uid || -1,
         createdAt: serverTimestamp(),
     };
     try {

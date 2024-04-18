@@ -1,6 +1,9 @@
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import './App.css'
+import React from 'react'
+
+import { Provider } from 'react-redux'
 import { RouterProvider } from 'react-router-dom'
 import { UserProvider } from './contexts/UserProvider.jsx'
 
@@ -28,12 +31,19 @@ import ForgotPassword from "@/src/views/Guest/ForgotPassword.jsx";
 import {ChatProvider} from "@/src/contexts/ChatProvider.jsx";
 import AdminLayout from "@/src/views/Layouts/AdminLayout.jsx";
 import AddUser from "@/src/views/Pages/AddUser.jsx";
+import ReducerPage from "@/src/views/Pages/ReducerPage.jsx";
+import UserReducer from "@/src/reducers/UserReducer.js";
+
+import {configureStore} from "@reduxjs/toolkit";
+import CodeReducer from "@/src/reducers/CodeReducer.js";
+
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
             <Route element={<Main />}>
                 <Route path="/" element={<WelcomePage />} />
+                <Route path={'/reducer'} element={<ReducerPage />} />
             </Route>
 
             <Route path={'/adduser/:id'} element={<AddUser />} />
@@ -81,11 +91,22 @@ const router = createBrowserRouter(
     )
 );
 
+const store = configureStore({
+    reducer: {
+        users: UserReducer,
+        codes: CodeReducer,
+    }
+})
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <UserProvider>
-        <ChatProvider>
-            <RouterProvider router={router} />
-        </ChatProvider>
-    </UserProvider>
+    <React.StrictMode>
+        <Provider store={store}>
+            <UserProvider>
+                <ChatProvider>
+                    <RouterProvider router={router} />
+                </ChatProvider>
+            </UserProvider>
+        </Provider>
+    </React.StrictMode>
 )
